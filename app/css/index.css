@@ -1,0 +1,445 @@
+
+
+:root {
+    --primary: #FFDCDC;
+    --second: #FFF2EB;
+    --third: #ffffff;
+    --fourth: #FFD6BA;
+    --text-dark: #5C4B4B;
+    --text-light: #7a6a6a;
+    --border-color: #EAE0DA;
+    --accent-dark: #E5A9A9;
+    --notification: #FF3B3B;
+}
+
+/* --- Global Styles --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--second); /* Main page background */
+    color: var(--text-dark);
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../image/Background.jpg) !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-attachment: fixed !important;
+}
+
+/* --- Header Styles --- */
+.main-header {
+    background-color: var(--second); /* Changed to match image */
+    /* Removed border and shadow to match image */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    height: 70px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--text-dark);
+    text-decoration: none;
+}
+
+.main-nav ul {
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.main-nav a {
+    text-decoration: none;
+    color: var(--text-light);
+    font-weight: 600;
+    padding: 8px 4px;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+}
+
+.main-nav a:hover {
+    color: var(--text-dark);
+}
+
+.main-nav a.active {
+    color: var(--accent-dark);
+    border-bottom-color: var(--accent-dark);
+}
+
+.cart-icon {
+    position: relative;
+    font-size: 1.5rem;
+}
+
+#cart-count {
+    position: absolute;
+    top: -8px;
+    right: -12px;
+    background-color: var(--notification);
+    color: var(--third);
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    display: none;
+}
+
+/* --- Page Layout Wrapper --- */
+.main-wrapper {
+    /* Pushes content down from header */
+    padding-top: 70px; 
+    /* Pushes content up from footer */
+    /* Adjust '100px' if your footer height changes */
+    padding-bottom: 100px; 
+}
+
+/* --- Dashboard Header --- */
+.dashboard-header {
+    text-align: center;
+    margin: 30px auto;
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.dashboard-logo {
+    width: 200px; /* Made the logo bigger */
+    margin-bottom: 1rem;
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* --- Animation Keyframes --- */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* --- Stats Grid --- */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 25px;
+    max-width: 900px;
+    margin: 0 auto 40px;
+    padding: 0 20px;
+}
+
+.stat-card {
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 25px;
+    text-align: center;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-card.available { animation-delay: 0.2s; }
+.stat-card.occupied { animation-delay: 0.4s; }
+.stat-card.reserved { animation-delay: 0.6s; }
+
+.stat-value {
+    font-size: 3.5rem;
+    font-weight: bold;
+}
+
+.stat-label {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-top: 5px;
+}
+
+.stat-icon {
+    position: absolute;
+    font-size: 5rem;
+    right: -20px;
+    bottom: -20px;
+    opacity: 0.1;
+    transform: rotate(-15deg);
+}
+
+/* --- Quick Actions --- */
+.quick-actions {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* --- Index Page Styles --- */
+.welcome-container {
+    max-width: 450px;
+    margin: 40px auto;
+    padding: 32px;
+    background-color: var(--third); /* White container */
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(92, 75, 75, 0.07);
+    text-align: center;
+
+    /* Make elements start hidden for animation */
+    & > * {
+        opacity: 0;
+        animation: fadeInUp 0.6s ease-out forwards;
+    }
+}
+
+.welcome-container img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+    border-radius: 12px;    
+    animation-delay: 0.2s; /* Stagger animation */
+}
+
+.welcome-container h1 {
+    margin-bottom: 10px;
+    color: var(--text-dark);
+    animation-delay: 0.4s; /* Stagger animation */
+}
+
+/* --- Reusable & Action Buttons --- */
+.btn, .action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-grow: 1;
+    padding: 18px;
+    margin-top: 15px;
+    background-color: var(--fourth); /* Peach button */
+    color: var(--text-dark);
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.2s;
+    animation-delay: 0.6s; /* Stagger animation */
+}
+
+.btn:hover, .action-btn:hover {
+    background-color: var(--primary); /* Pink hover */
+    transform: scale(1.02);
+}
+
+.action-btn ion-icon {
+    font-size: 1.4em;
+}
+
+/* --- Footer Styles --- */
+footer {
+    position: fixed; /* Changed from relative to match layout */
+    bottom: 0;       /* Added to fix to bottom */
+    left: 0;         /* Added to fix to bottom */
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px 100px;
+    background: #444; /* Dark gray from image */
+    /* Removed backdrop-filter, as it's not visible on a solid BG */
+    transition: 0.5s;
+    z-index: 1100;
+}
+
+.sci {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.sci li {
+    list-style: none;
+}
+
+.sci li a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 1.3em;
+    transition: 0.3s
+}
+
+.sci li a:hover {
+    color: var(--primary);
+}
+
+.footer-nav {
+    display: flex;
+    gap: 20px;
+}
+
+.footer-nav li {
+    list-style: none;
+}
+
+.footer-nav li a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 0.8em;
+    text-transform: uppercase;
+    font-weight: 300;
+    letter-spacing: 1px;
+    transition: 0.3s;
+}
+
+.footer-nav li a:hover {
+    color: var(--primary);
+}
+
+.ask-us {
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10PX
+}
+
+.ask-us p {
+    color: #fff;
+    font-weight: 300;
+    font-size: 0.8em;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.chat {
+    text-decoration: none;
+    color: #fff;
+    font-size: 2em;
+    padding: 10px;
+    background: var(--primary);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.3s;
+}
+
+.chat:hover {
+    color: #000;
+    background: #fff;
+}
+
+/* --- Dropdown Styles for Login & Profile --- */
+
+/* Parent list items that hold dropdowns */
+.main-nav .dropdown,
+.main-nav .profile-nav-item {
+    position: relative; /* Required for positioning the dropdown */
+}
+
+/* Common style for BOTH dropdown menus (Login & Profile) */
+.main-nav .dropdown-menu,
+.main-nav .profile-dropdown {
+    display: block; /* Must be block for transitions to work */
+    position: absolute;
+    top: 100%; /* Position right below the parent */
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    list-style: none;
+    padding: 5px 0;
+    margin: 0;
+    z-index: 1000;
+
+    /* --- ✨ Animation (Hidden State) --- */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-5px); /* Start 5px above */
+    pointer-events: none; /* Don't allow clicks when hidden */
+    transition: opacity 0.3s ease, 
+                transform 0.3s ease, 
+                visibility 0.3s;
+}
+
+/* Specific alignment for login dropdown */
+.main-nav .dropdown-menu {
+    left: 0;
+    min-width: 150px;
+}
+
+/* Specific alignment for profile dropdown */
+.main-nav .profile-dropdown {
+    right: 0;
+    min-width: 160px;
+}
+
+/* --- ✨ Show the menu on hover (Visible State) --- */
+.main-nav .dropdown:hover .dropdown-menu,
+.main-nav .profile-nav-item:hover .profile-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0); /* Move to final position */
+    pointer-events: auto; /* Allow clicks again */
+}
+
+/* Links inside the dropdown */
+.main-nav .dropdown-menu li a,
+.main-nav .profile-dropdown li a {
+    display: block;
+    padding: 8px 15px;
+    color: #333;
+    text-decoration: none;
+    white-space: nowrap; /* Prevent text wrapping */
+}
+
+.main-nav .dropdown-menu li a:hover,
+.main-nav .profile-dropdown li a:hover {
+    background-color: #f4f4f4;
+    color: #000;
+}
+
+/* --- Profile Nav Item Styles (Logged In) --- */
+
+.main-nav .profile-link {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between pic and name */
+}
+
+.main-nav .nav-profile-pic {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%; /* Make it circular */
+    object-fit: cover; /* Prevents stretching */
+    border: 2px solid transparent;
+}
+
+.main-nav .profile-link:hover .nav-profile-pic,
+.main-nav .profile-link.active .nav-profile-pic {
+    border-color: #000000; /* Example active color */
+}
