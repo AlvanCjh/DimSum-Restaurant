@@ -60,6 +60,6 @@ include '../_header.php';
     <!-- Quick Actions -->
     <div class="quick-actions">
         <a href="../table/table.php" class="btn action-btn"><ion-icon name="add-circle-outline"></ion-icon> Start New Order</a>
-        <a href="#" class="btn action-btn"><ion-icon name="list-outline"></ion-icon> View Active Orders</a>
+        <a href="../order/order.php" class="btn action-btn"><ion-icon name="list-outline"></ion-icon> View Active Orders</a>
     </div>
 </main>

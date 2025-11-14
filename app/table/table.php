@@ -56,6 +56,11 @@ if (isset($_POST['select_table']) && isset($_POST['table_id'])) {
 <main class="main-wrapper">
     <div class="app-container">
         <h2 class="page-title">Select a Table</h2>
+        <div class="search-bar-container" style="margin-bottom: 25px; text-align: center;">
+                <input type="text" id="tableSearchInput" 
+                       placeholder="Filter by table name (e.g., T01, VIP)" 
+                       style="padding: 10px 12px; width: 400px; border: 1px solid #ccc; border-radius: 6px; font-size: 1em;">
+            </div>
         
         <?php if (isset($message)): ?>
             <div class="message error"><?php echo htmlspecialchars($message); ?></div>
@@ -93,5 +98,42 @@ if (isset($_POST['select_table']) && isset($_POST['table_id'])) {
     </div>
 </main>
 
-
+<script>
+// Wait for the document to be fully loaded
+document.addEventListener("DOMContentLoaded", function() {
+    
+    // 1. Get the search input element
+    const searchInput = document.getElementById('tableSearchInput');
+    
+    // 2. Add an event listener for when the user types
+    searchInput.addEventListener('keyup', function() {
+        
+        // 3. Get the search term and convert to lowercase for matching
+        const filter = searchInput.value.toLowerCase();
+        
+        // 4. Get all the table cards
+        const tableCards = document.querySelectorAll('.tables-grid .table-card');
+        
+        // 5. Loop through each table card
+        tableCards.forEach(card => {
+            // 6. Find the element with the table number inside the card
+            const tableNumberElement = card.querySelector('.table-number');
+            
+            if (tableNumberElement) {
+                // 7. Get the table name text
+                const tableName = tableNumberElement.textContent || tableNumberElement.innerText;
+                
+                // 8. Check if the table name includes the filter text
+                if (tableName.toLowerCase().indexOf(filter) > -1) {
+                    // If it matches, show the card
+                    card.style.display = ""; 
+                } else {
+                    // If it doesn't match, hide the card
+                    card.style.display = "none";
+                }
+            }
+        });
+    });
+});
+</script>
 
