@@ -238,6 +238,7 @@ if ($selected_table_id) {
                     <div class="order-meta">
                         <span class="order-id">Order #<?php echo $current_order['id']; ?></span>
                         <span class="order-total">Total: RM <?php echo number_format($current_order['total_amount'], 2); ?></span>
+                        <a href="payment.php?order_id=<?php echo $current_order['id']; ?>" class="add-items-link">Process Bill</a>
                     </div>
                 </div>
 
@@ -284,6 +285,7 @@ if ($selected_table_id) {
                         
                         <div style="text-align: center; margin-top: 30px;">
                             <a href="../menu/menu.php" class="add-items-link">Add More Items from Menu</a>
+    
                         </div>
                     <?php endif; ?>
                 </div>
@@ -303,6 +305,7 @@ if ($selected_table_id) {
                 <p>Start adding items from the menu to create an order.</p>
                 <div style="text-align: center; margin-top: 20px;">
                     <a href="../menu/menu.php" class="add-items-link">Go to Menu to Add Items</a>
+                    
                 </div>
             </div>
         <?php endif; ?>

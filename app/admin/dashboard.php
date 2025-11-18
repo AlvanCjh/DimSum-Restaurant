@@ -13,6 +13,8 @@ $basePath = "../";
 include '../_header.php';
 ?>
 
+<link rel="stylesheet" href="/css/dashboard.css">
+
 <main class="main-wrapper">
     <div class="admin-dashboard">
         <div class="dashboard-header">
@@ -30,15 +32,15 @@ include '../_header.php';
 
             <div class="dashboard-card">
                 <div class="card-icon">📊</div>
-                <h2 class="card-title">View Orders</h2>
-                <p class="card-description">Monitor and manage customer orders</p>
-                <a href="#" class="card-button">View Orders</a>
+                <h2 class="card-title">View Statistics</h2>
+                <p class="card-description">Order History and Statistics</p>
+                <a href="#" class="card-button">View Statistics</a>
             </div>
 
             <div class="dashboard-card">
                 <div class="card-icon">🪑</div>
                 <h2 class="card-title">Manage Tables</h2>
-                <p class="card-description">View and manage dining table status</p>
+                <p class="card-description">View and manage dining table</p>
                 <a href="#" class="card-button">Manage Tables</a>
             </div>
         </div>

@@ -1,0 +1,75 @@
+/* Sticky Header for Staff Actions */
+.staff-action-bar {
+    position: sticky;
+    top: 80px; /* Adjust based on your main header height */
+    z-index: 90;
+    background-color: var(--second);
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid var(--border-color);
+}
+
+.batch-submit-btn {
+    background-color: var(--primary);
+    color: var(--text-dark);
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.batch-submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(229, 169, 169, 0.4);
+}
+
+.qty-control {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--second);
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    padding: 2px;
+}
+
+.qty-btn {
+    background: var(--fourth);
+    border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    color: var(--text-dark);
+}
+
+.qty-input {
+    width: 40px;
+    text-align: center;
+    border: none;
+    background: transparent;
+    font-weight: 600;
+    font-size: 1.1rem;
+    appearance: textfield;
+}
+
+.qty-input::-webkit-outer-spin-button,
+.qty-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Highlight card when quantity > 0 */
+.menu-item-card.selected {
+    border: 2px solid var(--accent-dark);
+    background-color: #fff5f5;
+}
