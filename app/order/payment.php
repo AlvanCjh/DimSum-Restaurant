@@ -12,9 +12,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'staff') {
     exit;
 }
 
-// Check if order_id is provided
 if (!isset($_GET['order_id'])) {
-    // If came here without an ID, go back to order view
     header("Location: order.php");
     exit;
 }
@@ -44,11 +42,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['process_payment'])) {
             ]);
             $payment_id = $pdo->lastInsertId();
 
-            // The database trigger `check_full_payment` handles status updates
-            
+            // The database trigger `check_full_payment` will automatically update
+            // the order status to 'completed' and the table status to 'available'.
+
             $pdo->commit();
 
-            // Redirect to receipt
+            // Redirect to the e-receipt page
             header("Location: receipt.php?payment_id=" . $payment_id);
             exit;
 
@@ -63,10 +62,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['process_payment'])) {
     }
 }
 
-// --- FETCH ORDER DETAILS ---
+// --- FETCH ORDER DETAILS FOR DISPLAY ---
 try {
-    // Added table_id to the query to help with redirection logic if needed
-    $sql_order = "SELECT o.*, dt.table_number, dt.id as table_id 
+    $sql_order = "SELECT o.*, dt.table_number 
                   FROM orders o 
                   JOIN dining_tables dt ON o.table_id = dt.id 
                   WHERE o.id = ? AND o.status = 'pending'";
@@ -75,9 +73,8 @@ try {
     $order = $stmt_order->fetch();
 
     if (!$order) {
-        // If order is not found or already completed, redirect back to order.php
-        // We can try to set a session message here if you have a way to display it
-        header("Location: order.php"); 
+        // If order is not found or already completed, redirect
+        header("Location: order.php?message=Order not found or already paid");
         exit;
     }
 
@@ -110,13 +107,7 @@ include '../_header.php';
     <div class="payment-container">
         <div class="page-header">
             <h1>Process Payment</h1>
-            <form action="order.php" method="POST" style="display:inline;">
-                <input type="hidden" name="table_id" value="<?php echo $order['table_id']; ?>">
-                <input type="hidden" name="select_table" value="1">
-                <button type="submit" class="back-link" style="background:none; border:none; cursor:pointer; color: inherit; font: inherit; padding: 0; text-decoration: underline;">
-                    ← Back to Order
-                </button>
-            </form>
+            <a href="order.php" class="back-link">← Back to Bills</a>
         </div>
 
         <?php if (!empty($message)): ?>

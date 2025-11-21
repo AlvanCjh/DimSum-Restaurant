@@ -19,22 +19,23 @@ if (isset($_POST['select_table']) && isset($_POST['table_id'])) {
         $table = $stmt_check->fetch();
         
         if ($table) {
+            // Allow 'available' AND 'occupied'
             if ($table['status'] === 'available' || $table['status'] === 'occupied') {
-                // Store selected table details in the session
+                
                 $_SESSION['selected_table_id'] = $table['id'];
                 $_SESSION['selected_table_number'] = $table['table_number'];
                 
-                // Redirect to the menu page
+                // Redirect to menu
                 header("Location: ../menu/menu.php");
                 exit;
             } else {
-                $message = "This table is currently " . htmlspecialchars($table['status']) . " and cannot be selected.";
+                $message = "This table is " . htmlspecialchars($table['status']) . ".";
             }
         } else {
             $message = "Table not found.";
         }
     } catch (PDOException $e) {
-        $message = "Error selecting table. Please try again.";
+        $message = "Error selecting table.";
     }
 }
 
@@ -58,6 +59,7 @@ try {
 <main class="main-wrapper">
     <div class="app-container">
         <h2 class="page-title">Select a Table</h2>
+        
         <div class="search-bar-container" style="margin-bottom: 25px; text-align: center;">
             <input type="text" id="tableSearchInput" 
                    placeholder="Filter by table name (e.g., T01, VIP)" 
@@ -68,19 +70,16 @@ try {
             <div class="message error"><?php echo htmlspecialchars($message); ?></div>
         <?php endif; ?>
         
-        <?php if (isset($error_message)): ?>
-            <div class="message error"><?php echo htmlspecialchars($error_message); ?></div>
-        <?php endif; ?>
-        
         <div class="tables-grid">
             <?php if (empty($tables)): ?>
-                <div class="message error">No tables found in the database.</div>
+                <div class="message error">No tables found.</div>
             <?php else: ?>
                 <?php foreach ($tables as $table): ?>
                     <div class="table-card <?php echo htmlspecialchars($table['status']); ?>">
                         <div class="table-icon">🍽️</div>
                         <div class="table-number"><?php echo htmlspecialchars($table['table_number']); ?></div>
                         <div class="table-capacity">Capacity: <?php echo $table['capacity']; ?> seats</div>
+                        
                         <div class="table-status <?php echo htmlspecialchars($table['status']); ?>">
                             <?php echo htmlspecialchars(ucfirst($table['status'])); ?>
                         </div>
@@ -88,11 +87,12 @@ try {
                         <?php if ($table['status'] === 'available' || $table['status'] === 'occupied'): ?>
                             <form method="post" style="margin-top: 15px;">
                                 <input type="hidden" name="table_id" value="<?php echo $table['id']; ?>">
+                                
                                 <?php if ($table['status'] === 'available'): ?>
                                     <button type="submit" name="select_table" class="select-table-btn">
                                         Order
                                     </button>
-                                <?php else: // Occupied ?>
+                                <?php else: ?>
                                     <button type="submit" name="select_table" class="select-table-btn occupied-btn">
                                         Add More Order
                                     </button>
@@ -109,20 +109,15 @@ try {
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     const searchInput = document.getElementById('tableSearchInput');
-    
     searchInput.addEventListener('keyup', function() {
         const filter = searchInput.value.toLowerCase();
         const tableCards = document.querySelectorAll('.tables-grid .table-card');
-        
         tableCards.forEach(card => {
-            const tableNumberElement = card.querySelector('.table-number');
-            if (tableNumberElement) {
-                const tableName = tableNumberElement.textContent || tableNumberElement.innerText;
-                if (tableName.toLowerCase().indexOf(filter) > -1) {
-                    card.style.display = ""; 
-                } else {
-                    card.style.display = "none";
-                }
+            const tableNumber = card.querySelector('.table-number').textContent;
+            if (tableNumber.toLowerCase().indexOf(filter) > -1) {
+                card.style.display = ""; 
+            } else {
+                card.style.display = "none";
             }
         });
     });

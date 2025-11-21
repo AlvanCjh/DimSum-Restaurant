@@ -31,6 +31,27 @@ $basePath = "../";
 include '../_header.php'; 
 ?>
 
+<!-- Custom styles to apply the background image -->
+<style>
+    body {
+        /* Apply the background image and overlay */
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('<?php echo $basePath; ?>image/background.jpg') !important;
+        background-size: cover !important;
+        background-position: center !important;
+        background-repeat: no-repeat !important;
+        background-attachment: fixed !important;
+    }
+</style>
+
+<?php
+// Check if the session variable is set for the alert
+if (isset($_SESSION['show_order_complete_alert'])) {
+    echo "<script>alert('Order Complete!');</script>";
+    // Unset the session variable so it doesn't show again on refresh
+    unset($_SESSION['show_order_complete_alert']);
+}
+?>
+
 <main class="main-wrapper">
     <div class="dashboard-header">
         <img src="<?php echo $basePath; ?>image/logo.png" alt="Yobita Logo" class="dashboard-logo">
@@ -59,7 +80,7 @@ include '../_header.php';
 
     <!-- Quick Actions -->
     <div class="quick-actions">
-        <a href="../table/table.php" class="btn action-btn"><ion-icon name="add-circle-outline"></ion-icon> Start New Order</a>
-        <a href="../order/order.php" class="btn action-btn"><ion-icon name="list-outline"></ion-icon> View Active Orders</a>
+        <a href="../table/table.php" class="btn action-btn"><ion-icon name="add-circle-outline"></ion-icon> Order</a>
+        <a href="../order/order.php" class="btn action-btn"><ion-icon name="receipt-outline"></ion-icon>Bill</a>
     </div>
 </main>

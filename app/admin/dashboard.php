@@ -34,14 +34,21 @@ include '../_header.php';
                 <div class="card-icon">📊</div>
                 <h2 class="card-title">View Statistics</h2>
                 <p class="card-description">Order History and Statistics</p>
-                <a href="#" class="card-button">View Statistics</a>
+                <a href="viewOrder.php" class="card-button">View Statistics</a>
             </div>
 
             <div class="dashboard-card">
                 <div class="card-icon">🪑</div>
                 <h2 class="card-title">Manage Tables</h2>
                 <p class="card-description">View and manage dining table</p>
-                <a href="#" class="card-button">Manage Tables</a>
+                <a href="manageTables.php" class="card-button">Manage Tables</a>
+            </div>
+
+            <div class="dashboard-card" style="border: 2px solid var(--accent-dark);">
+                <div class="card-icon">🤖</div>
+                <h2 class="card-title">AI Insights</h2>
+                <p class="card-description">Market analysis & revenue forecasting</p>
+                <a href="ai_insights.php" class="card-button" style="background-color: var(--accent-dark); color: white;">Open AI Hub</a>
             </div>
         </div>
 
@@ -49,22 +56,10 @@ include '../_header.php';
         // Get statistics
         try {
             $stats = [];
-            
-            // Count menu items
-            $stmt = $pdo->query("SELECT COUNT(*) as count FROM menu_items");
-            $stats['menu_items'] = $stmt->fetch()['count'];
-            
-            // Count categories
-            $stmt = $pdo->query("SELECT COUNT(*) as count FROM menu_categories");
-            $stats['categories'] = $stmt->fetch()['count'];
-            
-            // Count orders
-            $stmt = $pdo->query("SELECT COUNT(*) as count FROM orders");
-            $stats['orders'] = $stmt->fetch()['count'];
-            
-            // Count tables
-            $stmt = $pdo->query("SELECT COUNT(*) as count FROM dining_tables");
-            $stats['tables'] = $stmt->fetch()['count'];
+            $stats['menu_items'] = $pdo->query("SELECT COUNT(*) FROM menu_items")->fetchColumn();
+            $stats['categories'] = $pdo->query("SELECT COUNT(*) FROM menu_categories")->fetchColumn();
+            $stats['orders'] = $pdo->query("SELECT COUNT(*) FROM orders")->fetchColumn();
+            $stats['tables'] = $pdo->query("SELECT COUNT(*) FROM dining_tables")->fetchColumn();
         } catch (PDOException $e) {
             $stats = ['menu_items' => 0, 'categories' => 0, 'orders' => 0, 'tables' => 0];
         }
@@ -93,6 +88,3 @@ include '../_header.php';
         </div>
     </div>
 </main>
-
-
-

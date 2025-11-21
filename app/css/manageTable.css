@@ -1,0 +1,295 @@
+/* --- Animations --- */
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* General Admin Container Styles */
+.admin-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Add a subtle background pattern to the body for this page */
+body {
+    background-color: #f8f9fa; /* A light grey background */
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: var(--accent-dark, #a05252);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.back-link:hover {
+    color: var(--primary, #e5a9a9);
+}
+
+.page-header {
+    border-bottom: 2px solid var(--border-color, #eee);
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+    animation: fadeInDown 0.5s ease-out;
+}
+
+.page-header h1 {
+    color: var(--text-dark, #333);
+    font-size: 2.5rem;
+    margin: 0;
+}
+
+/* Message Styles */
+.message {
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    border: 1px solid transparent;
+    animation: fadeInDown 0.5s ease-out;
+}
+
+.message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border-color: #c3e6cb;
+}
+
+.message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-color: #f5c6cb;
+}
+
+/* Form Section Styles */
+.form-section {
+    background-color: #f9fafb;
+    padding: 2rem;
+    border-radius: 10px;
+    margin-bottom: 2.5rem;
+    border: 1px solid var(--border-color, #eee);
+    animation: fadeInUp 0.5s ease-out 0.2s;
+    animation-fill-mode: forwards; /* Keep state after animation */
+}
+
+.section-title {
+    font-size: 1.5rem;
+    color: var(--text-dark, #333);
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--text-light, #555);
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"] {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color, #ccc);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--accent-dark, #a05252);
+    box-shadow: 0 0 0 3px rgba(229, 169, 169, 0.3);
+}
+
+/* Table List Section */
+.tables-list-section {
+    margin-top: 2rem;
+    animation: fadeInUp 0.5s ease-out 0.4s;
+    animation-fill-mode: forwards; /* Keep state after animation */
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+table th, table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color, #eee);
+    vertical-align: middle;
+}
+
+table th {
+    background-color: #f9fafb;
+    font-weight: 600;
+    color: var(--text-light, #555);
+}
+
+table tbody tr {
+    transition: all 0.25s ease-in-out;
+}
+table tbody tr:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    background-color: #fff;
+}
+
+/* Status Dropdown */
+.status-select {
+    padding: 0.5rem 0.75rem;
+    border-radius: 20px;
+    border: none;
+    font-weight: 600;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-position: right 0.75rem center;
+    background-repeat: no-repeat;
+    background-size: 0.65em auto;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+}
+
+.status-available {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-occupied {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status-reserved {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+/* Action Buttons */
+.actions-cell {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.edit-btn, .delete-btn, .submit-btn, .cancel-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.submit-btn {
+    background: linear-gradient(to right, #28a745, #218838); /* Green gradient for save */
+    color: white;
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.2);
+}
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.3);
+}
+.submit-btn:active {
+    background: linear-gradient(to right, #218838, #1e7e34); /* Darker green on click */
+    transform: translateY(1px); /* "Pressed" effect */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); /* Adjust shadow for pressed effect */
+}
+
+.edit-btn {
+    background-color: #e2e6ea;
+    color: #333;
+}
+.edit-btn:hover { 
+    background-color: #d3d9df; 
+    transform: scale(1.05);
+}
+
+.cancel-btn {
+    background-color: #f8f9fa;
+    color: #555;
+    border: 1px solid #ddd;
+}
+.cancel-btn:hover { 
+    background-color: #e2e6ea; 
+    transform: scale(1.05);
+}
+
+.delete-btn {
+    background-color: #dc3545;
+    color: white;
+    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.2);
+}
+.delete-btn:hover { 
+    background-color: #c82333; 
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(220, 53, 69, 0.3);
+}
+
+/* Edit Mode Styles */
+td .edit-mode {
+    width: 100%;
+    padding: 0.5rem;
+}
+
+/* Responsive Table */
+@media screen and (max-width: 768px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+    tr { border: 1px solid #ccc; margin-bottom: 1rem; }
+    td {
+        border: none;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        padding-left: 50%;
+        text-align: right;
+    }
+    td:before {
+        position: absolute;
+        left: 10px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        content: attr(data-label);
+        font-weight: bold;
+        text-align: left;
+    }
+    .actions-cell { justify-content: flex-end; }
+}

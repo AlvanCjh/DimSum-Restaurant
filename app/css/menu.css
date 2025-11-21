@@ -1,75 +1,380 @@
-/* Sticky Header for Staff Actions */
+/* =========================================
+   1. Variables & Layout
+   ========================================= */
+:root {
+    /* Assuming these variables exist from your global CSS. 
+       If not, values are provided as fallbacks. */
+    --primary: #FF9F1C;       /* Orange/Primary Brand Color */
+    --secondary: #2EC4B6;     /* Secondary/Accent */
+    --bg-body: #F7F9FC;       /* Light Gray Background */
+    --bg-card: #FFFFFF;       /* White */
+    --text-dark: #1A202C;     /* Dark Text */
+    --text-light: #718096;    /* Muted Text */
+    --danger: #E53E3E;        /* Red for errors/remove */
+    --success: #38A169;       /* Green for success */
+    --border-radius: 12px;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Main Grid Layout: Menu Content (Left) + Sidebar (Right) */
+.menu-page-layout {
+    display: grid;
+    grid-template-columns: 1fr 350px; /* Flexible menu, fixed width sidebar */
+    gap: 24px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+    position: relative;
+}
+
+/* =========================================
+   2. Menu Header & Filters
+   ========================================= */
 .staff-action-bar {
-    position: sticky;
-    top: 80px; /* Adjust based on your main header height */
-    z-index: 90;
-    background-color: var(--second);
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border: 1px solid var(--border-color);
+    margin-bottom: 24px !important; /* Override inline styles slightly for consistency */
+}
+
+.page-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-dark);
 }
 
 .batch-submit-btn {
     background-color: var(--primary);
-    color: var(--text-dark);
-    border: none;
+    color: #fff;
     padding: 12px 24px;
-    border-radius: 8px;
+    border-radius: 50px;
     font-weight: 600;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 12px rgba(255, 159, 28, 0.3);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .batch-submit-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(229, 169, 169, 0.4);
+    box-shadow: 0 6px 16px rgba(255, 159, 28, 0.4);
 }
 
-.qty-control {
+.category-filters {
     display: flex;
-    align-items: center;
-    gap: 5px;
-    background: var(--second);
-    border-radius: 6px;
-    border: 1px solid var(--border-color);
-    padding: 2px;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    scrollbar-width: thin; /* Firefox */
 }
 
-.qty-btn {
-    background: var(--fourth);
-    border: none;
-    width: 30px;
-    height: 30px;
+/* Scrollbar styling for filters */
+.category-filters::-webkit-scrollbar {
+    height: 6px;
+}
+.category-filters::-webkit-scrollbar-thumb {
+    background-color: #ccc;
     border-radius: 4px;
+}
+
+.filter-btn {
+    background: var(--bg-card);
+    border: 1px solid #E2E8F0;
+    color: var(--text-light);
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    white-space: nowrap;
     cursor: pointer;
-    font-weight: bold;
+    transition: all 0.2s ease;
+}
+
+.filter-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.filter-btn.active {
+    background-color: var(--primary);
+    color: #fff; /* White text for active button */
+    border-color: var(--primary);
+    box-shadow: 0 4px 10px rgba(255, 159, 28, 0.2);
+}
+
+/* =========================================
+   3. Menu Grid & Cards
+   ========================================= */
+#menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 20px;
+}
+
+.menu-item-card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius);
+    border: 2px solid transparent; /* Reserve space for selected border */
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.2s ease;
+}
+
+/* Style applied via JS when quantity > 0 */
+.menu-item-card.selected {
+    border-color: var(--primary);
+    background-color: #fffaf0; /* Very light orange tint */
+}
+
+.item-image {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-bottom: 1px solid #F0F0F0;
+}
+
+.item-info {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.item-info h3 {
+    font-size: 1.1rem;
+    margin: 0 0 8px 0;
     color: var(--text-dark);
 }
 
-.qty-input {
-    width: 40px;
-    text-align: center;
-    border: none;
-    background: transparent;
-    font-weight: 600;
-    font-size: 1.1rem;
-    appearance: textfield;
+.item-info p {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin: 0 0 16px 0;
+    line-height: 1.4;
+    flex-grow: 1; /* Pushes footer down */
 }
 
+.item-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+}
+
+.item-price {
+    font-weight: 700;
+    color: var(--text-dark);
+    font-size: 1.1rem;
+}
+
+/* =========================================
+   4. Quantity Controls (Batch Logic)
+   ========================================= */
+.qty-control {
+    background-color: #F7FAFC;
+    border-radius: 8px;
+    padding: 4px;
+    border: 1px solid #EDF2F7;
+}
+
+.qty-btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 6px;
+    background-color: #fff;
+    color: var(--text-dark);
+    font-weight: bold;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    transition: background 0.1s;
+}
+
+.qty-btn:hover {
+    background-color: #EDF2F7;
+}
+
+.qty-btn:active {
+    background-color: #E2E8F0;
+}
+
+/* Hide spinner in number input */
 .qty-input::-webkit-outer-spin-button,
 .qty-input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
 
-/* Highlight card when quantity > 0 */
-.menu-item-card.selected {
-    border: 2px solid var(--accent-dark);
-    background-color: #fff5f5;
+.qty-input {
+    -moz-appearance: textfield; /* Firefox */
+    font-weight: 600;
+    color: var(--text-dark);
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important; /* Override inline style borders */
+}
+
+/* =========================================
+   5. Order Sidebar (Right Panel)
+   ========================================= */
+.order-sidebar {
+    background: var(--bg-card);
+    border-radius: var(--border-radius);
+    padding: 24px;
+    box-shadow: var(--shadow);
+    height: fit-content;
+    max-height: calc(100vh - 40px);
+    position: sticky;
+    top: 20px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.order-sidebar h3 {
+    font-size: 1.25rem;
+    margin-top: 0;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #F7FAFC;
+    color: var(--text-dark);
+}
+
+.order-sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 1;
+}
+
+.order-sidebar li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #F7FAFC;
+}
+
+.order-sidebar li span:first-child {
+    font-size: 0.95rem;
+    color: var(--text-dark);
+    font-weight: 500;
+    max-width: 60%;
+}
+
+/* Sidebar Quantity Controls */
+.quantity-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #F7FAFC;
+    padding: 2px 6px;
+    border-radius: 6px;
+}
+
+.quantity-btn {
+    background: none;
+    border: none;
+    color: var(--text-light);
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0 4px;
+}
+
+.quantity-btn:hover {
+    color: var(--primary);
+}
+
+.quantity-display {
+    font-weight: 600;
+    font-size: 0.9rem;
+    min-width: 16px;
+    text-align: center;
+}
+
+.no-items-message {
+    text-align: center;
+    color: var(--text-light);
+    font-style: italic;
+    padding: 20px 0;
+}
+
+/* Subtotal & Finalize */
+.subtotal-display {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    padding-top: 15px;
+    border-top: 2px dashed #E2E8F0;
+}
+
+.sidebar-actions {
+    margin-top: 20px;
+}
+
+.finalize-order-btn {
+    width: 100%;
+    background-color: var(--success);
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.finalize-order-btn:hover {
+    background-color: #2f855a;
+}
+
+/* =========================================
+   6. Responsive Design
+   ========================================= */
+@media (max-width: 992px) {
+    .menu-page-layout {
+        grid-template-columns: 1fr; /* Stack layout */
+    }
+
+    .order-sidebar {
+        position: fixed;
+        bottom: 0;
+        top: auto;
+        left: 0;
+        right: 0;
+        width: 100%;
+        max-height: 40vh; /* Only take up bottom portion */
+        border-radius: 12px 12px 0 0;
+        box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+        z-index: 100;
+    }
+    
+    .menu-main-content {
+        padding-bottom: 250px; /* Ensure content isn't hidden behind fixed sidebar */
+    }
+}
+
+@media (max-width: 480px) {
+    #menu-grid {
+        grid-template-columns: 1fr; /* Single column for mobile */
+    }
+    
+    .staff-action-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    
+    .batch-submit-btn {
+        width: 100%;
+    }
 }

@@ -1,0 +1,172 @@
+/* --- Animations --- */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- General Styles (re-using from admin_tables for consistency) --- */
+.admin-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    animation: fadeInUp 0.6s ease-out;
+}
+
+body {
+    background-color: #f8f9fa;
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: var(--accent-dark, #a05252);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.back-link:hover {
+    color: var(--primary, #e5a9a9);
+}
+
+.page-header {
+    border-bottom: 2px solid var(--border-color, #eee);
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+}
+
+.page-header h1 {
+    color: var(--text-dark, #333);
+    font-size: 2.5rem;
+    margin: 0;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    color: var(--text-dark, #333);
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+}
+
+/* --- Table Styles --- */
+.table-responsive { overflow-x: auto; }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+table th, table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color, #eee);
+    vertical-align: middle;
+}
+table th {
+    background-color: #f9fafb;
+    font-weight: 600;
+    color: var(--text-light, #555);
+}
+
+/* --- Status Badges --- */
+.status-badge {
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+}
+.status-pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+.status-completed {
+    background-color: #d4edda;
+    color: #155724;
+}
+.status-cancelled {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* --- Action Buttons --- */
+.action-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+}
+.view-btn {
+    background-color: #17a2b8;
+    color: white;
+}
+.view-btn:hover {
+    background-color: #138496;
+    transform: translateY(-2px);
+}
+
+/* --- Order Details Page --- */
+.order-details-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+    align-items: flex-start;
+}
+
+.order-summary-card, .order-items-card {
+    background-color: #f9fafb;
+    padding: 2rem;
+    border-radius: 10px;
+    border: 1px solid var(--border-color, #eee);
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.8rem 0;
+    border-bottom: 1px dashed var(--border-color, #eee);
+    font-size: 1rem;
+}
+.summary-item:last-child {
+    border-bottom: none;
+}
+.summary-item span {
+    color: var(--text-light);
+}
+.summary-item strong {
+    color: var(--text-dark);
+}
+
+.status-text-completed { color: #155724; }
+.status-text-pending { color: #856404; }
+.status-text-cancelled { color: #721c24; }
+
+/* Responsive Adjustments */
+@media screen and (max-width: 992px) {
+    .order-details-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    table, thead, tbody, th, td, tr { display: block; }
+    thead tr { position: absolute; top: -9999px; left: -9999px; }
+    tr { border: 1px solid #ccc; margin-bottom: 1rem; }
+    td {
+        border: none; border-bottom: 1px solid #eee;
+        position: relative; padding-left: 50%; text-align: right;
+    }
+    td:before {
+        position: absolute; left: 10px; width: 45%; padding-right: 10px;
+        white-space: nowrap; content: attr(data-label);
+        font-weight: bold; text-align: left;
+    }
+    .actions-cell { justify-content: flex-end; }
+}
