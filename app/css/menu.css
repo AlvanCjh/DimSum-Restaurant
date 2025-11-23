@@ -208,7 +208,7 @@
 }
 
 .qty-input {
-    -moz-appearance: textfield; /* Firefox */
+    appearance: textfield; /* Firefox */
     font-weight: 600;
     color: var(--text-dark);
     background: transparent !important;

@@ -48,7 +48,7 @@ include '../_header.php';
                 <div class="card-icon">🤖</div>
                 <h2 class="card-title">AI Insights</h2>
                 <p class="card-description">Market analysis & revenue forecasting</p>
-                <a href="ai_insights.php" class="card-button" style="background-color: var(--accent-dark); color: white;">Open AI Hub</a>
+                <a href="ai_forecast.php" class="card-button" style="background-color: var(--accent-dark); color: white;">Open AI Hub</a>
             </div>
         </div>
 
