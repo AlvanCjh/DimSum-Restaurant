@@ -1,0 +1,199 @@
+/* css/receipt.css */
+
+:root {
+    --primary: #FFDCDC;
+    --second: #FFF2EB;
+    --third: #ffffff;
+    --fourth: #FFD6BA;
+    --text-dark: #5C4B4B;
+    --text-light: #7a6a6a;
+    --border-color: #EAE0DA;
+    --accent-dark: #E5A9A9;
+    --success-green: #28a745;
+}
+
+body {
+    background-color: var(--second);
+    font-family: 'Poppins', sans-serif;
+    color: var(--text-dark);
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.main-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+/* =========================================
+   1. SUCCESS SCREEN STYLES
+   ========================================= */
+.success-container {
+    background: var(--third);
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(92, 75, 75, 0.1);
+    max-width: 400px;
+    width: 100%;
+    animation: fadeInUp 0.5s ease-out;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.success-header h2 {
+    color: var(--text-dark);
+    margin: 20px 0 5px 0;
+    font-size: 1.8rem;
+}
+
+.success-header p {
+    color: var(--text-light);
+    margin: 0 0 25px 0;
+}
+
+/* Animated Checkmark */
+.checkmark-wrapper {
+    width: 80px;
+    height: 80px;
+    background: #e8f5e9;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.checkmark {
+    width: 40px;
+    height: 40px;
+    stroke: var(--success-green);
+    stroke-width: 4;
+    fill: none;
+    stroke-linecap: round;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    animation: dash 1s ease-in-out forwards;
+}
+
+@keyframes dash {
+    to { stroke-dashoffset: 0; }
+}
+
+/* Payment Details Box */
+.payment-summary {
+    background: var(--second);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+    color: var(--text-light);
+}
+
+.summary-row.highlight {
+    color: var(--text-dark);
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border-color);
+    margin-bottom: 0;
+}
+
+.change-label {
+    color: var(--success-green);
+}
+
+/* Buttons */
+.generate-btn {
+    background: var(--accent-dark);
+    color: white;
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
+    margin-bottom: 10px;
+}
+
+.generate-btn:hover {
+    background: var(--text-dark);
+    transform: translateY(-2px);
+}
+
+.skip-btn {
+    background: transparent;
+    color: var(--text-light);
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    text-decoration: underline;
+}
+
+/* =========================================
+   2. RECEIPT VIEW (Initially Hidden)
+   ========================================= */
+.receipt-container {
+    display: none; /* HIDDEN BY DEFAULT */
+    background-color: var(--third);
+    width: 100%;
+    max-width: 380px;
+    padding: 40px 30px;
+    box-shadow: 0 10px 30px rgba(92, 75, 75, 0.15);
+    border-top: 8px solid var(--accent-dark);
+}
+
+/* ... (Keep existing receipt styles from previous answer) ... */
+/* Paste previous Receipt styles here for headers, tables, etc. */
+.receipt-header { text-align: center; border-bottom: 2px dashed var(--border-color); padding-bottom: 20px; margin-bottom: 20px; }
+.receipt-header h1 { font-size: 2rem; margin: 0; color: var(--text-dark); }
+.receipt-header p { color: var(--text-light); font-size: 0.8rem; letter-spacing: 2px; }
+.receipt-info { font-size: 0.9rem; margin-bottom: 20px; color: var(--text-light); }
+.receipt-info p { display: flex; justify-content: space-between; margin: 5px 0; }
+.receipt-items table { width: 100%; border-collapse: collapse; margin-bottom: 20px; border-bottom: 2px dashed var(--border-color); }
+.receipt-items th { text-align: left; font-size: 0.75rem; color: var(--text-light); padding-bottom: 10px; }
+.receipt-items td { padding: 10px 0; font-size: 0.95rem; color: var(--text-dark); }
+.receipt-items td:last-child, .receipt-items th:last-child { text-align: right; }
+.total-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-light); }
+.grand-total { border-top: 2px solid var(--border-color); padding-top: 15px; font-size: 1.3rem; font-weight: 800; color: var(--text-dark); margin-top: 15px; }
+.receipt-footer { text-align: center; font-size: 0.85rem; color: var(--text-light); margin: 30px 0; }
+.receipt-actions { display: flex; gap: 15px; }
+.print-btn, .done-btn { flex: 1; padding: 12px; border-radius: 8px; text-align: center; font-weight: 600; text-decoration: none; cursor: pointer; border: none; font-size: 1rem; }
+.print-btn { background-color: var(--primary); color: var(--text-dark); }
+.done-btn { background-color: var(--accent-dark); color: white; }
+
+
+/* =========================================
+   3. PRINT CONFIGURATION
+   ========================================= */
+@media print {
+    body { background: white; }
+    .success-container { display: none !important; } /* Hide success screen */
+    .receipt-container { 
+        display: block !important; /* Force show receipt */
+        box-shadow: none; 
+        border: none;
+        width: 100%;
+        max-width: 100%;
+        position: absolute;
+        top: 0; left: 0;
+    }
+    .receipt-actions, header, nav, .back-link { display: none !important; }
+}

@@ -44,11 +44,11 @@ include '../_header.php';
                 <a href="manageTables.php" class="card-button">Manage Tables</a>
             </div>
 
-            <div class="dashboard-card" style="border: 2px solid var(--accent-dark);">
+            <div class="dashboard-card">
                 <div class="card-icon">🤖</div>
                 <h2 class="card-title">AI Insights</h2>
                 <p class="card-description">Market analysis & revenue forecasting</p>
-                <a href="ai_forecast.php" class="card-button" style="background-color: var(--accent-dark); color: white;">Open AI Hub</a>
+                <a href="ai_forecast.php" class="card-button">Open AI Hub</a>
             </div>
         </div>
 
