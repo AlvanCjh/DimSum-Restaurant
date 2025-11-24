@@ -38,13 +38,13 @@ body {
 
 .dashboard-header h1 {
     font-size: 2.8rem;
-    color: var(--text-dark);
+    color: #fff;
     margin-bottom: 0.5rem;
 }
 
 .dashboard-header p {
     font-size: 1.1rem;
-    color: var(--text-light);
+    color: #fff;
 }
 
 /* --- Dashboard Grid & Cards --- */
@@ -120,7 +120,7 @@ body {
 }
 
 .stats-section h2 {
-    color: var(--text-dark);
+    color: #fff;
     margin-bottom: 2rem;
     text-align: center;
     font-size: 2rem;

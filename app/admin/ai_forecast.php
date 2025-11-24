@@ -26,12 +26,13 @@ $errorMsg = isset($data['error']) ? $data['error'] : "Unknown error connecting t
     <div class="admin-container">
         <a href="dashboard.php" class="back-link">← Back to Dashboard</a>
 
-        <div class="page-header">
+        <div class="page-header" style="display: flex; justify-content: space-between; align-items: center;">
             <h1>AI Sales Forecast</h1>
+            
             <?php if($hasData): ?>
-                <span class="ai-status-badge">
-                    🟢 AI Model Active
-                </span>
+                <div class="ai-status-badge">
+                    <span class="pulse-dot"></span> AI Model Active
+                </div>
             <?php endif; ?>
         </div>
 
@@ -70,14 +71,12 @@ $errorMsg = isset($data['error']) ? $data['error'] : "Unknown error connecting t
                         </thead>
                         <tbody>
                             <?php 
-                            // Get the last actual sale value to compare trend
                             $lastValue = end($data['history_sales']);
                             
                             for($i = 0; $i < count($data['forecast_dates']); $i++) {
                                 $currVal = $data['forecast_sales'][$i];
                                 $dateStr = date("F d, Y", strtotime($data['forecast_dates'][$i]));
                                 
-                                // Determine trend
                                 $trend = ($currVal >= $lastValue) ? 'up' : 'down';
                                 $trendIcon = ($trend == 'up') 
                                     ? '<span style="color: #28a745;">▲ Rising</span>' 
@@ -89,7 +88,7 @@ $errorMsg = isset($data['error']) ? $data['error'] : "Unknown error connecting t
                                 echo "<td>" . $trendIcon . "</td>";
                                 echo "</tr>";
 
-                                $lastValue = $currVal; // Update comparison for next row
+                                $lastValue = $currVal; 
                             }
                             ?>
                         </tbody>
@@ -112,7 +111,6 @@ $errorMsg = isset($data['error']) ? $data['error'] : "Unknown error connecting t
 
     const allLabels = historyDates.concat(forecastDates);
     
-    // Prepare Datasets
     const historyDataPadded = historySales.concat(Array(forecastDates.length).fill(null));
     
     const lastHistoryVal = historySales[historySales.length - 1];
@@ -122,9 +120,8 @@ $errorMsg = isset($data['error']) ? $data['error'] : "Unknown error connecting t
 
     const ctx = document.getElementById('forecastChart').getContext('2d');
 
-    // --- Professional Color Theme ---
-    const colorHistory = '#4e73df'; // Primary Blue
-    const colorForecast = '#fd7e14'; // Orange (Distinctive for forecast)
+    const colorHistory = '#4e73df'; 
+    const colorForecast = '#fd7e14'; 
 
     new Chart(ctx, {
         type: 'line',
@@ -135,7 +132,7 @@ $errorMsg = isset($data['error']) ? $data['error'] : "Unknown error connecting t
                     label: 'Actual Sales',
                     data: historyDataPadded,
                     borderColor: colorHistory,
-                    backgroundColor: 'rgba(78, 115, 223, 0.05)', // Very faint blue fill
+                    backgroundColor: 'rgba(78, 115, 223, 0.05)', 
                     pointBackgroundColor: colorHistory,
                     pointRadius: 4,
                     borderWidth: 3,
@@ -146,7 +143,7 @@ $errorMsg = isset($data['error']) ? $data['error'] : "Unknown error connecting t
                     label: 'AI Forecast',
                     data: forecastDataPadded,
                     borderColor: colorForecast,
-                    borderDash: [8, 6], // Dashed line
+                    borderDash: [8, 6], 
                     pointBackgroundColor: '#fff',
                     pointBorderColor: colorForecast,
                     pointRadius: 4,
@@ -159,7 +156,7 @@ $errorMsg = isset($data['error']) ? $data['error'] : "Unknown error connecting t
         options: {
             maintainAspectRatio: false,
             plugins: {
-                legend: { display: false }, // We use our custom HTML legend
+                legend: { display: false }, 
                 tooltip: {
                     backgroundColor: 'rgba(0,0,0,0.8)',
                     titleFont: { size: 13 },
@@ -190,4 +187,3 @@ $errorMsg = isset($data['error']) ? $data['error'] : "Unknown error connecting t
     });
 </script>
 <?php endif; ?>
-

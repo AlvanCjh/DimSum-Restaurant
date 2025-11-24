@@ -1,0 +1,189 @@
+/* --- Animation Keyframes (reused from index.css) --- */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Main container for the profile form */
+.profile-container {
+    width: 40%; /* Force the container to be 90% of the screen width */
+    margin: 6rem auto; /* Adjusted vertical space to ensure it fits well */
+    padding: 3rem; /* Adjusted padding for a solid container */
+    border-radius: 20px; /* More curved corners */
+    background-color: var(--third); /* Reverted to solid white background */
+    box-shadow: 0 10px 30px rgba(92, 75, 75, 0.07); /* Standard soft shadow */
+
+    /* Apply animation to direct children */
+    & > * {
+        opacity: 0;
+        animation: fadeInUp 0.6s ease-out forwards;
+    }
+}
+
+.profile-container h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: var(--text-dark); /* Reverted to dark text */
+    animation-delay: 0.1s; /* Stagger animation */
+}
+
+/* Profile Picture Section */
+.pfp-section {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+#pfp-preview {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--border-color); /* Use theme border color */
+    cursor: pointer;
+    transition: border-color 0.3s;
+}
+
+#pfp-preview:hover {
+    border-color: #007bff;
+}
+
+.pfp-upload-btn {
+    display: block;
+    margin: 0.5rem auto 0;
+    cursor: pointer;
+    color: var(--text-light); /* Reverted to light text color */
+    font-weight: 500;
+}
+
+/* Form Styling */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--text-dark); /* Reverted to dark text */
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="number"] {
+    width: 100%;
+    padding: 0.75rem; /* Standard padding */
+    border: 1px solid var(--border-color); /* Use theme border color */
+    border-radius: 10px; /* More rounded corners */
+    font-size: 1rem;
+    box-sizing: border-box;
+    background-color: #f9f9f9; /* Light background for inputs */
+    color: var(--text-dark); /* Dark text for input */
+}
+
+.form-group input::placeholder {
+    color: var(--text-light); /* Use theme placeholder color */
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.captcha-group label {
+    font-size: 1.1rem; /* This rule is now unused as CAPTCHA is removed */
+}
+
+hr {
+    border: none;
+    border-top: 1px solid var(--border-color); /* Use theme border color */
+    margin: 2rem 0;
+    animation-delay: 0.8s;
+}
+
+h4 {
+    color: var(--text-dark); /* Reverted to dark text */
+    margin-bottom: 1rem;
+}
+
+/* Submit Button */
+.submit-btn {
+    width: auto; /* Allow button to size to content */
+    padding: 0.9rem 2rem; /* Adjusted padding */
+    background: linear-gradient(to right, var(--primary), var(--accent-dark)); /* Gradient button */
+    color: white;
+    border: none;
+    border-radius: 10px; /* Rounded button corners */
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+    margin-top: 1.5rem; /* Space above button */
+}
+
+.submit-btn:hover {
+    transform: scale(1.02);
+}
+
+/* Messages */
+.message.success {
+    background-color: #d4edda; color: #155724;
+}
+.message.error {
+    background-color: #f8d7da; color: #721c24;
+}
+.message {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 10px;
+    text-align: center;
+}
+
+/* Modal for Cropping */
+.modal {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fff; /* Reverted to solid white */
+    color: var(--text-dark); /* Reverted to dark text */
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    text-align: center;
+}
+
+.close-modal {
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    color: #555;
+    cursor: pointer;
+}
+
+.crop-container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    max-height: 400px;
+}
+
+#image-to-crop {
+    max-width: 100%;
+}

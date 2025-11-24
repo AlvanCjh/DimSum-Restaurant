@@ -18,16 +18,14 @@ body {
     color: var(--text-dark);
     margin: 0;
     min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 .main-wrapper {
     width: 100%;
     display: flex;
     justify-content: center;
-    padding: 20px;
+    padding: 100px 20px 40px 20px; 
+    box-sizing: border-box; /* Ensures padding doesn't mess up width */
 }
 
 /* =========================================

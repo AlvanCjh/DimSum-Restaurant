@@ -45,10 +45,24 @@ include '../_header.php';
             </div>
 
             <div class="dashboard-card">
+                <div class="card-icon">👥</div>
+                <h2 class="card-title">Manage Staff</h2>
+                <p class="card-description">View staff profiles and performance stats</p>
+                <a href="manageStaff.php" class="card-button">View Staff</a>
+            </div>
+
+            <div class="dashboard-card">
                 <div class="card-icon">🤖</div>
                 <h2 class="card-title">AI Insights</h2>
                 <p class="card-description">Market analysis & revenue forecasting</p>
                 <a href="ai_forecast.php" class="card-button">Open AI Hub</a>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="card-icon">🤖</div>
+                <h2 class="card-title">AI Reports Generation</h2>
+                <p class="card-description">Automate AI Report Generation</p>
+                <a href="ai_reports.php" class="card-button">Open AI Reports</a>
             </div>
         </div>
 
@@ -66,7 +80,7 @@ include '../_header.php';
         ?>
 
         <div class="stats-section">
-            <h2 style="color: var(--text-dark); margin-bottom: 20px; text-align: center;">Statistics</h2>
+            <h2 style="color: #fff; margin-bottom: 20px; text-align: center;">Statistics</h2>
             <div class="stats-grid">
                 <div class="stat-item">
                     <div class="stat-number"><?php echo $stats['menu_items']; ?></div>

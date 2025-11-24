@@ -1,76 +1,177 @@
 <?php
-// --- 1. START SESSION & INCLUDE CONNECTION ---
 session_start();
+require_once '../connection.php';
 
-$pageTitle = "Admin Login"; 
-$basePath = "../";
-include '../_header.php';
-
-// This path assumes your admin login file is in /admin/login.php
-// It goes up one level to the root to find connection.php
-require_once '../connection.php'; 
-
-// Initialize message variable
 $message = "";
 
-// --- 2. ADMIN SIGN IN LOGIC ---
-if (isset($_POST['login'])) {
-    
-    // Get form data
-    $email    = trim($_POST['email']);
+// --- ADMIN SIGN IN LOGIC ---
+if (isset($_POST['admin_login'])) {
+    $email = trim($_POST['email']);
     $password = trim($_POST['password']);
 
     try {
-        // Find user by email
-        $sql = "SELECT * FROM users WHERE email = ?";
+        $sql = "SELECT * FROM users WHERE email = ? AND role = 'admin'";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$email]);
-        $user = $stmt->fetch();
+        $admin = $stmt->fetch();
 
-        // Check if user exists and password is correct
-        if ($user && password_verify($password, $user['password'])) {
-            
-            // --- VALIDATION ---
-            // Check if the user's role is 'admin'
-            if ($user['role'] == 'admin') {
+        if ($admin && password_verify($password, $admin['password'])) {
+            // Login successful, set session variables
+            $_SESSION['user_id'] = $admin['id']; // This was missing
+            $_SESSION['username'] = $admin['username']; // This was missing
+            $_SESSION['role'] = $admin['role']; // This was missing
+            $_SESSION['profile_picture'] = $admin['profile_picture']; // This was missing
 
-                // Login successful
-                $_SESSION['user_id'] = $user['id'];
-                $_SESSION['username'] = $user['username'];
-                $_SESSION['role'] = $user['role'];
-                $_SESSION['profile_picture'] = $user['profile_picture'];
-                
-                // Redirect to the main admin dashboard or index
-                // (Using ../index.php as per your previous staff login)
-                header("Location: dashboard.php"); 
-                exit; 
-
-            } else {
-                // User is 'staff' or another role, but not 'admin'
-                $message = "You do not have permission to access the admin area.";
-            }
+            // Redirect to admin dashboard
+            header("Location: dashboard.php");
+            exit;
 
         } else {
-            // User not found or password was incorrect
-            $message = "Invalid email or password.";
+            $message = "Invalid credentials or not an admin account.";
         }
-
     } catch (PDOException $e) {
         $message = "Database error. Please try again later.";
-        // For debugging: $message = $e->getMessage();
     }
 }
+
+// --- PAGE SETUP ---
+$pageTitle = 'Admin Login';
+$basePath = '../'; // Set base path for assets
+include '../_header.php';
 ?>
 
+<!-- Use the same stylesheet as the staff login for a consistent feel -->
+<link rel="stylesheet" href="<?php echo $basePath; ?>css/signInUp.css">
 
+<!-- Custom styles to adapt the two-panel layout for a single login form -->
+<style>
+    /* Add a subtle gradient background for this page */
+    body {
+        /* Restore background image with overlay */
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('<?php echo $basePath; ?>image/background.jpg') !important;
+        background-size: cover !important;
+        background-position: center !important;
+        background-repeat: no-repeat !important;
+        background-attachment: fixed !important;
+        display: flex; /* Helps center the container */
+    }
 
-<link rel="stylesheet" href="/css/adminSignIn.css">
-<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    /* Animation for the container to fade in and slide up */
+    @keyframes slideUpFadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .container {
+        width: 37%; /* Made the container wider */
+        min-height: 75vh; /* Force a minimum height (75% of viewport height) */
+            margin: auto; /* Vertically and horizontally center */
+            overflow: visible;
+        padding: 3rem 4rem; /* Adjusted padding for a more spacious feel */
+        border-radius: 30px; /* Made the corners more curved */
+        
+        /* --- Reverted to Solid Container --- */
+        background-color: var(--third); /* Solid white background */
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Standard soft shadow */
+
+        animation: slideUpFadeIn 0.6s ease-out forwards;
+
+        /* Add flex properties to center the form inside the taller container */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    /* Keyframe for individual element animations */
+    @keyframes element-fade-in {
+        from { opacity: 0; transform: translateY(15px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .form-container form > * {
+        opacity: 0; /* Start hidden */
+        animation: element-fade-in 0.5s ease-out forwards;
+    }
+
+    .form-container { 
+        width: 100%; 
+        padding: 0;
+        background: none;
+    }
+
+    .overlay-container { display: none; } /* Hide the sliding overlay */
+
+    .admin-logo {
+        width: 150px; /* Made the logo bigger */
+        display: block;
+        margin: 0 auto 1rem; /* Centered the logo */
+        margin-bottom: 2rem; /* Increased space below logo */
+        animation-delay: 0.2s; /* Stagger animation */
+    }
+
+    .form-container h1 {
+        animation-delay: 0.3s;
+        font-size: 2.5rem; /* Made the title bigger */
+        margin-bottom: 1.5rem; /* Adjusted space below the title */
+        color: var(--text-dark); /* Dark text for readability */
+    }
+
+    .form-container .infield {
+        margin-bottom: 1.5rem; /* More space between input fields */
+        animation-delay: 0.4s;
+    }
+
+    .form-container .infield:nth-of-type(2) { animation-delay: 0.5s; } /* Stagger animation for second input */
+
+    .form-container .infield input {
+        background-color: #f9f9f9; /* Light background for inputs */
+        border: 1px solid var(--border-color); /* Standard border */
+        padding: 1rem 1.2rem; /* More padding for taller inputs */
+        border-radius: 10px; /* Slightly rounded input corners */
+        color: var(--text-dark); /* Dark text for input */
+        font-weight: 500;
+    }
+
+    .form-container .infield input:focus {
+        border-color: var(--accent-dark);
+        box-shadow: 0 0 0 3px rgba(229, 169, 169, 0.3);
+    }
+
+    .form-container .error-message {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        margin-top: 1rem;
+        font-size: 0.9rem;
+        animation-delay: 0.6s;
+    }
+
+    .form-container button {
+        background: linear-gradient(to right, var(--primary), var(--accent-dark)); /* Gradient button */
+        color: white;
+        border: none;
+        padding: 0.9rem 1.8rem; /* Adjusted padding to make button smaller */
+        border-radius: 10px; /* Rounded button corners */
+        font-size: 1rem; /* Adjusted font size to make button smaller */
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+        animation-delay: 0.7s;
+        transition: all 0.3s ease;
+    }
+
+    .form-container button:hover {
+        /* Add a "glow" effect on hover */
+        box-shadow: 0 8px 25px rgba(255, 220, 220, 0.4);
+    }
+
+</style>
 
 <div class="container" id="container">
     <div class="form-container sign-in-container">
         <form method="post">
-            <h1>Admin Sign In</h1>
+            <img src="<?php echo $basePath; ?>image/logo.png" alt="Yobita Logo" class="admin-logo">
+            <h1>Admin Log In</h1>
             <div class="infield">
                 <input type="email" placeholder="Email" name="email" required />
             </div>
@@ -78,17 +179,12 @@ if (isset($_POST['login'])) {
                 <input type="password" placeholder="Password" name="password" required />
             </div>
 
-            <?php 
-            // --- 3. DISPLAY ERROR MESSAGE ---
-            // This checks if a login was attempted and if the $message is not empty
-            if (isset($_POST['login']) && !empty($message)) { 
-            ?>
+            <?php if (!empty($message)) : ?>
                 <p class="error-message"><?php echo $message; ?></p>
-            <?php 
-            } 
-            ?>
+            <?php endif; ?>
 
-            <button type="submit" name="login">Sign In</button>
+            <button type="submit" name="admin_login">Log In</button>
+
         </form>
     </div>
 </div>
