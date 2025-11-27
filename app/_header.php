@@ -51,6 +51,7 @@ if (!isset($basePath)) {
                             <a href="#" class="login-link <?php echo ($pageTitle === 'Login') ? 'active' : ''; ?>">Login</a>
                             <ul class="dropdown-menu">
                                 <li><a href="<?php echo $basePath; ?>index.php">Staff Login</a></li>
+                                <li><a href="<?php echo $basePath; ?>chef/login.php">Chef Login</a></li>
                                 <li><a href="<?php echo $basePath; ?>admin/login.php">Admin Login</a></li> 
                             </ul>
                         </li>

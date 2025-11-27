@@ -10,7 +10,7 @@ if (isset($_POST['admin_login'])) {
     $password = trim($_POST['password']);
 
     try {
-        $sql = "SELECT * FROM users WHERE email = ? AND role = 'admin'";
+        $sql = "SELECT * FROM users WHERE email = ? AND role = 'chef'";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$email]);
         $admin = $stmt->fetch();
@@ -27,7 +27,7 @@ if (isset($_POST['admin_login'])) {
             exit;
 
         } else {
-            $message = "Invalid credentials or not an admin account.";
+            $message = "Invalid credentials or not a chef account.";
         }
     } catch (PDOException $e) {
         $message = "Database error. Please try again later.";
@@ -35,7 +35,7 @@ if (isset($_POST['admin_login'])) {
 }
 
 // --- PAGE SETUP ---
-$pageTitle = 'Admin Login';
+$pageTitle = 'chef Login';
 $basePath = '../'; // Set base path for assets
 include '../_header.php';
 ?>
@@ -48,7 +48,7 @@ include '../_header.php';
         <form method="post">
             <img src="<?php echo $basePath; ?>image/logo.png" alt="Yobita Logo" class="admin-logo anim-1">
             
-            <h1 class="anim-2">Admin Log In</h1>
+            <h1 class="anim-2">Chef Log In</h1>
             
             <div class="infield anim-3">
                 <input type="email" placeholder="Email" name="email" required />
