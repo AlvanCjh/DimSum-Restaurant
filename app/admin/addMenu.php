@@ -151,21 +151,21 @@ try {
 <link rel="stylesheet" href="/css/addMenu.css">
 
 <main class="main-wrapper">
-    <div class="admin-menu-container">
-        <a href="dashboard.php" class="back-link">← Back to Dashboard</a>
+    <div class="admin-menu-container admin-container">
+        <a href="dashboard.php" class="back-link fade-in-down">← Back to Dashboard</a>
         
-        <div class="page-header">
+        <div class="page-header fade-in-down delay-1">
             <h1>Manage Menu</h1>
         </div>
 
         <?php if (!empty($message)): ?>
-            <div class="message <?php echo $message_type; ?>">
+            <div class="message fade-in-down delay-2 <?php echo $message_type; ?>">
                 <?php echo htmlspecialchars($message); ?>
             </div>
         <?php endif; ?>
 
-        <div class="two-column-layout">
-            <div class="form-section">
+        <div class="two-column-layout fade-in-up">
+            <div class="form-section delay-1">
                 <h2 class="section-title">Add New Category</h2>
                 <form method="post">
                     <div class="form-group">
@@ -180,7 +180,7 @@ try {
                 </form>
             </div>
 
-            <div class="form-section" id="itemFormSection">
+            <div class="form-section delay-2" id="itemFormSection">
                 <h2 class="section-title" id="formTitle">Add New Menu Item</h2>
                 <form method="post" enctype="multipart/form-data" id="menuItemForm">
                     <input type="hidden" name="item_id" id="item_id">
@@ -225,14 +225,14 @@ try {
             </div>
         </div>
 
-        <div class="menu-items-section">
+        <div class="menu-items-section fade-in-up delay-3">
             <h2 class="section-title">Existing Menu Items (<?php echo count($menu_items); ?>)</h2>
             <div class="search-container">
                 <input type="text" id="menuSearchInput" placeholder="🔍 Search items by name, category, or description...">
             </div>
             <div class="items-grid">
                 <?php foreach ($menu_items as $item): ?>
-                    <div class="menu-item-card">
+                    <div class="menu-item-card fade-in-up">
                         <div class="card-image">
                             <img src="<?php echo $item['image_url'] ? '../'.htmlspecialchars($item['image_url']) : 'https://via.placeholder.com/250x150?text=No+Image'; ?>" alt="Item">
                         </div>
