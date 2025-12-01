@@ -90,8 +90,8 @@ if (isset($_POST['add_batch_order']) && isset($_POST['items']) && $_SESSION['rol
     try {
         $pdo->beginTransaction();
 
-        // 1. Check or Create Order
-        $sql_order = "SELECT * FROM orders WHERE table_id = ? AND status = 'pending' LIMIT 1";
+        // 1. Check or Create Order (check for both 'pending' and 'prepared' status)
+        $sql_order = "SELECT * FROM orders WHERE table_id = ? AND status IN ('pending', 'prepared') LIMIT 1";
         $stmt_order = $pdo->prepare($sql_order);
         $stmt_order->execute([$table_id]);
         $order = $stmt_order->fetch();
@@ -107,6 +107,14 @@ if (isset($_POST['add_batch_order']) && isset($_POST['items']) && $_SESSION['rol
             $stmt_update_table->execute([$table_id]);
         } else {
             $order_id = $order['id'];
+            
+            // If order status is 'prepared', revert it back to 'pending' when new items are added
+            // This ensures the chef sees the new items on the KDS
+            if ($order['status'] === 'prepared') {
+                $sql_revert_status = "UPDATE orders SET status = 'pending' WHERE id = ?";
+                $stmt_revert_status = $pdo->prepare($sql_revert_status);
+                $stmt_revert_status->execute([$order_id]);
+            }
         }
 
         // 2. Loop through submitted items
@@ -124,7 +132,8 @@ if (isset($_POST['add_batch_order']) && isset($_POST['items']) && $_SESSION['rol
 
                     if ($existing) {
                         $new_qty = $existing['quantity'] + $qty;
-                        $stmt_upd = $pdo->prepare("UPDATE order_items SET quantity = ? WHERE id = ?");
+                        // When updating quantity, clear prepared_at so it shows on KDS again
+                        $stmt_upd = $pdo->prepare("UPDATE order_items SET quantity = ?, prepared_at = NULL WHERE id = ?");
                         $stmt_upd->execute([$new_qty, $existing['id']]);
                     } else {
                         $stmt_ins = $pdo->prepare("INSERT INTO order_items (order_id, menu_item_id, quantity, price) VALUES (?, ?, ?, ?)");
@@ -285,7 +294,7 @@ try {
             $current_order_id = null;
             $current_subtotal = 0;
             try {
-                $sql_find_order = "SELECT id, total_amount FROM orders WHERE table_id = ? AND status = 'pending' LIMIT 1";
+                $sql_find_order = "SELECT id, total_amount FROM orders WHERE table_id = ? AND status IN ('pending', 'prepared') LIMIT 1";
                 $stmt_find_order = $pdo->prepare($sql_find_order);
                 $stmt_find_order->execute([$_SESSION['selected_table_id']]);
                 $current_order = $stmt_find_order->fetch();

@@ -82,5 +82,6 @@ if (isset($_SESSION['show_order_complete_alert'])) {
     <div class="quick-actions">
         <a href="../table/table.php" class="btn action-btn"><ion-icon name="add-circle-outline"></ion-icon> Order</a>
         <a href="../order/order.php" class="btn action-btn"><ion-icon name="receipt-outline"></ion-icon>Bill</a>
+        <a href="active_orders.php" class="btn action-btn"><ion-icon name="list-outline"></ion-icon>Active Orders</a>
     </div>
 </main>

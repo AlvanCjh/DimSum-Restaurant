@@ -48,12 +48,12 @@ $message_type = "";
             <h2 class="page-title" style="text-align: center; margin-bottom: 30px;">Select a Bill to Process</h2>
             
             <?php
-            // Fetch only tables that have a 'pending' order
+            // Fetch tables that have 'pending' or 'prepared' orders
             try {
-                $sql_active_orders = "SELECT dt.id as table_id, dt.table_number, dt.capacity, o.id as order_id, o.total_amount
+                $sql_active_orders = "SELECT dt.id as table_id, dt.table_number, dt.capacity, o.id as order_id, o.total_amount, o.status
                                       FROM orders o
                                       JOIN dining_tables dt ON o.table_id = dt.id
-                                      WHERE o.status = 'pending'
+                                      WHERE o.status IN ('pending', 'prepared')
                                       ORDER BY dt.table_number ASC";
                 $stmt_active_orders = $pdo->query($sql_active_orders);
                 $active_orders = $stmt_active_orders->fetchAll();
@@ -74,10 +74,27 @@ $message_type = "";
                             <div class="table-icon">🍽️</div>
                             <div class="table-number"><?php echo htmlspecialchars($order['table_number']); ?></div>
                             <div class="table-capacity">Order Total: RM <?php echo number_format($order['total_amount'], 2); ?></div>
+                            <div class="order-status-badge" style="margin: 10px 0;">
+                                <?php if ($order['status'] === 'pending'): ?>
+                                    <span style="background: #fff3cd; color: #856404; padding: 5px 12px; border-radius: 20px; font-size: 0.85em; font-weight: 600;">
+                                        ⏳ Pending (Kitchen)
+                                    </span>
+                                <?php elseif ($order['status'] === 'prepared'): ?>
+                                    <span style="background: #d1ecf1; color: #0c5460; padding: 5px 12px; border-radius: 20px; font-size: 0.85em; font-weight: 600;">
+                                        ✅ Prepared (Ready for Payment)
+                                    </span>
+                                <?php endif; ?>
+                            </div>
                             <div class="table-actions">
-                                <a href="payment.php?order_id=<?php echo $order['order_id']; ?>" class="select-table-btn" style="width: 100%;">
-                                    Go to Bill
-                                </a>
+                                <?php if ($order['status'] === 'prepared'): ?>
+                                    <a href="payment.php?order_id=<?php echo $order['order_id']; ?>" class="select-table-btn" style="width: 100%;">
+                                        Go to Bill
+                                    </a>
+                                <?php else: ?>
+                                    <button class="select-table-btn" style="width: 100%; opacity: 0.6; cursor: not-allowed;" disabled>
+                                        Waiting for Kitchen...
+                                    </button>
+                                <?php endif; ?>
                             </div>
                         </div>
                     <?php endforeach; ?>

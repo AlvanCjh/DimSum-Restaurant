@@ -1,0 +1,272 @@
+/* --- Animations --- */
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* --- General Admin Container Styles --- */
+.kds-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    animation: fadeInUp 0.6s ease-out;
+}
+
+body {
+    background-color: #f8f9fa;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* --- Header Styles --- */
+.kds-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 2rem;
+    background: #f9fafb;
+    border-radius: 12px;
+    border: 1px solid var(--border-color, #eee);
+    animation: fadeInDown 0.5s ease-out;
+}
+
+.kds-header h1 {
+    margin: 0 0 10px 0;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-dark, #333);
+}
+
+.kds-header p {
+    margin: 5px 0;
+    font-size: 1.1em;
+    color: var(--text-light, #666);
+}
+
+.auto-refresh-indicator {
+    margin-top: 15px;
+    font-size: 0.9em;
+    color: var(--text-light, #666);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.refresh-icon {
+    animation: spin 2s linear infinite;
+}
+
+/* --- Message Styles --- */
+.message {
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    border: 1px solid transparent;
+    animation: fadeInDown 0.5s ease-out;
+}
+
+.message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border-color: #c3e6cb;
+}
+
+.message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-color: #f5c6cb;
+}
+
+/* --- No Orders State --- */
+.no-orders {
+    text-align: center;
+    padding: 80px 20px;
+    background: #f9fafb;
+    border-radius: 12px;
+    border: 1px solid var(--border-color, #eee);
+    animation: fadeInUp 0.6s ease-out 0.2s;
+    animation-fill-mode: forwards;
+}
+
+.no-orders-icon {
+    font-size: 5em;
+    margin-bottom: 20px;
+}
+
+.no-orders h2 {
+    color: var(--text-dark, #333);
+    margin-bottom: 10px;
+}
+
+.no-orders p {
+    color: var(--text-light, #666);
+    font-size: 1.1em;
+}
+
+/* --- Orders Grid --- */
+.orders-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 25px;
+    margin-top: 30px;
+    animation: fadeInUp 0.6s ease-out 0.3s;
+    animation-fill-mode: forwards;
+}
+
+.order-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 25px;
+    border: 1px solid var(--border-color, #eee);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+}
+
+.order-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.order-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid var(--border-color, #eee);
+}
+
+.table-number-large {
+    font-size: 2.2em;
+    font-weight: 700;
+    color: var(--accent-dark, #a05252);
+}
+
+.order-time {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: #f9fafb;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    color: var(--text-light, #666);
+}
+
+.time-label {
+    font-size: 1.2em;
+}
+
+.time-value {
+    color: var(--text-dark, #333);
+    font-weight: 500;
+}
+
+/* --- Order Items List --- */
+.order-items-list {
+    flex-grow: 1;
+    margin-bottom: 20px;
+}
+
+.order-items-list h3 {
+    font-size: 1em;
+    color: var(--text-light, #666);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+.order-items-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.order-items-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-color, #eee);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.order-items-list li:last-child {
+    border-bottom: none;
+}
+
+.item-quantity {
+    background: var(--accent-dark, #a05252);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.9em;
+    min-width: 35px;
+    text-align: center;
+}
+
+.item-name {
+    font-size: 1.05em;
+    color: var(--text-dark, #333);
+    font-weight: 500;
+}
+
+/* --- Mark Prepared Button --- */
+.mark-prepared-form {
+    margin-top: auto;
+}
+
+.mark-prepared-btn {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(to right, #28a745, #218838);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.2);
+}
+
+.mark-prepared-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.3);
+}
+
+.mark-prepared-btn:active {
+    transform: translateY(0);
+    background: linear-gradient(to right, #218838, #1e7e34);
+}
+
+/* --- Responsive Design --- */
+@media screen and (max-width: 768px) {
+    .orders-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .kds-header h1 {
+        font-size: 2em;
+    }
+    
+    .table-number-large {
+        font-size: 1.8em;
+    }
+}

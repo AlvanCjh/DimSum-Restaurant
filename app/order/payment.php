@@ -67,14 +67,14 @@ try {
     $sql_order = "SELECT o.*, dt.table_number 
                   FROM orders o 
                   JOIN dining_tables dt ON o.table_id = dt.id 
-                  WHERE o.id = ? AND o.status = 'pending'";
+                  WHERE o.id = ? AND o.status = 'prepared'";
     $stmt_order = $pdo->prepare($sql_order);
     $stmt_order->execute([$order_id]);
     $order = $stmt_order->fetch();
 
     if (!$order) {
-        // If order is not found or already completed, redirect
-        header("Location: order.php?message=Order not found or already paid");
+        // If order is not found or not prepared, redirect
+        header("Location: order.php?message=Order not found or not ready for payment. Please wait for kitchen to prepare the order.");
         exit;
     }
 

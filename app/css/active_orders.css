@@ -1,0 +1,274 @@
+/* --- Animations --- */
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* --- General Admin Container Styles --- */
+.active-orders-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    animation: fadeInUp 0.6s ease-out;
+}
+
+body {
+    background-color: #f8f9fa;
+    font-family: 'Poppins', sans-serif;
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: var(--accent-dark, #a05252);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.back-link:hover {
+    color: var(--primary, #e5a9a9);
+}
+
+.page-header {
+    border-bottom: 2px solid var(--border-color, #eee);
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+    animation: fadeInDown 0.5s ease-out;
+}
+
+.page-header h1 {
+    color: var(--text-dark, #333);
+    font-size: 2.5rem;
+    margin: 0 0 10px 0;
+}
+
+.auto-refresh-indicator {
+    margin-top: 10px;
+    font-size: 0.9em;
+    color: var(--text-light, #666);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.refresh-icon {
+    animation: spin 2s linear infinite;
+}
+
+/* --- Message Styles --- */
+.message {
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    border: 1px solid transparent;
+    animation: fadeInDown 0.5s ease-out;
+}
+
+.message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border-color: #c3e6cb;
+}
+
+.message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-color: #f5c6cb;
+}
+
+/* --- No Orders State --- */
+.no-orders {
+    text-align: center;
+    padding: 80px 20px;
+    background: #f9fafb;
+    border-radius: 12px;
+    border: 1px solid var(--border-color, #eee);
+    animation: fadeInUp 0.6s ease-out 0.2s;
+    animation-fill-mode: forwards;
+}
+
+.no-orders-icon {
+    font-size: 5em;
+    margin-bottom: 20px;
+}
+
+.no-orders h2 {
+    color: var(--text-dark, #333);
+    margin-bottom: 10px;
+}
+
+.no-orders p {
+    color: var(--text-light, #666);
+    font-size: 1.1em;
+}
+
+/* --- Table Styles --- */
+.orders-table-wrapper {
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid var(--border-color, #eee);
+    overflow-x: auto;
+    animation: fadeInUp 0.6s ease-out 0.3s;
+    animation-fill-mode: forwards;
+}
+
+.orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.orders-table th, .orders-table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color, #eee);
+    vertical-align: middle;
+}
+
+.orders-table th {
+    background-color: #f9fafb;
+    font-weight: 600;
+    color: var(--text-light, #555);
+}
+
+.orders-table tbody tr {
+    transition: all 0.25s ease-in-out;
+}
+
+.orders-table tbody tr:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    background-color: #fff;
+}
+
+/* --- Status Badges --- */
+.status-badge {
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+}
+
+.status-pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status-prepared {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+.status-other {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* --- Action Buttons --- */
+.actions-cell {
+    white-space: nowrap;
+}
+
+.action-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.process-btn {
+    background-color: #28a745;
+    color: white;
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.2);
+}
+
+.process-btn:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.3);
+}
+
+.action-info {
+    color: var(--text-light, #666);
+    font-size: 0.9em;
+    font-style: italic;
+}
+
+/* --- Responsive Design --- */
+@media screen and (max-width: 768px) {
+    .orders-table {
+        font-size: 0.9em;
+    }
+    
+    .orders-table th,
+    .orders-table td {
+        padding: 10px 8px;
+    }
+    
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .orders-table, thead, tbody, th, td, tr {
+        display: block;
+    }
+    
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+    
+    tr {
+        border: 1px solid #ccc;
+        margin-bottom: 1rem;
+        border-radius: 8px;
+    }
+    
+    td {
+        border: none;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        padding-left: 50%;
+        text-align: right;
+    }
+    
+    td:before {
+        position: absolute;
+        left: 10px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        content: attr(data-label);
+        font-weight: bold;
+        text-align: left;
+    }
+    
+    .actions-cell {
+        justify-content: flex-end;
+    }
+}
