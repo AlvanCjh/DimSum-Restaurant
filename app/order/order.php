@@ -45,7 +45,7 @@ $message_type = "";
 
         <!-- Active Bills Display -->
         <div class="table-selection-section">
-            <h2 class="page-title" style="text-align: center; margin-bottom: 30px;">Select a Bill to Process</h2>
+            <h2 class="page-title" style="text-align: center; margin-bottom: 30px; color: #fff;">Select a Bill to Process</h2>
             
             <?php
             // Fetch tables that have 'pending' or 'prepared' orders

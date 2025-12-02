@@ -61,14 +61,7 @@ if (!isset($basePath)) {
                     <!-- ===== LOGIN / PROFILE LOGIC END ===== -->
                     
                     <!-- ===== CART - Only show if user is logged in as staff ===== -->
-                    <?php if (isset($_SESSION['user_id']) && isset($_SESSION['role']) && $_SESSION['role'] === 'staff') : ?>
-                    <li>
-                        <a href="<?php echo $basePath; ?>cart.php" class="cart-icon <?php echo ($pageTitle === 'Cart') ? 'active' : ''; ?>">
-                            <ion-icon name="cart-outline"></ion-icon>
-                            <span id="cart-count">0</span>
-                        </a>
-                    </li>
-                    <?php endif; ?>
+                    
                 </ul>
             </nav>
         </div>
