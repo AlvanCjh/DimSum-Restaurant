@@ -331,28 +331,28 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- Table structure for table `staffs`
 --
 
-CREATE TABLE `users` (
+CREATE TABLE `staffs` (
   `id` int(10) UNSIGNED NOT NULL,
   `username` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `role` enum('staff','admin','chef') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'staff',
+  `role` enum('waiter','admin','chef') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'waiter',
   `profile_picture` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `users`
+-- Dumping data for table `staffs`
 --
 
-INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`, `profile_picture`, `created_at`) VALUES
-(1, 'Chel', 'Chel@yobita.com', '$2y$10$JDRBgVKgrvEocAOtHjjaZOjxjavaXpCYio3kZUoqUu1tifc8Qm8pG', 'staff', 'uploads/profile/profile_1_1763949548.png', '2025-11-12 05:16:57'),
+INSERT INTO `staffs` (`id`, `username`, `email`, `password`, `role`, `profile_picture`, `created_at`) VALUES
+(1, 'Chel', 'Chel@yobita.com', '$2y$10$JDRBgVKgrvEocAOtHjjaZOjxjavaXpCYio3kZUoqUu1tifc8Qm8pG', 'waiter', 'uploads/profile/profile_1_1763949548.png', '2025-11-12 05:16:57'),
 (2, 'Ciaa', 'Ciaa@Admin.com', '$2y$10$Bn27mTMP97HzYzffvyJlcOnaxwlBCCJ5EGfnHbnWB/F9/hbY7muzG', 'admin', 'uploads/profile/profile_2_1763949802.png', '2025-11-12 07:01:25'),
-(4, 'Tray', 'Tray@yobita.com', '$2y$10$v9efxdxJ5AyexEGSxjvEgOjIoYEe8hD1dE32Vpp5ER2BzeVDbWTii', 'staff', 'uploads/profile/profile_4_1763949590.png', '2025-11-19 01:33:18'),
-(5, 'Kyzh', 'Kyzh@yobita.com', '$2y$10$i/wmhDvrYM8JHjSrWZ85Bu69vFRkRa3FOn/oBYydl0xRooKou69nS', 'staff', 'uploads/profile/profile_5_1763952565.png', '2025-11-24 02:48:56'),
+(4, 'Tray', 'Tray@yobita.com', '$2y$10$v9efxdxJ5AyexEGSxjvEgOjIoYEe8hD1dE32Vpp5ER2BzeVDbWTii', 'waiter', 'uploads/profile/profile_4_1763949590.png', '2025-11-19 01:33:18'),
+(5, 'Kyzh', 'Kyzh@yobita.com', '$2y$10$i/wmhDvrYM8JHjSrWZ85Bu69vFRkRa3FOn/oBYydl0xRooKou69nS', 'waiter', 'uploads/profile/profile_5_1763952565.png', '2025-11-24 02:48:56'),
 (6, 'Ramsay', 'Ramsay@yobita.com', '$2y$10$bVPYGP1ZytZT2lv0tD1H7e8KTz4hhSP9k65jbjklchqDWfb4xHgM6', 'chef', 'uploads/Default_pfp.png', '2025-11-27 01:14:44');
 
 --
@@ -405,9 +405,9 @@ ALTER TABLE `payments`
   ADD KEY `fk_payment_order` (`order_id`);
 
 --
--- Indexes for table `users`
+-- Indexes for table `staffs`
 --
-ALTER TABLE `users`
+ALTER TABLE `staffs`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `username` (`username`),
   ADD UNIQUE KEY `email` (`email`);
@@ -453,9 +453,9 @@ ALTER TABLE `payments`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
--- AUTO_INCREMENT for table `users`
+-- AUTO_INCREMENT for table `staffs`
 --
-ALTER TABLE `users`
+ALTER TABLE `staffs`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
@@ -473,7 +473,7 @@ ALTER TABLE `menu_items`
 --
 ALTER TABLE `orders`
   ADD CONSTRAINT `fk_order_table` FOREIGN KEY (`table_id`) REFERENCES `dining_tables` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_order_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_order_user` FOREIGN KEY (`user_id`) REFERENCES `staffs` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `order_items`

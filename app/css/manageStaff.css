@@ -19,13 +19,13 @@
     background-color: #e3f2fd;
     color: #1565c0;
 }
-.role-staff {
+.role-waiter {
     background-color: #f3e5f5;
     color: #7b1fa2;
 }
 
 /* --- DETAIL PAGE GRID --- */
-.staff-detail-grid {
+.waiter-detail-grid {
     display: grid;
     grid-template-columns: 300px 1fr;
     gap: 30px;
@@ -106,7 +106,7 @@
 
 /* Responsive */
 @media (max-width: 900px) {
-    .staff-detail-grid {
+    .waiter-detail-grid {
         grid-template-columns: 1fr;
     }
     .profile-card {

@@ -2,8 +2,8 @@
 session_start();
 require_once '../connection.php';
 
-// Check if user is logged in as staff
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'staff') {
+// Check if user is logged in as waiter
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'waiter') {
     header("Location: ../index.php");
     exit;
 }
@@ -34,7 +34,7 @@ $message_type = "";
     <div class="order-container">
         <div class="page-header">
             <h1>Process Bill</h1>
-            <a href="../staff/index.php" class="back-link">← Back to Dashboard</a>
+            <a href="../waiter/index.php" class="back-link">← Back to Dashboard</a>
         </div>
 
         <?php if (!empty($message)): ?>

@@ -8,13 +8,13 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     exit;
 }
 
-$pageTitle = "Manage Staff";
+$pageTitle = "Manage waiter";
 $basePath = "../";
 include '../_header.php';
 
-// --- FETCH USERS & ORDER COUNTS ---
+// --- FETCH staffs & ORDER COUNTS ---
 try {
-    // We select users and count their orders by joining the orders table
+    // We select staffs and count their orders by joining the orders table
     $sql = "SELECT 
                 u.id, 
                 u.username, 
@@ -23,16 +23,16 @@ try {
                 u.profile_picture, 
                 u.created_at,
                 COUNT(o.id) as orders_handled
-            FROM users u
+            FROM staffs u
             LEFT JOIN orders o ON u.id = o.user_id
             GROUP BY u.id
             ORDER BY u.role ASC, u.username ASC";
             
     $stmt = $pdo->query($sql);
-    $staff_members = $stmt->fetchAll();
+    $waiter_members = $stmt->fetchAll();
 } catch (PDOException $e) {
-    $staff_members = [];
-    $message = "Error fetching staff: " . $e->getMessage();
+    $waiter_members = [];
+    $message = "Error fetching waiter: " . $e->getMessage();
 }
 ?>
 
@@ -44,11 +44,11 @@ try {
         <a href="dashboard.php" class="back-link">← Back to Dashboard</a>
         
         <div class="page-header">
-            <h1>Staff Directory</h1>
+            <h1>waiter Directory</h1>
         </div>
 
         <div class="orders-list-section">
-            <h2 class="section-title">All Users (<?php echo count($staff_members); ?>)</h2>
+            <h2 class="section-title">All staffs (<?php echo count($waiter_members); ?>)</h2>
             <div class="table-responsive">
                 <table>
                     <thead>
@@ -63,23 +63,23 @@ try {
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($staff_members as $staff): ?>
+                        <?php foreach ($waiter_members as $waiter): ?>
                             <tr>
                                 <td data-label="Profile">
-                                    <img src="<?php echo $staff['profile_picture'] ? $basePath . $staff['profile_picture'] : $basePath.'uploads/Default_pfp.png'; ?>" 
+                                    <img src="<?php echo $waiter['profile_picture'] ? $basePath . $waiter['profile_picture'] : $basePath.'uploads/Default_pfp.png'; ?>" 
                                          alt="pfp" class="table-pfp">
                                 </td>
-                                <td data-label="Name"><strong><?php echo htmlspecialchars($staff['username']); ?></strong></td>
+                                <td data-label="Name"><strong><?php echo htmlspecialchars($waiter['username']); ?></strong></td>
                                 <td data-label="Role">
-                                    <span class="role-badge role-<?php echo $staff['role']; ?>">
-                                        <?php echo ucfirst($staff['role']); ?>
+                                    <span class="role-badge role-<?php echo $waiter['role']; ?>">
+                                        <?php echo ucfirst($waiter['role']); ?>
                                     </span>
                                 </td>
-                                <td data-label="Email"><?php echo htmlspecialchars($staff['email']); ?></td>
-                                <td data-label="Orders Handled"><?php echo $staff['orders_handled']; ?></td>
-                                <td data-label="Joined"><?php echo date("d M Y", strtotime($staff['created_at'])); ?></td>
+                                <td data-label="Email"><?php echo htmlspecialchars($waiter['email']); ?></td>
+                                <td data-label="Orders Handled"><?php echo $waiter['orders_handled']; ?></td>
+                                <td data-label="Joined"><?php echo date("d M Y", strtotime($waiter['created_at'])); ?></td>
                                 <td class="actions-cell" data-label="Actions">
-                                    <a href="staffDetail.php?id=<?php echo $staff['id']; ?>" class="action-btn view-btn">
+                                    <a href="staffDetail.php?id=<?php echo $waiter['id']; ?>" class="action-btn view-btn">
                                         View Details
                                     </a>
                                 </td>

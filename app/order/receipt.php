@@ -7,7 +7,7 @@ const SERVICE_CHARGE_RATE = 0.06;
 const SST_RATE = 0.06;
 
 // --- SECURITY ---
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'staff') {
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'waiter') {
     header("Location: ../index.php");
     exit;
 }
@@ -21,11 +21,11 @@ $payment_id = (int)$_GET['payment_id'];
 // --- FETCH DATA ---
 try {
     $sql = "SELECT p.*, o.id as order_id, o.created_at as order_time, 
-                   dt.table_number, u.username as staff_name, o.total_amount as order_total_required
+                   dt.table_number, u.username as waiter_name, o.total_amount as order_total_required
             FROM payments p
             JOIN orders o ON p.order_id = o.id
             JOIN dining_tables dt ON o.table_id = dt.id
-            LEFT JOIN users u ON o.user_id = u.id
+            LEFT JOIN staffs u ON o.user_id = u.id
             WHERE p.id = ?";
     
     $stmt = $pdo->prepare($sql);
@@ -101,7 +101,7 @@ include '../_header.php';
             <i class="fas fa-receipt"></i> Generate Receipt
         </button>
         
-        <a href="../staff/index.php" class="skip-btn">Skip & Return to Home</a>
+        <a href="../waiter/index.php" class="skip-btn">Skip & Return to Home</a>
     </div>
 
 
@@ -115,7 +115,7 @@ include '../_header.php';
             <p><strong>Receipt ID:</strong> <?php echo str_pad($payment_id, 6, '0', STR_PAD_LEFT); ?></p>
             <p><strong>Date:</strong> <?php echo date("d M Y, h:i A", strtotime($receipt_details['payment_time'])); ?></p>
             <p><strong>Table:</strong> <?php echo htmlspecialchars($receipt_details['table_number']); ?></p>
-            <p><strong>Staff:</strong> <?php echo htmlspecialchars($receipt_details['staff_name'] ?? 'Staff'); ?></p>
+            <p><strong>waiter:</strong> <?php echo htmlspecialchars($receipt_details['waiter_name'] ?? 'waiter'); ?></p>
         </div>
 
         <div class="receipt-items">
@@ -162,7 +162,7 @@ include '../_header.php';
 
         <div class="receipt-actions">
             <button onclick="window.print()" class="print-btn">Print</button>
-            <a href="../staff/index.php" class="done-btn">Done</a>
+            <a href="../waiter/index.php" class="done-btn">Done</a>
         </div>
     </div>
 

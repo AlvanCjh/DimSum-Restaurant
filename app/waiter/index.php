@@ -2,8 +2,8 @@
 session_start(); 
 require_once '../connection.php';
 
-// Redirect if not logged in as staff
-if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'staff') {
+// Redirect if not logged in as waiter
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'waiter') {
     header("Location: ../index.php");
     exit;
 }

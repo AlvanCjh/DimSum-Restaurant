@@ -10,7 +10,7 @@ if (isset($_POST['admin_login'])) {
     $password = trim($_POST['password']);
 
     try {
-        $sql = "SELECT * FROM users WHERE email = ? AND role = 'chef'";
+        $sql = "SELECT * FROM staffs WHERE email = ? AND role = 'chef'";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$email]);
         $admin = $stmt->fetch();
@@ -40,7 +40,7 @@ $basePath = '../'; // Set base path for assets
 include '../_header.php';
 ?>
 
-<!-- Use the same stylesheet as the staff login for a consistent feel -->
+<!-- Use the same stylesheet as the waiter login for a consistent feel -->
 <link rel="stylesheet" href="<?php echo $basePath; ?>css/signIn.css">
 
 <div class="container" id="container">

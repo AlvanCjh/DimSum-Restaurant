@@ -30,7 +30,7 @@
 /* =========================================
    2. Menu Header & Filters
    ========================================= */
-.staff-action-bar {
+.waiter-action-bar {
     margin-bottom: 24px !important; /* Override inline styles slightly for consistency */
 }
 
@@ -368,7 +368,7 @@
         grid-template-columns: 1fr; /* Single column for mobile */
     }
     
-    .staff-action-bar {
+    .waiter-action-bar {
         flex-direction: column;
         align-items: flex-start;
         gap: 15px;

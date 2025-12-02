@@ -36,7 +36,7 @@ if (!function_exists('recalculateOrderTotal')) {
 // Handle finalizing the order
 if (isset($_POST['finalize_order']) && isset($_POST['order_id'])) {
     $_SESSION['show_order_complete_alert'] = true;
-    header("Location: ../staff/index.php");
+    header("Location: ../waiter/index.php");
     exit;
 }
 
@@ -82,7 +82,7 @@ if (isset($_POST['increase_quantity']) && isset($_POST['order_item_id'])) {
 //  LOGIC PART 2: BATCH ADD TO ORDER (From Main Code - Add New Items)
 // =================================================================================
 
-if (isset($_POST['add_batch_order']) && isset($_POST['items']) && $_SESSION['role'] === 'staff') {
+if (isset($_POST['add_batch_order']) && isset($_POST['items']) && $_SESSION['role'] === 'waiter') {
     $items = $_POST['items']; // Array format: [menu_item_id => quantity]
     $table_id = $_SESSION['selected_table_id'];
     $items_added_count = 0;
@@ -222,9 +222,9 @@ try {
       
       <form method="post" id="batchOrderForm">
 
-        <div class="staff-action-bar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <div class="waiter-action-bar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
             <h2 class="page-title" style="margin:0;">Our Menu</h2>
-            <?php if ($_SESSION['role'] === 'staff'): ?>
+            <?php if ($_SESSION['role'] === 'waiter'): ?>
                 <button type="submit" name="add_batch_order" class="batch-submit-btn" style="background-color: var(--primary); color: var(--text-dark); padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">
                     Add Selected (+0)
                 </button>
@@ -260,7 +260,7 @@ try {
                         RM <?php echo number_format($item['price'], 2); ?>
                     </span>
                     
-                    <?php if ($_SESSION['role'] === 'staff'): ?>
+                    <?php if ($_SESSION['role'] === 'waiter'): ?>
                         <div class="qty-control" style="display: flex; align-items: center; gap: 5px;">
                             <button type="button" class="qty-btn" onclick="updateQty(<?php echo $item['id']; ?>, -1)" style="padding: 5px 10px; cursor: pointer;">-</button>
                             

@@ -28,7 +28,7 @@ if (isset($_POST['signup'])) {
         
         try {
             // Check if email already exists
-            $sql_check = "SELECT id FROM users WHERE email = ?";
+            $sql_check = "SELECT id FROM staffs WHERE email = ?";
             $stmt_check = $pdo->prepare($sql_check);
             $stmt_check->execute([$email]);
 
@@ -39,7 +39,7 @@ if (isset($_POST['signup'])) {
                 $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
                 // Insert new user
-                $sql_insert = "INSERT INTO users (username, email, password, profile_picture) VALUES (?, ?, ?, ?)";
+                $sql_insert = "INSERT INTO staffs (username, email, password, profile_picture) VALUES (?, ?, ?, ?)";
                 $stmt_insert = $pdo->prepare($sql_insert);
                 
                 if ($stmt_insert->execute([$username, $email, $hashed_password, $profile_pic])) {
@@ -65,7 +65,7 @@ if (isset($_POST['login'])) {
 
     try {
         // Find user by email
-        $sql = "SELECT * FROM users WHERE email = ?";
+        $sql = "SELECT * FROM staffs WHERE email = ?";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$email]);
         $user = $stmt->fetch();
@@ -73,8 +73,8 @@ if (isset($_POST['login'])) {
         // Check if user exists and password is correct
         if ($user && password_verify($password, $user['password'])) {
             
-            // Check if user is 'staff' or 'admin'
-            if ($user['role'] == 'staff') {
+            // Check if user is 'waiter' or 'admin'
+            if ($user['role'] == 'waiter') {
 
                 // Login successful
                 $_SESSION['user_id'] = $user['id'];
@@ -83,7 +83,7 @@ if (isset($_POST['login'])) {
                 $_SESSION['profile_picture'] = $user['profile_picture'];
                 
                 // Redirect to the main index.php (one level up)
-                header("Location: staff/index.php"); 
+                header("Location: waiter/index.php"); 
                 exit; 
 
             } else {
@@ -113,7 +113,7 @@ include '_header.php';
 <div class="container" id="container">
     <div class="form-container sign-up-container">
        <form method="post">
-           <h1>Create Staff Account</h1>
+           <h1>Create waiter Account</h1>
            <div class="infield">
                <input type="text" placeholder="Name" name="name" required />
            </div>
@@ -135,7 +135,7 @@ include '_header.php';
 
     <div class="form-container sign-in-container">
         <form method="post">
-            <h1>Staff Sign In</h1>
+            <h1>Waiter Sign In</h1>
             <div class="infield">
                 <input type="email" placeholder="Email" name="email" required />
             </div>
@@ -162,7 +162,7 @@ include '_header.php';
                 </div>
                 <div class="overlay-panel overlay-right">
                     <img src="/image/logo.png" alt="Yobita Logo" class="overlay-logo">
-                    <h1>Hello, New Staff!</h1>
+                    <h1>Hello, New waiter!</h1>
                     <p>Enter your details to create an account.</p>
                     <button class="ghost" id="signUpBtn">Sign Up</button>
                 </div>

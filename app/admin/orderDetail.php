@@ -25,10 +25,10 @@ try {
     $sql_order = "SELECT 
                     o.id, o.status, o.total_amount, o.created_at,
                     dt.table_number,
-                    u.username as staff_name
+                    u.username as waiter_name
                   FROM orders o
                   JOIN dining_tables dt ON o.table_id = dt.id
-                  LEFT JOIN users u ON o.user_id = u.id
+                  LEFT JOIN staffs u ON o.user_id = u.id
                   WHERE o.id = ?";
     $stmt_order = $pdo->prepare($sql_order);
     $stmt_order->execute([$order_id]);
@@ -83,7 +83,7 @@ try {
                 </div>
                 <div class="summary-item">
                     <span>Handled By:</span>
-                    <strong><?php echo htmlspecialchars($order['staff_name'] ?? 'N/A'); ?></strong>
+                    <strong><?php echo htmlspecialchars($order['waiter_name'] ?? 'N/A'); ?></strong>
                 </div>
             </div>
 

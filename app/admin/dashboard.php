@@ -46,9 +46,9 @@ include '../_header.php';
 
             <div class="dashboard-card">
                 <div class="card-icon">👥</div>
-                <h2 class="card-title">Manage Staff</h2>
-                <p class="card-description">View staff profiles and performance stats</p>
-                <a href="manageStaff.php" class="card-button">View Staff</a>
+                <h2 class="card-title">Manage Staffs</h2>
+                <p class="card-description">View waiter profiles and performance stats</p>
+                <a href="manageStaff.php" class="card-button">View waiter</a>
             </div>
 
             <div class="dashboard-card">

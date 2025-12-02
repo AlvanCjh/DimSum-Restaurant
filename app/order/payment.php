@@ -7,7 +7,7 @@ const SERVICE_CHARGE_RATE = 0.06; // 6%
 const SST_RATE = 0.06;            // 6%
 
 // --- SECURITY AND INITIALIZATION ---
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'staff') {
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'waiter') {
     header("Location: ../index.php");
     exit;
 }

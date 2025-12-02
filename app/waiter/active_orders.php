@@ -2,8 +2,8 @@
 session_start();
 require_once '../connection.php';
 
-// Security: Only staff role can access
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'staff') {
+// Security: Only waiter role can access
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'waiter') {
     header("Location: ../index.php");
     exit;
 }
@@ -21,11 +21,11 @@ try {
                 o.created_at,
                 dt.table_number,
                 dt.id as table_id,
-                u.username as staff_name,
+                u.username as waiter_name,
                 COUNT(oi.id) as item_count
             FROM orders o
             JOIN dining_tables dt ON o.table_id = dt.id
-            LEFT JOIN users u ON o.user_id = u.id
+            LEFT JOIN staffs u ON o.user_id = u.id
             LEFT JOIN order_items oi ON o.id = oi.order_id
             WHERE o.status IN ('pending', 'prepared')
             GROUP BY o.id, o.status, o.total_amount, o.created_at, dt.table_number, dt.id, u.username
@@ -80,7 +80,7 @@ try {
                             <th>Items</th>
                             <th>Total Amount</th>
                             <th>Created At</th>
-                            <th>Staff</th>
+                            <th>waiter</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -115,7 +115,7 @@ try {
                                 <td data-label="Created">
                                     <?php echo date("d M Y, h:i A", strtotime($order['created_at'])); ?>
                                 </td>
-                                <td data-label="Staff"><?php echo htmlspecialchars($order['staff_name'] ?? 'N/A'); ?></td>
+                                <td data-label="waiter"><?php echo htmlspecialchars($order['waiter_name'] ?? 'N/A'); ?></td>
                                 <td data-label="Actions" class="actions-cell">
                                     <?php if ($order['status'] === 'prepared'): ?>
                                         <a href="../order/payment.php?order_id=<?php echo $order['order_id']; ?>" 

@@ -14,7 +14,7 @@ $error = '';
 
 // Fetch current user data
 try {
-    $stmt = $pdo->prepare("SELECT username, email, profile_picture FROM users WHERE id = ?");
+    $stmt = $pdo->prepare("SELECT username, email, profile_picture FROM staffs WHERE id = ?");
     $stmt->execute([$_SESSION['user_id']]);
     $user = $stmt->fetch();
 } catch (PDOException $e) {
@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Update email if changed
     if ($email !== $user['email']) {
         // Check if new email is already taken
-        $stmt = $pdo->prepare("SELECT id FROM users WHERE email = ? AND id != ?");
+        $stmt = $pdo->prepare("SELECT id FROM staffs WHERE email = ? AND id != ?");
         $stmt->execute([$email, $userId]);
         if ($stmt->fetch()) {
             $error = "This email address is already in use by another account.";
@@ -100,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // --- EXECUTE DATABASE UPDATE ---
     if (empty($error) && !empty($updateFields)) {
-        $sql = "UPDATE users SET " . implode(', ', $updateFields) . " WHERE id = ?";
+        $sql = "UPDATE staffs SET " . implode(', ', $updateFields) . " WHERE id = ?";
         $updateValues[] = $userId;
 
         try {
@@ -113,7 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (isset($filename)) {
                     $_SESSION['profile_picture'] = $filename;
                 }
-                $stmt = $pdo->prepare("SELECT username, email, profile_picture FROM users WHERE id = ?");
+                $stmt = $pdo->prepare("SELECT username, email, profile_picture FROM staffs WHERE id = ?");
                 $stmt->execute([$userId]);
                 $user = $stmt->fetch();
 
