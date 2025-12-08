@@ -30,8 +30,18 @@ $errorMsg = isset($data['error']) ? $data['error'] : "Unknown error connecting t
             <h1>AI Sales Forecast</h1>
             
             <?php if($hasData): ?>
-                <div class="ai-status-badge">
-                    <span class="pulse-dot"></span> AI Model Active
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <div class="ai-status-badge">
+                        <span class="pulse-dot"></span> AI Model Active
+                    </div>
+                    <div class="report-actions">
+                        <button onclick="printReport()" class="action-btn print-btn">
+                            <ion-icon name="print-outline"></ion-icon> Print
+                        </button>
+                        <button onclick="downloadPDF()" class="action-btn pdf-btn">
+                            <ion-icon name="download-outline"></ion-icon> Download PDF
+                        </button>
+                    </div>
                 </div>
             <?php endif; ?>
         </div>
@@ -43,6 +53,11 @@ $errorMsg = isset($data['error']) ? $data['error'] : "Unknown error connecting t
             </div>
         <?php else: ?>
 
+            <div id="report-content" class="report-content" data-date="<?php echo date('F j, Y g:i A'); ?>">
+            <div class="report-header-print">
+                <h1 class="report-title-print">YOBITA RESTAURANT</h1>
+                <h2 class="report-subtitle-print">AI Sales Forecast Report</h2>
+            </div>
             <div class="forecast-section">
                 <h2 class="section-title">7-Day Revenue Prediction</h2>
                 
@@ -95,12 +110,18 @@ $errorMsg = isset($data['error']) ? $data['error'] : "Unknown error connecting t
                     </table>
                 </div>
             </div>
+            <div class="report-footer-print">
+                <p>Report Generated: <?php echo date('F j, Y g:i A'); ?></p>
+            </div>
+            </div>
 
         <?php endif; ?>
     </div>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <?php if($hasData): ?>
 <script>
@@ -185,5 +206,91 @@ $errorMsg = isset($data['error']) ? $data['error'] : "Unknown error connecting t
             }
         }
     });
+
+    // Print functionality
+    function printReport() {
+        window.print();
+    }
+
+    // PDF Download functionality
+    function downloadPDF() {
+        const { jsPDF } = window.jspdf;
+        const container = document.querySelector('.admin-container');
+        
+        // Show loading indicator
+        const loadingMsg = document.createElement('div');
+        loadingMsg.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;padding:20px;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,0.3);z-index:10000;';
+        loadingMsg.innerHTML = '<p>Generating PDF...</p>';
+        document.body.appendChild(loadingMsg);
+
+        // Hide elements that shouldn't be in PDF
+        const backLink = document.querySelector('.back-link');
+        const reportActions = document.querySelector('.report-actions');
+        const statusBadge = document.querySelector('.ai-status-badge');
+        const reportHeader = document.querySelector('.report-header-print');
+        const reportFooter = document.querySelector('.report-footer-print');
+        
+        if (backLink) backLink.style.display = 'none';
+        if (reportActions) reportActions.style.display = 'none';
+        if (statusBadge) statusBadge.style.display = 'none';
+        if (reportHeader) reportHeader.style.display = 'block';
+        if (reportFooter) reportFooter.style.display = 'block';
+
+        // Wait a bit for any animations to complete
+        setTimeout(() => {
+            html2canvas(container, {
+                scale: 2,
+                useCORS: true,
+                logging: false,
+                backgroundColor: '#ffffff'
+            }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const imgWidth = 210; // A4 width in mm
+                const pageHeight = 297; // A4 height in mm
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                let heightLeft = imgHeight;
+                let position = 0;
+
+                // Add first page
+                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+
+                // Add additional pages if needed
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+
+                // Generate filename with timestamp
+                const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
+                pdf.save('AI_Sales_Forecast_' + timestamp + '.pdf');
+                
+                // Restore hidden elements
+                if (backLink) backLink.style.display = '';
+                if (reportActions) reportActions.style.display = '';
+                if (statusBadge) statusBadge.style.display = '';
+                if (reportHeader) reportHeader.style.display = 'none';
+                if (reportFooter) reportFooter.style.display = 'none';
+                
+                // Remove loading indicator
+                document.body.removeChild(loadingMsg);
+            }).catch(error => {
+                console.error('PDF generation error:', error);
+                
+                // Restore hidden elements on error
+                if (backLink) backLink.style.display = '';
+                if (reportActions) reportActions.style.display = '';
+                if (statusBadge) statusBadge.style.display = '';
+                if (reportHeader) reportHeader.style.display = 'none';
+                if (reportFooter) reportFooter.style.display = 'none';
+                
+                alert('Error generating PDF. Please try again.');
+                document.body.removeChild(loadingMsg);
+            });
+        }, 500);
+    }
 </script>
 <?php endif; ?>

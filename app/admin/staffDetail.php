@@ -59,10 +59,10 @@ try {
 
 <main class="main-wrapper">
     <div class="admin-container">
-        <a href="manageStaff.php" class="back-link">← Back to waiter List</a>
+        <a href="manageStaff.php" class="back-link">← Back to Staff List</a>
         
         <div class="page-header">
-            <h1>waiter Profile: <?php echo htmlspecialchars($waiter['username']); ?></h1>
+            <h1>Staff Profile: <?php echo htmlspecialchars($waiter['username']); ?></h1>
         </div>
 
         <div class="waiter-detail-grid">

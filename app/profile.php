@@ -43,14 +43,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Update email if changed
     if ($email !== $user['email']) {
-        // Check if new email is already taken
-        $stmt = $pdo->prepare("SELECT id FROM staffs WHERE email = ? AND id != ?");
-        $stmt->execute([$email, $userId]);
-        if ($stmt->fetch()) {
-            $error = "This email address is already in use by another account.";
+        // Validate email format
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $error = "Please enter a valid email address (e.g., user@example.com).";
         } else {
-            $updateFields[] = "email = ?";
-            $updateValues[] = $email;
+            // Check if new email is already taken
+            $stmt = $pdo->prepare("SELECT id FROM staffs WHERE email = ? AND id != ?");
+            $stmt->execute([$email, $userId]);
+            if ($stmt->fetch()) {
+                $error = "This email address is already in use by another account.";
+            } else {
+                $updateFields[] = "email = ?";
+                $updateValues[] = $email;
+            }
         }
     }
 
@@ -167,6 +172,7 @@ include '_header.php';
         <div class="form-group">
             <label for="email" style="animation-delay: 0.6s;">Email</label>
             <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required style="animation-delay: 0.7s;">
+            <small style="color: #888; display: block; margin-top: 5px;">Please enter a valid email (e.g., user@example.com)</small>
         </div>
 
         <hr style="animation-delay: 0.8s;">
@@ -195,6 +201,7 @@ include '_header.php';
         <button id="crop-button" class="submit-btn">Crop and Save</button>
     </div>
 </div>
+
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {

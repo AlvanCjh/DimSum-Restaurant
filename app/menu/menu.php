@@ -198,6 +198,28 @@ try {
 } catch (PDOException $e) {
     $categories = [];
 }
+
+// Fetch AI Suggestions (Popular/Trending Items)
+$aiSuggestions = [];
+try {
+    $command = "python ../ai/menu_suggestions.py";
+    $output = shell_exec($command);
+    $suggestionData = json_decode($output, true);
+    
+    if (isset($suggestionData['suggestions']) && is_array($suggestionData['suggestions'])) {
+        $aiSuggestions = $suggestionData['suggestions'];
+        // Process image paths
+        foreach ($aiSuggestions as &$suggestion) {
+            $suggestion['image'] = !empty($suggestion['image_url']) 
+                ? $basePath . $suggestion['image_url'] 
+                : 'https://via.placeholder.com/280x200.png?text=No+Image';
+        }
+        unset($suggestion);
+    }
+} catch (Exception $e) {
+    // Silently fail - suggestions are optional
+    $aiSuggestions = [];
+}
 ?>
 
 <link rel="stylesheet" href="../css/menu.css">
@@ -230,6 +252,59 @@ try {
                 </button>
             <?php endif; ?>
         </div>
+
+        <?php if (!empty($aiSuggestions) && $_SESSION['role'] === 'waiter'): ?>
+        <div class="ai-suggestions-section">
+            <div class="ai-suggestions-header">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span class="ai-icon">🤖</span>
+                    <h3 class="ai-suggestions-title">AI Recommendations</h3>
+                    <span class="ai-badge">Smart Suggestions</span>
+                </div>
+                <p class="ai-suggestions-subtitle">Most popular items customers love - perfect for recommendations!</p>
+            </div>
+            
+            <div class="ai-suggestions-grid">
+                <?php foreach ($aiSuggestions as $suggestion): ?>
+                    <div class="ai-suggestion-card" data-item-id="<?php echo $suggestion['id']; ?>">
+                        <div class="ai-badge-overlay">
+                            <?php 
+                            $badgeClass = 'popular';
+                            if (strpos($suggestion['badge'], 'Trending') !== false) {
+                                $badgeClass = 'trending';
+                            } elseif (strpos($suggestion['badge'], 'New') !== false) {
+                                $badgeClass = 'new';
+                            }
+                            ?>
+                            <span class="ai-item-badge badge-<?php echo $badgeClass; ?>">
+                                <?php echo htmlspecialchars($suggestion['badge']); ?>
+                            </span>
+                        </div>
+                        <img src="<?php echo htmlspecialchars($suggestion['image']); ?>" 
+                             alt="<?php echo htmlspecialchars($suggestion['name']); ?>" 
+                             class="ai-suggestion-image"
+                             onclick="scrollToMenuItem(<?php echo $suggestion['id']; ?>)">
+                        <div class="ai-suggestion-info">
+                            <h4 class="ai-suggestion-name"><?php echo htmlspecialchars($suggestion['name']); ?></h4>
+                            <p class="ai-suggestion-desc"><?php echo htmlspecialchars(substr($suggestion['description'], 0, 60)) . (strlen($suggestion['description']) > 60 ? '...' : ''); ?></p>
+                            <div class="ai-suggestion-footer">
+                                <span class="ai-suggestion-price">RM <?php echo number_format($suggestion['price'], 2); ?></span>
+                                <?php if ($suggestion['total_quantity'] > 0): ?>
+                                    <span class="ai-suggestion-stats">
+                                        <ion-icon name="flame-outline"></ion-icon>
+                                        <?php echo $suggestion['total_quantity']; ?> orders
+                                    </span>
+                                <?php endif; ?>
+                            </div>
+                            <button type="button" class="ai-quick-add-btn" onclick="quickAddSuggestion(<?php echo $suggestion['id']; ?>)">
+                                <ion-icon name="add-outline"></ion-icon> Quick Add
+                            </button>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+        <?php endif; ?>
 
         <div class="category-filters">
             <button type="button" class="filter-btn active" data-filter="all">All</button>
@@ -327,7 +402,6 @@ try {
                             <form method="post" style="display:inline;">
                                 <input type="hidden" name="order_item_id" value="<?php echo $order_item['id']; ?>">
                                 <input type="hidden" name="order_id" value="<?php echo $current_order_id; ?>">
-                                <button type="submit" name="decrease_quantity" class="quantity-btn">-</button>
                             </form>
                             
                             <span class="quantity-display"><?php echo $order_item['quantity']; ?></span>
@@ -335,7 +409,6 @@ try {
                             <form method="post" style="display:inline;">
                                 <input type="hidden" name="order_item_id" value="<?php echo $order_item['id']; ?>">
                                 <input type="hidden" name="order_id" value="<?php echo $current_order_id; ?>">
-                                <button type="submit" name="increase_quantity" class="quantity-btn">+</button>
                             </form>
                         </div>
                     </li>
@@ -423,6 +496,33 @@ function updateTotalButton() {
         } else {
             submitBtn.style.opacity = "1";
         }
+    }
+}
+
+// AI Suggestions Functions
+function scrollToMenuItem(itemId) {
+    const card = document.getElementById('card-' + itemId);
+    if (card) {
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // Highlight the card temporarily
+        card.style.transition = 'all 0.3s ease';
+        card.style.transform = 'scale(1.05)';
+        card.style.boxShadow = '0 8px 20px rgba(255, 159, 28, 0.4)';
+        setTimeout(() => {
+            card.style.transform = 'scale(1)';
+            card.style.boxShadow = '';
+        }, 1000);
+    }
+}
+
+function quickAddSuggestion(itemId) {
+    const input = document.getElementById('qty-' + itemId);
+    if (input) {
+        updateQty(itemId, 1);
+        // Scroll to item to show it was added
+        setTimeout(() => {
+            scrollToMenuItem(itemId);
+        }, 100);
     }
 }
 </script>

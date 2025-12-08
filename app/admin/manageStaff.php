@@ -44,7 +44,7 @@ try {
         <a href="dashboard.php" class="back-link">← Back to Dashboard</a>
         
         <div class="page-header">
-            <h1>waiter Directory</h1>
+            <h1>Staff Directory</h1>
         </div>
 
         <div class="orders-list-section">

@@ -181,7 +181,7 @@ try {
             </div>
 
             <div class="form-section delay-2" id="itemFormSection">
-                <h2 class="section-title" id="formTitle">Add New Menu Item</h2>
+                <h2 class="section-title" id="formTitle">Add New Menu</h2>
                 <form method="post" enctype="multipart/form-data" id="menuItemForm">
                     <input type="hidden" name="item_id" id="item_id">
                     <input type="hidden" name="cropped_image_data" id="cropped_image_data">
@@ -218,7 +218,7 @@ try {
                     </div>
 
                     <div class="form-actions">
-                        <button type="submit" name="save_menu_item" class="submit-btn" id="submitBtn">Add Menu Item</button>
+                        <button type="submit" name="save_menu_item" class="submit-btn" id="submitBtn">Add Menu</button>
                         <button type="button" id="cancelEditBtn" class="cancel-btn" style="display:none;">Cancel Edit</button>
                     </div>
                 </form>
@@ -226,7 +226,7 @@ try {
         </div>
 
         <div class="menu-items-section fade-in-up delay-3">
-            <h2 class="section-title">Existing Menu Items (<?php echo count($menu_items); ?>)</h2>
+            <h2 class="section-title">Existing Menu (<?php echo count($menu_items); ?>)</h2>
             <div class="search-container">
                 <input type="text" id="menuSearchInput" placeholder="🔍 Search items by name, category, or description...">
             </div>
