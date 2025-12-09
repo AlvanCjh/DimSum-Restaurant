@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 02, 2025 at 11:54 AM
+-- Generation Time: Dec 08, 2025 at 08:24 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.29
 
@@ -41,8 +41,17 @@ CREATE TABLE `dining_tables` (
 INSERT INTO `dining_tables` (`id`, `table_number`, `capacity`, `status`) VALUES
 (1, 'T01', 4, 'available'),
 (2, 'T02', 4, 'available'),
-(3, 'T03', 2, 'available'),
-(4, 'VIP1', 8, 'available');
+(3, 'T03', 4, 'available'),
+(4, 'VIP1', 8, 'available'),
+(5, 'VIP2', 8, 'available'),
+(6, 'T04', 4, 'available'),
+(7, 'T05', 4, 'available'),
+(8, 'T06', 4, 'available'),
+(9, 'VIP3', 8, 'available'),
+(10, 'T07', 4, 'available'),
+(11, 'T08', 4, 'available'),
+(12, 'T09', 6, 'available'),
+(13, 'T10', 6, 'available');
 
 -- --------------------------------------------------------
 
@@ -146,7 +155,13 @@ INSERT INTO `orders` (`id`, `table_id`, `user_id`, `status`, `total_amount`, `cr
 (27, 2, 5, 'completed', '43.80', '2025-12-01 05:55:14'),
 (28, 2, 5, 'completed', '25.80', '2025-12-01 06:29:40'),
 (29, 1, 1, 'completed', '56.00', '2025-12-01 08:44:43'),
-(30, 4, 1, 'completed', '115.00', '2025-12-01 08:45:20');
+(30, 4, 1, 'completed', '115.00', '2025-12-01 08:45:20'),
+(31, 3, 1, 'completed', '63.80', '2025-12-04 23:56:36'),
+(32, 4, 1, 'completed', '75.00', '2025-12-04 23:57:01'),
+(33, 1, 5, 'completed', '61.40', '2025-12-05 00:24:00'),
+(34, 2, 4, 'completed', '48.20', '2025-12-05 03:02:44'),
+(35, 4, 5, 'completed', '52.60', '2025-12-07 04:44:29'),
+(36, 4, 1, 'completed', '19.00', '2025-12-08 04:50:18');
 
 -- --------------------------------------------------------
 
@@ -282,7 +297,29 @@ INSERT INTO `order_items` (`id`, `order_id`, `menu_item_id`, `quantity`, `price`
 (114, 30, 4, 1, '19.00', '2025-12-01 08:51:25'),
 (115, 30, 3, 1, '7.80', '2025-12-01 08:51:25'),
 (116, 30, 2, 1, '7.80', '2025-12-01 08:51:25'),
-(117, 30, 1, 4, '7.80', '2025-12-01 08:51:25');
+(117, 30, 1, 4, '7.80', '2025-12-01 08:51:25'),
+(118, 31, 6, 1, '8.80', '2025-12-05 00:05:48'),
+(119, 31, 5, 1, '5.80', '2025-12-05 00:05:48'),
+(120, 31, 1, 3, '7.80', '2025-12-05 00:05:48'),
+(121, 32, 7, 1, '19.00', '2025-12-05 00:05:47'),
+(122, 32, 5, 1, '5.80', '2025-12-05 00:05:47'),
+(123, 32, 4, 1, '19.00', '2025-12-05 00:05:47'),
+(124, 32, 2, 1, '7.80', '2025-12-05 00:05:47'),
+(125, 31, 8, 1, '6.80', '2025-12-05 00:06:54'),
+(126, 31, 4, 1, '19.00', '2025-12-05 00:06:54'),
+(127, 32, 3, 1, '7.80', '2025-12-05 00:06:53'),
+(128, 32, 1, 2, '7.80', '2025-12-05 00:06:53'),
+(129, 33, 4, 2, '19.00', '2025-12-05 00:24:31'),
+(130, 33, 1, 3, '7.80', '2025-12-05 00:24:31'),
+(131, 34, 5, 1, '5.80', '2025-12-05 03:02:57'),
+(132, 34, 4, 1, '19.00', '2025-12-05 03:02:57'),
+(133, 34, 1, 3, '7.80', '2025-12-05 03:02:57'),
+(134, 35, 8, 1, '6.80', '2025-12-07 04:44:40'),
+(135, 35, 6, 1, '8.80', '2025-12-07 04:44:40'),
+(136, 35, 5, 1, '5.80', '2025-12-07 04:44:40'),
+(137, 35, 2, 1, '7.80', '2025-12-07 04:44:40'),
+(138, 35, 1, 3, '7.80', '2025-12-07 04:44:40'),
+(139, 36, 7, 1, '19.00', '2025-12-08 04:50:28');
 
 --
 -- Triggers `order_items`
@@ -347,7 +384,13 @@ INSERT INTO `payments` (`id`, `order_id`, `amount`, `subtotal`, `service_charge`
 (27, 27, '49.06', '43.80', '2.63', '2.63', '', '2025-12-01 05:55:46'),
 (28, 28, '28.90', '25.80', '1.55', '1.55', '', '2025-12-01 06:30:30'),
 (29, 30, '128.80', '115.00', '6.90', '6.90', '', '2025-12-02 07:52:19'),
-(30, 29, '62.72', '56.00', '3.36', '3.36', '', '2025-12-02 07:52:28');
+(30, 29, '62.72', '56.00', '3.36', '3.36', '', '2025-12-02 07:52:28'),
+(31, 32, '84.00', '75.00', '4.50', '4.50', 'cash', '2025-12-05 00:07:11'),
+(32, 31, '71.46', '63.80', '3.83', '3.83', '', '2025-12-05 00:07:19'),
+(33, 33, '68.77', '61.40', '3.68', '3.68', 'cash', '2025-12-05 00:24:38'),
+(34, 34, '53.98', '48.20', '2.89', '2.89', '', '2025-12-05 03:03:04'),
+(35, 35, '58.91', '52.60', '3.16', '3.16', 'cash', '2025-12-07 04:44:50'),
+(36, 36, '21.28', '19.00', '1.14', '1.14', 'cash', '2025-12-08 05:00:16');
 
 --
 -- Triggers `payments`
@@ -478,7 +521,7 @@ ALTER TABLE `staffs`
 -- AUTO_INCREMENT for table `dining_tables`
 --
 ALTER TABLE `dining_tables`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `menu_categories`
@@ -490,25 +533,25 @@ ALTER TABLE `menu_categories`
 -- AUTO_INCREMENT for table `menu_items`
 --
 ALTER TABLE `menu_items`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=118;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=140;
 
 --
 -- AUTO_INCREMENT for table `payments`
 --
 ALTER TABLE `payments`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `staffs`

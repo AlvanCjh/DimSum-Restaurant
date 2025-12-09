@@ -3,6 +3,7 @@ import pandas as pd
 from sklearn.linear_model import LinearRegression
 import json
 import datetime
+import argparse
 import sys
 
 # 1. Connect to Database
@@ -16,6 +17,14 @@ try:
 except Exception as e:
     print(json.dumps({"error": str(e)}))
     sys.exit()
+
+# --- Argument Parsing ---
+parser = argparse.ArgumentParser(description='Sales Forecasting Script')
+parser.add_argument('--days', type=int, default=7, help='Number of days to forecast from the last data point.')
+parser.add_argument('--start_date', type=str, help='The start date for the forecast period (YYYY-MM-DD).')
+parser.add_argument('--end_date', type=str, help='The end date for the forecast period (YYYY-MM-DD).')
+args = parser.parse_args()
+
 
 # 2. Fetch Daily Sales Data (Only Completed Orders)
 query = """
@@ -50,22 +59,36 @@ last_day_index = df['day_index'].max()
 future_days = []
 predicted_sales = []
 future_dates = []
+forecast_days = args.days
 
 current_date = pd.to_datetime(df['sale_date'].max())
 
-for i in range(1, 8): # 7 Days
-    next_index = last_day_index + i
-    prediction = model.predict([[next_index]])[0]
-    
-    # Don't predict negative sales
-    prediction = max(0, prediction)
-    
-    future_days.append(next_index)
-    predicted_sales.append(round(prediction, 2))
-    
-    # Calculate the actual date string for the chart
+# --- Determine Forecast Range ---
+# Generate a forecast for a reasonable maximum period (e.g., 90 days)
+max_forecast_days = 90
+for i in range(1, max_forecast_days + 1):
     next_date = current_date + datetime.timedelta(days=i)
-    future_dates.append(next_date.strftime('%Y-%m-%d'))
+    next_index = last_day_index + i
+    prediction = max(0, model.predict([[next_index]])[0])
+    
+    # We only need to store if it falls within the requested range
+    
+    # Case 1: Custom Date Range is provided
+    if args.start_date and args.end_date:
+        start_dt = datetime.datetime.strptime(args.start_date, '%Y-%m-%d').date()
+        end_dt = datetime.datetime.strptime(args.end_date, '%Y-%m-%d').date()
+        if start_dt <= next_date.date() <= end_dt:
+            predicted_sales.append(round(prediction, 2))
+            future_dates.append(next_date.strftime('%Y-%m-%d'))
+            
+    # Case 2: No custom range, use 'days' argument
+    else:
+        if i <= args.days:
+            predicted_sales.append(round(prediction, 2))
+            future_dates.append(next_date.strftime('%Y-%m-%d'))
+        else:
+            # We have forecasted enough days
+            break
 
 # 6. Output JSON for PHP
 result = {

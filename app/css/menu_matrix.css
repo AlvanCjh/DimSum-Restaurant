@@ -1,0 +1,238 @@
+/* --- Colors & Variables --- */
+:root {
+    --star-color: #28a745;     
+    --plow-color: #ffc107;      
+    --puzzle-color: #17a2b8;   
+    --dog-color: #dc3545;       
+    --yobita-orange: #fd7e14;   
+}
+
+/* --- Base Admin Styles --- */
+body {
+    background-color: #f8f9fa;
+    font-family: 'Poppins', sans-serif; 
+}
+
+.admin-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: var(--yobita-orange);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.back-link:hover {
+    color: #e66b0d;
+}
+
+.page-header {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 1.5rem;
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.page-header h1 {
+    color: #333;
+    font-size: 2.2rem;
+    margin: 0;
+    font-weight: 700;
+}
+
+.page-header p {
+    color: #7a6a6a;
+    margin: 5px 0 0 0;
+    font-size: 0.95rem;
+}
+
+/* --- Status Badge (Matches Forecast) --- */
+.ai-status-badge {
+    background-color: #f0fdf4;
+    color: #15803d;
+    padding: 8px 16px;
+    border-radius: 30px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid #bbf7d0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.pulse-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #22c55e;
+    border-radius: 50%;
+    box-shadow: 0 0 0 rgba(34, 197, 94, 0.4);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+}
+
+/* --- Hero Card / Chart Section --- */
+.matrix-section {
+    background: #fff;
+    padding: 30px;
+    border-radius: 20px;
+    border: 1px solid #ffe8cc; /* Subtle orange tint border */
+    margin-bottom: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Decoration for the section similar to revenue card */
+.matrix-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(90deg, var(--star-color), var(--plow-color), var(--puzzle-color), var(--dog-color));
+    opacity: 0.8;
+}
+
+.chart-container {
+    position: relative;
+    height: 450px;
+    width: 100%;
+}
+
+/* --- Legend / Quadrant Explainer (Modern Pill Style) --- */
+.quadrant-legend {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 25px;
+    justify-content: center;
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 50px; /* Pill container */
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #555;
+    background: #fff;
+    padding: 8px 16px;
+    border-radius: 30px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    border: 1px solid #eee;
+    transition: transform 0.2s;
+}
+
+.legend-item:hover {
+    transform: translateY(-2px);
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+/* --- Table Styles (Matches Forecast Table) --- */
+.table-responsive {
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid #eee;
+}
+
+.analysis-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.analysis-table th {
+    text-align: left;
+    padding: 15px 20px;
+    background-color: #f1f3f5;
+    font-weight: 600;
+    color: #555;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.analysis-table td {
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+    font-size: 0.95rem;
+    color: #333;
+}
+
+.analysis-table tr:hover {
+    background-color: #fcfcfc;
+}
+
+.analysis-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* --- Category Badges (Redesigned) --- */
+.cat-badge {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: white;
+    display: inline-block;
+    min-width: 90px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.cat-star { background-color: var(--star-color); box-shadow: 0 4px 10px rgba(40, 167, 69, 0.2); }
+.cat-plowhorse { background-color: var(--plow-color); color: #333; box-shadow: 0 4px 10px rgba(255, 193, 7, 0.2); }
+.cat-puzzle { background-color: var(--puzzle-color); box-shadow: 0 4px 10px rgba(23, 162, 184, 0.2); }
+.cat-dog { background-color: var(--dog-color); box-shadow: 0 4px 10px rgba(220, 53, 69, 0.2); }
+
+/* --- Recommendation Text --- */
+.recommendation {
+    font-size: 0.9rem;
+    color: #666;
+    background: #f8f9fa;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border-left: 3px solid #ccc;
+}
+
+/* Specific borders for recommendations based on type (optional detail) */
+tr:has(.cat-star) .recommendation { border-left-color: var(--star-color); background: #f0fdf4; }
+tr:has(.cat-plowhorse) .recommendation { border-left-color: var(--plow-color); background: #fffbe6; }
+tr:has(.cat-puzzle) .recommendation { border-left-color: var(--puzzle-color); background: #e0f7fa; }
+tr:has(.cat-dog) .recommendation { border-left-color: var(--dog-color); background: #fef2f2; }

@@ -20,7 +20,7 @@ if (isset($_POST['select_table']) && isset($_POST['table_id'])) {
         
         if ($table) {
             // Allow 'available' AND 'occupied'
-            if ($table['status'] === 'available' || $table['status'] === 'occupied') {
+            if ($table['status'] === 'available' || $table['status'] === 'occupied' || $table['status'] === 'reserved') {
                 
                 $_SESSION['selected_table_id'] = $table['id'];
                 $_SESSION['selected_table_number'] = $table['table_number'];
@@ -84,7 +84,7 @@ try {
                             <?php echo htmlspecialchars(ucfirst($table['status'])); ?>
                         </div>
                         
-                        <?php if ($table['status'] === 'available' || $table['status'] === 'occupied'): ?>
+                        <?php if ($table['status'] === 'available' || $table['status'] === 'occupied' || $table['status'] === 'reserved'): ?>
                             <form method="post" style="margin-top: 15px;">
                                 <input type="hidden" name="table_id" value="<?php echo $table['id']; ?>">
                                 

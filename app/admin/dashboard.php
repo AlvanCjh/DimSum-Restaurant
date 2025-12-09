@@ -64,6 +64,13 @@ include '../_header.php';
                 <p class="card-description">Automate AI Report Generation</p>
                 <a href="ai_reports.php" class="card-button">Open AI Reports</a>
             </div>
+
+            <div class="dashboard-card">
+                <div class="card-icon">📈</div>
+                <h2 class="card-title">Menu Engineering</h2>
+                <p class="card-description">Analyze Profit vs Popularity</p>
+                <a href="menu_matrix.php" class="card-button">View Matrix</a>
+            </div>
         </div>
 
         <?php
