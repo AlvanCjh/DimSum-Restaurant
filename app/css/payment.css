@@ -1,150 +1,354 @@
-/* --- Base Styles for Payment Page --- */
+/* css/payment.css */
+
+:root {
+    --bg-color: #eef2f5;
+    --white: #ffffff;
+    --text-dark: #2d3436;
+    --text-grey: #636e72;
+    --primary: #28a745; /* Green for Money */
+    --accent: #4e73df;
+    --border: #dfe6e9;
+}
+
 body {
-    background-color: var(--second) !important; /* Light gray background for the page */
+    background-color: var(--bg-color);
 }
 
-.payment-container {
-    max-width: 800px;
+.pos-payment-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr; /* Bill on Left, Keypad on Right */
+    gap: 30px;
+    max-width: 1100px;
     margin: 40px auto;
-    padding: 2rem 3rem;
-    background-color: var(--third); /* Solid white background */
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(92, 75, 75, 0.1);
-    animation: fadeInUp 0.6s ease-out forwards;
+    height: 80vh; /* Fixed height for POS feel */
 }
 
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.page-header {
+/* --- LEFT: BILL SECTION --- */
+.bill-section {
+    background: var(--white);
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid var(--border-color);
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--border);
 }
 
-.page-header h1 {
-    font-size: 2rem;
-    color: var(--text-dark);
-}
-
-.back-link {
-    color: var(--text-dark);
-    text-decoration: none;
-    font-weight: 600;
-    padding: 10px 20px;
-    background-color: var(--second);
-    border-radius: 8px;
-    transition: all 0.2s;
-}
-
-.back-link:hover {
-    background-color: var(--fourth);
-}
-
-/* --- Bill Summary --- */
-.bill-summary h2 {
+.bill-header {
+    background: #f8f9fa;
+    padding: 20px;
+    border-bottom: 1px dashed var(--border);
     text-align: center;
-    font-size: 1.5rem;
-    color: var(--text-dark);
-    margin-bottom: 2rem;
 }
 
-/* --- Itemized List Table --- */
-.bill-items table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 2rem;
+.bill-header h2 { margin: 0; font-size: 1.5rem; color: var(--text-dark); }
+.order-id { font-size: 0.9rem; color: var(--text-grey); }
+
+.bill-items-scroll {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto; /* Scrollable list if long */
 }
 
-.bill-items th,
-.bill-items td {
-    padding: 12px 15px;
-    text-align: left;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.bill-items thead th {
-    background-color: var(--second);
-    font-weight: 600;
-    color: var(--text-dark);
-}
-
-.bill-items td:nth-child(2), /* Quantity */
-.bill-items td:nth-child(3), /* Unit Price */
-.bill-items td:nth-child(4) { /* Total */
-    text-align: right;
-}
-
-/* --- Totals Section --- */
-.bill-totals {
-    margin-left: auto;
-    max-width: 400px;
-    width: 100%;
-    padding-top: 1rem;
-    border-top: 2px dashed var(--border-color);
-}
-
-.total-row {
+.bill-row {
     display: flex;
     justify-content: space-between;
-    padding: 8px 0;
+    margin-bottom: 12px;
     font-size: 1rem;
-}
-
-.total-row span:first-child {
-    color: var(--text-light);
-}
-
-.total-row span:last-child {
-    font-weight: 600;
     color: var(--text-dark);
 }
 
-.grand-total {
-    font-size: 1.5rem;
-    font-weight: bold;
-    padding: 15px 0;
+.bill-row .qty { font-weight: bold; margin-right: 10px; color: var(--accent); }
+
+.bill-totals {
+    background: #fff;
+    padding: 20px;
     border-top: 2px solid var(--text-dark);
+}
+
+.bill-totals .row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    color: var(--text-grey);
+}
+
+.bill-totals .total {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text-dark);
     margin-top: 10px;
 }
 
-.grand-total span {
-    color: var(--accent-dark) !important;
-}
-
-/* --- Payment Buttons --- */
-.payment-actions {
+/* --- RIGHT: INPUT SECTION --- */
+.input-section {
     display: flex;
-    justify-content: center;
-    gap: 1.5rem;
-    margin-top: 2.5rem;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-.payment-btn {
-    padding: 1rem 2.5rem;
-    border: none;
+/* Tabs */
+.payment-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.method-btn {
+    flex: 1;
+    background: var(--white);
+    border: 1px solid var(--border);
+    padding: 15px;
     border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--text-grey);
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.method-btn input { display: none; }
+.method-btn ion-icon { font-size: 1.5rem; }
+
+.method-btn.active {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+    box-shadow: 0 4px 10px rgba(78, 115, 223, 0.3);
+}
+
+/* Cash Interface */
+.amount-display {
+    background: var(--white);
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border);
+}
+
+.amount-display label {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--text-grey);
+    margin-bottom: 5px;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--text-dark);
+}
+
+.input-group input {
+    border: none;
+    font-size: 2.5rem;
+    font-weight: bold;
+    width: 100%;
+    outline: none;
+    color: var(--text-dark);
+    margin-left: 10px;
+}
+
+/* Quick Cash Buttons */
+.quick-cash-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.quick-cash-grid button {
+    padding: 20px;
     font-size: 1.1rem;
     font-weight: 600;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    color: white;
-    background: linear-gradient(to right, var(--primary), var(--accent-dark));
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    transition: background 0.1s;
+    color: var(--text-dark);
 }
 
-.payment-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(229, 169, 169, 0.4);
+.quick-cash-grid button:active {
+    background: #dfe6e9;
+    transform: scale(0.98);
 }
+
+.change-display {
+    text-align: right;
+    font-size: 1.2rem;
+    padding: 10px;
+    color: #fff; 
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.change-display strong {
+    font-size: 1.8rem;
+    display: block;
+}
+
+/* Digital UI */
+.digital-instruction {
+    text-align: center;
+    padding: 40px;
+    color: #FFF;
+}
+.big-icon { font-size: 4rem; margin-bottom: 15px; display: block; margin: 0 auto;}
+
+/* Pay Button */
+.pay-btn {
+    width: 100%;
+    padding: 20px;
+    background: var(--primary);
+    color: white;
+    font-size: 1.3rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: auto; /* Push to bottom */
+}
+
+.pay-btn:hover:not(:disabled) {
+    background: #218838;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+}
+
+.error-banner {
+    background: #ff7675;
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .pos-payment-layout {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+}
+
+/* --- Digital UI (QR & Card) --- */
+
+/* Target the specific IDs because they don't have a common class in your HTML */
+#qrInstruction, #cardInstruction {
+    text-align: center;
+    padding: 40px;
+    color: #ffffff !important; /* Force White Text */
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.9); /* Black shadow to make text pop against background */
+}
+
+#qrInstruction p, #cardInstruction p {
+    color: #ffffff !important;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+#qrInstruction strong, #cardInstruction strong {
+    color: #ffffff !important;
+    font-weight: 800;
+}
+
+.big-icon { 
+    font-size: 4rem; 
+    margin-bottom: 15px; 
+    display: block; 
+    margin: 0 auto;
+    color: #ffffff; /* Make the icon white too */
+    filter: drop-shadow(0 2px 3px rgba(0,0,0,0.5));
+}
+
+.instruction-box {
+    background: rgba(0, 0, 0, 0.6); /* Semi-transparent dark box */
+    padding: 30px;
+    border-radius: 15px;
+    color: white;
+    backdrop-filter: blur(10px); /* Nice blur effect */
+    border: 1px solid rgba(255,255,255,0.1);
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+.instruction-box h3 {
+    margin: 15px 0 10px 0;
+    font-size: 1.4rem;
+    color: #fff;
+}
+
+.instruction-box p {
+    color: #ddd;
+    font-size: 1rem;
+    margin-bottom: 20px;
+}
+
+/* 2. QR Code Styling */
+.qr-frame {
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    display: inline-block;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+.qr-img {
+    width: 220px; /* Bigger size */
+    height: 220px;
+    object-fit: contain;
+    display: block;
+}
+
+/* 3. Card Icon Styling */
+.card-icon-frame {
+    font-size: 5rem;
+    color: #4e73df; /* Blue icon */
+    background: white;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+/* 4. Alert Box inside Instruction */
+.alert-info-box {
+    background: rgba(40, 167, 69, 0.2);
+    border: 1px solid #28a745;
+    color: #28a745; /* Green text */
+    padding: 10px;
+    border-radius: 8px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.amount-to-charge {
+    background: rgba(255,255,255,0.1);
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 15px;
+}
+
+.amount-to-charge div {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #fff;
+}
+

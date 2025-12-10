@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 08, 2025 at 08:24 AM
+-- Generation Time: Dec 09, 2025 at 02:29 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.29
 
@@ -104,7 +104,10 @@ INSERT INTO `menu_items` (`id`, `category_id`, `name`, `description`, `price`, `
 (5, 7, 'Jasmine Tea Pot', 'A traditional teapot filled with green tea leaves and fragrant jasmine blossoms that steep to release a soothing, floral aroma.', '5.80', 'uploads/menu/menu_6922def51385c8.58264371.png'),
 (6, 4, 'Salad Prawn', 'Salad prawn features crispy, deep-fried shrimp dumplings served with a creamy, slightly sweet mayonnaise dipping sauce.', '8.80', 'uploads/menu/menu_6922e01f838953.19585583.png'),
 (7, 5, 'YangZhou Fried Rice', 'Yangzhou fried rice is a classic, colorful wok-fried dish featuring fluffy rice tossed with diced BBQ pork, shrimp, egg, and scallions.', '19.00', 'uploads/menu/menu_6922e0ce9d0249.13310552.png'),
-(8, 1, 'Chicken Feet', 'Steamed chicken feet, also known as \"Phoenix Claws,\" are tender, gelatinous claws braised in a savory sauce of fermented black beans and mild chili.', '6.80', 'uploads/menu/menu_6922e15e633360.57752262.png');
+(8, 1, 'Chicken Feet', 'Steamed chicken feet, also known as \"Phoenix Claws,\" are tender, gelatinous claws braised in a savory sauce of fermented black beans and mild chili.', '6.80', 'uploads/menu/menu_6922e15e633360.57752262.png'),
+(10, 1, 'Fish Ball', 'Fish balls are savory, spherical dumplings crafted from pounded fish paste, best known for their smooth surface and distinctively springy, bouncy texture.', '7.80', 'uploads/menu/menu_6936b05843cd39.96416045.png'),
+(11, 4, 'Pan Fried Turnip Cake', 'Fried turnip cake features savory squares of steamed radish and rice flour, studded with cured meat and shrimp, then pan-fried to a golden crisp.', '5.80', 'uploads/menu/menu_6936b0c846a6c6.38365914.png'),
+(12, 4, 'Deep Fried Wonton', 'Deep-fried wontons are crispy, golden-brown dumplings filled with seasoned pork and shrimp, typically served with a tangy sweet and sour dipping sauce.', '7.80', 'uploads/menu/menu_6936b133986e80.64865540.png');
 
 -- --------------------------------------------------------
 
@@ -161,7 +164,8 @@ INSERT INTO `orders` (`id`, `table_id`, `user_id`, `status`, `total_amount`, `cr
 (33, 1, 5, 'completed', '61.40', '2025-12-05 00:24:00'),
 (34, 2, 4, 'completed', '48.20', '2025-12-05 03:02:44'),
 (35, 4, 5, 'completed', '52.60', '2025-12-07 04:44:29'),
-(36, 4, 1, 'completed', '19.00', '2025-12-08 04:50:18');
+(36, 4, 1, 'completed', '19.00', '2025-12-08 04:50:18'),
+(37, 11, 4, 'completed', '50.60', '2025-12-08 11:08:58');
 
 -- --------------------------------------------------------
 
@@ -319,7 +323,12 @@ INSERT INTO `order_items` (`id`, `order_id`, `menu_item_id`, `quantity`, `price`
 (136, 35, 5, 1, '5.80', '2025-12-07 04:44:40'),
 (137, 35, 2, 1, '7.80', '2025-12-07 04:44:40'),
 (138, 35, 1, 3, '7.80', '2025-12-07 04:44:40'),
-(139, 36, 7, 1, '19.00', '2025-12-08 04:50:28');
+(139, 36, 7, 1, '19.00', '2025-12-08 04:50:28'),
+(140, 37, 12, 1, '7.80', '2025-12-08 11:09:08'),
+(141, 37, 11, 1, '5.80', '2025-12-08 11:09:08'),
+(142, 37, 10, 2, '7.80', '2025-12-08 11:09:08'),
+(143, 37, 5, 1, '5.80', '2025-12-08 11:09:08'),
+(144, 37, 1, 2, '7.80', '2025-12-08 11:09:08');
 
 --
 -- Triggers `order_items`
@@ -390,7 +399,8 @@ INSERT INTO `payments` (`id`, `order_id`, `amount`, `subtotal`, `service_charge`
 (33, 33, '68.77', '61.40', '3.68', '3.68', 'cash', '2025-12-05 00:24:38'),
 (34, 34, '53.98', '48.20', '2.89', '2.89', '', '2025-12-05 03:03:04'),
 (35, 35, '58.91', '52.60', '3.16', '3.16', 'cash', '2025-12-07 04:44:50'),
-(36, 36, '21.28', '19.00', '1.14', '1.14', 'cash', '2025-12-08 05:00:16');
+(36, 36, '21.28', '19.00', '1.14', '1.14', 'cash', '2025-12-08 05:00:16'),
+(37, 37, '56.67', '50.60', '3.04', '3.04', 'cash', '2025-12-08 11:09:19');
 
 --
 -- Triggers `payments`
@@ -533,25 +543,25 @@ ALTER TABLE `menu_categories`
 -- AUTO_INCREMENT for table `menu_items`
 --
 ALTER TABLE `menu_items`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=140;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=145;
 
 --
 -- AUTO_INCREMENT for table `payments`
 --
 ALTER TABLE `payments`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `staffs`

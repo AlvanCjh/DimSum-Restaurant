@@ -3,10 +3,10 @@ session_start();
 require_once '../connection.php';
 
 // --- CONFIGURATION ---
-const SERVICE_CHARGE_RATE = 0.06; // 6%
-const SST_RATE = 0.06;            // 6%
+const SERVICE_CHARGE_RATE = 0.06;
+const SST_RATE = 0.06;
 
-// --- SECURITY AND INITIALIZATION ---
+// --- SECURITY ---
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'waiter') {
     header("Location: ../index.php");
     exit;
@@ -21,60 +21,18 @@ $order_id = (int)$_GET['order_id'];
 $message = '';
 $message_type = '';
 
-// --- HANDLE PAYMENT SUBMISSION ---
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['process_payment'])) {
-    $payment_method = $_POST['payment_method'];
-    $grand_total = (float)$_POST['total_amount'];
-    $subtotal = (float)$_POST['subtotal'];
-    $service_charge = (float)$_POST['service_charge'];
-    $sst = (float)$_POST['sst'];
-
-    if (in_array($payment_method, ['cash', 'online']) && $grand_total > 0) {
-        try {
-            $pdo->beginTransaction();
-
-            // Insert payment record
-            $sql_payment = "INSERT INTO payments (order_id, amount, subtotal, service_charge, sst, payment_method) 
-                            VALUES (?, ?, ?, ?, ?, ?)";
-            $stmt_payment = $pdo->prepare($sql_payment);
-            $stmt_payment->execute([
-                $order_id, $grand_total, $subtotal, $service_charge, $sst, $payment_method
-            ]);
-            $payment_id = $pdo->lastInsertId();
-
-            // The database trigger `check_full_payment` will automatically update
-            // the order status to 'completed' and the table status to 'available'.
-
-            $pdo->commit();
-
-            // Redirect to the e-receipt page
-            header("Location: receipt.php?payment_id=" . $payment_id);
-            exit;
-
-        } catch (PDOException $e) {
-            $pdo->rollBack();
-            $message = "Error processing payment: " . $e->getMessage();
-            $message_type = "error";
-        }
-    } else {
-        $message = "Invalid payment method or amount.";
-        $message_type = "error";
-    }
-}
-
-// --- FETCH ORDER DETAILS FOR DISPLAY ---
+// --- FETCH ORDER DETAILS ---
 try {
     $sql_order = "SELECT o.*, dt.table_number 
                   FROM orders o 
                   JOIN dining_tables dt ON o.table_id = dt.id 
-                  WHERE o.id = ? AND o.status = 'prepared'";
+                  WHERE o.id = ?";
     $stmt_order = $pdo->prepare($sql_order);
     $stmt_order->execute([$order_id]);
     $order = $stmt_order->fetch();
 
     if (!$order) {
-        // If order is not found or not prepared, redirect
-        header("Location: order.php?message=Order not found or not ready for payment. Please wait for kitchen to prepare the order.");
+        header("Location: order.php?error=OrderNotFound");
         exit;
     }
 
@@ -86,17 +44,72 @@ try {
     $stmt_items->execute([$order_id]);
     $order_items = $stmt_items->fetchAll();
 
-    // --- CALCULATIONS ---
+    // Calculate Totals
     $subtotal = $order['total_amount'];
     $service_charge = $subtotal * SERVICE_CHARGE_RATE;
     $sst = $subtotal * SST_RATE;
     $grand_total = $subtotal + $service_charge + $sst;
 
+    // Round logic (Standard accounting)
+    $grand_total = round($grand_total, 2);
+
 } catch (PDOException $e) {
-    die("Error fetching order details: " . $e->getMessage());
+    die("Error: " . $e->getMessage());
 }
 
-$pageTitle = "Process Payment";
+// --- HANDLE PAYMENT SUBMISSION ---
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['process_payment'])) {
+    $payment_method = $_POST['payment_method']; // cash, credit_card, qr_pay
+    $tendered_amount = (float)$_POST['amount_tendered']; 
+    
+    // Validation: Ensure tendered amount covers the bill
+    if ($payment_method == 'cash' && $tendered_amount < $grand_total) {
+        $message = "Insufficient payment amount!";
+        $message_type = "error";
+    } 
+    // Logic: If not cash (meaning QR/Card), we proceed automatically.
+    else {
+        // If digital, force tendered to equal grand_total for the receipt record
+        if ($payment_method != 'cash') {
+            $tendered_amount = $grand_total;
+        }
+        
+        try {
+            $pdo->beginTransaction();
+
+            // Insert Payment Record
+            // Note: We insert the BILL amount as 'amount' for the database trigger to close the order properly.
+            // We usually don't store 'tendered' in the payments table unless you add a specific column for it.
+            $sql_payment = "INSERT INTO payments (order_id, amount, subtotal, service_charge, sst, payment_method) 
+                            VALUES (?, ?, ?, ?, ?, ?)";
+            $stmt_payment = $pdo->prepare($sql_payment);
+            $stmt_payment->execute([
+                $order_id, $grand_total, $subtotal, $service_charge, $sst, $payment_method
+            ]);
+            $payment_id = $pdo->lastInsertId();
+
+            $pdo->commit();
+
+            // Store Change/Tendered info in Session for the Receipt Page to display
+            $_SESSION['receipt_data'] = [
+                'tendered' => $tendered_amount,
+                'change' => $tendered_amount - $grand_total,
+                'method' => $payment_method
+            ];
+
+            // Redirect to Receipt
+            header("Location: receipt.php?payment_id=" . $payment_id);
+            exit;
+
+        } catch (PDOException $e) {
+            $pdo->rollBack();
+            $message = "Database Error: " . $e->getMessage();
+            $message_type = "error";
+        }
+    }
+}
+
+$pageTitle = "Payment Terminal";
 $basePath = "../";
 include '../_header.php';
 ?>
@@ -104,83 +117,214 @@ include '../_header.php';
 <link rel="stylesheet" href="../css/payment.css">
 
 <main class="main-wrapper">
-    <div class="payment-container">
-        <div class="page-header">
-            <h1>Process Payment</h1>
-            <a href="order.php" class="back-link">← Back to Bills</a>
-        </div>
+    <div class="pos-payment-layout">
+        
+        <div class="bill-section">
+            <div class="bill-header">
+                <h2>Table <?php echo htmlspecialchars($order['table_number']); ?></h2>
+                <span class="order-id">Order #<?php echo $order_id; ?></span>
+            </div>
 
-        <?php if (!empty($message)): ?>
-            <div class="message <?php echo $message_type; ?>"><?php echo htmlspecialchars($message); ?></div>
-        <?php endif; ?>
-
-        <div class="bill-summary">
-            <h2>Bill for Table <?php echo htmlspecialchars($order['table_number']); ?></h2>
-
-            <div class="bill-items">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Item</th>
-                            <th>Quantity</th>
-                            <th>Unit Price</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($order_items as $item): ?>
-                        <tr>
-                            <td><?php echo htmlspecialchars($item['item_name']); ?></td>
-                            <td><?php echo $item['quantity']; ?></td>
-                            <td>RM <?php echo number_format($item['price'], 2); ?></td>
-                            <td>RM <?php echo number_format($item['price'] * $item['quantity'], 2); ?></td>
-                        </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+            <div class="bill-items-scroll">
+                <?php foreach ($order_items as $item): ?>
+                <div class="bill-row">
+                    <div class="item-name">
+                        <span class="qty"><?php echo $item['quantity']; ?>x</span>
+                        <?php echo htmlspecialchars($item['item_name']); ?>
+                    </div>
+                    <div class="item-price">RM <?php echo number_format($item['price'] * $item['quantity'], 2); ?></div>
+                </div>
+                <?php endforeach; ?>
             </div>
 
             <div class="bill-totals">
-                <div class="total-row">
-                    <span>Subtotal</span>
-                    <span>RM <?php echo number_format($subtotal, 2); ?></span>
-                </div>
-                <div class="total-row">
-                    <span>Service Charge (6%)</span>
-                    <span>RM <?php echo number_format($service_charge, 2); ?></span>
-                </div>
-                <div class="total-row">
-                    <span>SST (6%)</span>
-                    <span>RM <?php echo number_format($sst, 2); ?></span>
-                </div>
-                <div class="total-row grand-total">
-                    <span>Grand Total</span>
-                    <span>RM <?php echo number_format($grand_total, 2); ?></span>
-                </div>
+                <div class="row"><span>Subtotal</span> <span>RM <?php echo number_format($subtotal, 2); ?></span></div>
+                <div class="row"><span>Service (6%)</span> <span>RM <?php echo number_format($service_charge, 2); ?></span></div>
+                <div class="row"><span>SST (6%)</span> <span>RM <?php echo number_format($sst, 2); ?></span></div>
+                <div class="row total"><span>Total Due</span> <span>RM <?php echo number_format($grand_total, 2); ?></span></div>
             </div>
+        </div>
 
-            <div class="payment-actions">
-                <form method="post">
-                    <input type="hidden" name="subtotal" value="<?php echo $subtotal; ?>">
-                    <input type="hidden" name="service_charge" value="<?php echo $service_charge; ?>">
-                    <input type="hidden" name="sst" value="<?php echo $sst; ?>">
-                    <input type="hidden" name="total_amount" value="<?php echo $grand_total; ?>">
-                    <input type="hidden" name="payment_method" value="cash">
-                    <button type="submit" name="process_payment" class="payment-btn cash">
-                        Pay with Cash
-                    </button>
-                </form>
-                <form method="post">
-                    <input type="hidden" name="subtotal" value="<?php echo $subtotal; ?>">
-                    <input type="hidden" name="service_charge" value="<?php echo $service_charge; ?>">
-                    <input type="hidden" name="sst" value="<?php echo $sst; ?>">
-                    <input type="hidden" name="total_amount" value="<?php echo $grand_total; ?>">
-                    <input type="hidden" name="payment_method" value="online">
-                    <button type="submit" name="process_payment" class="payment-btn online">
-                        Pay with Online
-                    </button>
-                </form>
-            </div>
+        <div class="input-section">
+            
+            <form method="post" id="paymentForm">
+                <input type="hidden" name="total_amount" id="totalAmount" value="<?php echo $grand_total; ?>">
+                
+                <div class="payment-tabs">
+                    <label class="method-btn active" id="btn-cash">
+                        <input type="radio" name="payment_method" value="cash" checked onchange="togglePaymentMode('cash', this)">
+                        <ion-icon name="cash-outline"></ion-icon> Cash
+                    </label>
+                    <label class="method-btn" id="btn-qr">
+                        <input type="radio" name="payment_method" value="qr_pay" onchange="togglePaymentMode('qr', this)">
+                        <ion-icon name="qr-code-outline"></ion-icon> QR Pay
+                    </label>
+                    <label class="method-btn" id="btn-card">
+                        <input type="radio" name="payment_method" value="credit_card" onchange="togglePaymentMode('card', this)">
+                        <ion-icon name="card-outline"></ion-icon> Card
+                    </label>
+                </div>
+
+                <div id="cashInterface" class="payment-mode-ui">
+                    <div class="amount-display">
+                        <label>Amount Tendered</label>
+                        <div class="input-group">
+                            <span class="currency">RM</span>
+                            <input type="number" name="amount_tendered" id="tenderedInput" step="0.05" 
+                                   placeholder="0.00" oninput="calculateChange()">
+                        </div>
+                    </div>
+
+                    <div class="quick-cash-grid">
+                        <button type="button" onclick="setCash(<?php echo $grand_total; ?>)">Exact</button>
+                        <button type="button" onclick="setCash(10)">RM 10</button>
+                        <button type="button" onclick="setCash(20)">RM 20</button>
+                        <button type="button" onclick="setCash(50)">RM 50</button>
+                        <button type="button" onclick="setCash(100)">RM 100</button>
+                        <button type="button" onclick="setCash(200)">RM 200</button>
+                    </div>
+
+                        
+                    <div class="change-display">
+                        <span>Change Due:</span>
+                        <strong id="changeAmount">RM 0.00</strong>
+                    </div>
+                </div>
+
+                <div id="digitalInterface" class="payment-mode-ui" style="display:none;">
+                    
+                    <div id="qrInstruction" style="display:none; text-align:center;">
+                        <div class="instruction-box">
+                            <div class="qr-frame">
+                                <img src="../image/QR.jpg" alt="DuitNow QR" class="qr-img">
+                            </div>
+                            <h3>DuitNow / Touch 'n Go</h3>
+                            <p>Ask customer to scan the QR code above.</p>
+                            <div class="alert-info-box">
+                                <ion-icon name="phone-portrait-outline"></ion-icon>
+                                Verify success screen on customer's phone
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="cardInstruction" style="display:none; text-align:center;">
+                        <div class="instruction-box">
+                            <div class="card-icon-frame">
+                                <ion-icon name="card-outline"></ion-icon>
+                            </div>
+                            <h3>Credit / Debit Card</h3>
+                            <p>Please use the external <strong>Card Terminal</strong>.</p>
+                            <div class="amount-to-charge">
+                                <small>Amount to Charge:</small>
+                                <div>RM <?php echo number_format($grand_total, 2); ?></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <button type="submit" name="process_payment" class="pay-btn" id="payButton" disabled>
+                    Complete Payment
+                </button>
+            </form>
+
+            <?php if ($message): ?>
+                <div class="error-banner"><?php echo $message; ?></div>
+            <?php endif; ?>
         </div>
     </div>
 </main>
+
+<script>
+    const grandTotal = <?php echo $grand_total; ?>;
+    const tenderedInput = document.getElementById('tenderedInput');
+    const changeDisplay = document.getElementById('changeAmount');
+    const payButton = document.getElementById('payButton');
+    const cashUI = document.getElementById('cashInterface');
+    const digitalUI = document.getElementById('digitalInterface');
+    
+    let currentMode = 'cash'; // Track current payment mode
+
+    function togglePaymentMode(mode, inputElement) {
+        currentMode = mode; // Update current mode
+        
+        // 1. Visual Tab Switching
+        document.querySelectorAll('.method-btn').forEach(btn => btn.classList.remove('active'));
+        inputElement.closest('.method-btn').classList.add('active');
+
+        // 2. Logic Switching
+        if (mode === 'cash') {
+            cashUI.style.display = 'block';
+            digitalUI.style.display = 'none';
+            
+            // Reset for Cash Mode
+            tenderedInput.value = ''; 
+            calculateChange(); // This will disable the button until amount is entered
+            
+        } else {
+            // Digital Modes (QR / Card)
+            cashUI.style.display = 'none';
+            digitalUI.style.display = 'flex';
+            
+            const qrView = document.getElementById('qrInstruction');
+            const cardView = document.getElementById('cardInstruction');
+
+            if(mode === 'qr') {
+                qrView.style.display = 'block';
+                cardView.style.display = 'none';
+                payButton.innerText = "Verify & Complete Order"; 
+            } 
+            else if(mode === 'card') { 
+                qrView.style.display = 'none';
+                cardView.style.display = 'block';
+                payButton.innerText = "Transaction Approved"; 
+            }
+
+            // FORCE ENABLE BUTTON FOR DIGITAL
+            tenderedInput.value = grandTotal.toFixed(2); 
+            
+            payButton.disabled = false;
+            payButton.style.opacity = '1';
+            payButton.style.background = '#28a745'; // Force Green
+            payButton.style.cursor = 'pointer';
+        }
+    }
+
+    // Handle Cash Logic
+    function setCash(amount) {
+        tenderedInput.value = amount.toFixed(2);
+        calculateChange();
+    }
+
+    function calculateChange() {
+        // Only apply cash validation logic when in cash mode
+        if (currentMode !== 'cash') {
+            return; // Exit early for digital payments
+        }
+        
+        const tendered = parseFloat(tenderedInput.value) || 0;
+        const change = tendered - grandTotal;
+
+        // Visual updates for Change Display
+        if (change >= 0) {
+            changeDisplay.innerHTML = "Change Due:<br>" + "RM " + change.toFixed(2);
+            changeDisplay.style.color = "#28a745"; 
+            
+            payButton.disabled = false;
+            payButton.style.opacity = '1';
+            payButton.innerText = "Pay & Print Receipt";
+            payButton.style.background = "#28a745";
+            payButton.style.cursor = 'pointer';
+        } else {
+            const short = (grandTotal - tendered).toFixed(2);
+            changeDisplay.innerHTML = "Short:<br>" + "RM " + short;
+            changeDisplay.style.color = "#dc3545"; 
+            
+            payButton.disabled = true;
+            payButton.style.opacity = '0.5';
+            payButton.innerText = "Insufficient Amount";
+            payButton.style.background = "#dc3545";
+            payButton.style.cursor = 'not-allowed';
+        }
+    }
+</script>

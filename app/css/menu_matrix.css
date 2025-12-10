@@ -31,14 +31,14 @@ body {
 .back-link {
     display: inline-block;
     margin-bottom: 1.5rem;
-    color: var(--yobita-orange);
+    color: var(--accent-dark, #a05252);
     text-decoration: none;
     font-weight: 600;
     transition: color 0.3s ease;
 }
 
 .back-link:hover {
-    color: #e66b0d;
+    color: var(--primary, #e5a9a9);
 }
 
 .page-header {

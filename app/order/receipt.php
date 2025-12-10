@@ -43,15 +43,24 @@ try {
     $stmt_items->execute([$receipt_details['order_id']]);
     $order_items = $stmt_items->fetchAll();
 
+
     // --- CALCULATE TOTALS & CHANGE ---
-    // Note: payments.amount is what user GAVE. 
-    // If you store the actual bill total in payments table (as subtotal+tax), use that.
-    // Assuming 'subtotal', 'service_charge', 'sst' are exact costs of bill:
+    // 1. Calculate the exact bill total
     $bill_total = $receipt_details['subtotal'] + $receipt_details['service_charge'] + $receipt_details['sst'];
     
-    // Total Paid is what they handed over (e.g., they gave RM 100 for a RM 85 bill)
-    // If your DB only stores exact payment, change will be 0.
-    $total_paid = $receipt_details['amount'];
+    // 2. Determine Amount Tendered & Change
+    // FIX: Check $_SESSION first! This contains the actual cash (e.g., RM 100) from the previous screen.
+    if (isset($_SESSION['receipt_data'])) {
+        $total_paid = $_SESSION['receipt_data']['tendered'];
+        $change_due = $_SESSION['receipt_data']['change'];
+        
+        // Optional: Clear session after use so it doesn't persist if refreshed
+        // unset($_SESSION['receipt_data']); 
+    } else {
+        // Fallback: If opening an old receipt from history, assume exact payment
+        $total_paid = $receipt_details['amount']; 
+        $change_due = 0.00;
+    }
     
     // Change Calculation
     $change_due = $total_paid - $bill_total;
