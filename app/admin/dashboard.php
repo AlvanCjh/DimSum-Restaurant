@@ -67,7 +67,7 @@ include '../_header.php';
 
             <div class="dashboard-card">
                 <div class="card-icon">📈</div>
-                <h2 class="card-title">Menu Engineering</h2>
+                <h2 class="card-title">Menu Insights</h2>
                 <p class="card-description">Analyze Profit vs Popularity</p>
                 <a href="menu_matrix.php" class="card-button">View Matrix</a>
             </div>

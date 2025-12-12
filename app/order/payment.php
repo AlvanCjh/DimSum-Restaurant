@@ -60,7 +60,7 @@ try {
 // --- HANDLE PAYMENT SUBMISSION ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['process_payment'])) {
     $payment_method = $_POST['payment_method']; // cash, credit_card, qr_pay
-    $tendered_amount = (float)$_POST['amount_tendered']; 
+    $tendered_amount = (float)($_POST['amount_tendered'] ?? 0);
     
     // Validation: Ensure tendered amount covers the bill
     if ($payment_method == 'cash' && $tendered_amount < $grand_total) {
@@ -147,7 +147,7 @@ include '../_header.php';
 
         <div class="input-section">
             
-            <form method="post" id="paymentForm">
+            <form method="post" id="paymentForm" novalidate>
                 <input type="hidden" name="total_amount" id="totalAmount" value="<?php echo $grand_total; ?>">
                 
                 <div class="payment-tabs">
@@ -170,8 +170,7 @@ include '../_header.php';
                         <label>Amount Tendered</label>
                         <div class="input-group">
                             <span class="currency">RM</span>
-                            <input type="number" name="amount_tendered" id="tenderedInput" step="0.05" 
-                                   placeholder="0.00" oninput="calculateChange()">
+                            <input type="number" name="amount_tendered" id="tenderedInput" step="0.05" placeholder="0.00">
                         </div>
                     </div>
 
@@ -236,95 +235,126 @@ include '../_header.php';
 </main>
 
 <script>
-    const grandTotal = <?php echo $grand_total; ?>;
-    const tenderedInput = document.getElementById('tenderedInput');
-    const changeDisplay = document.getElementById('changeAmount');
-    const payButton = document.getElementById('payButton');
-    const cashUI = document.getElementById('cashInterface');
-    const digitalUI = document.getElementById('digitalInterface');
-    
-    let currentMode = 'cash'; // Track current payment mode
-
-    function togglePaymentMode(mode, inputElement) {
-        currentMode = mode; // Update current mode
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- 1. Initialize Variables ---
+        const grandTotal = <?php echo number_format($grand_total, 2, '.', ''); ?>; // Force raw number format
+        const tenderedInput = document.getElementById('tenderedInput');
+        const changeDisplay = document.getElementById('changeAmount');
+        const payButton = document.getElementById('payButton');
+        const cashUI = document.getElementById('cashInterface');
+        const digitalUI = document.getElementById('digitalInterface');
         
-        // 1. Visual Tab Switching
-        document.querySelectorAll('.method-btn').forEach(btn => btn.classList.remove('active'));
-        inputElement.closest('.method-btn').classList.add('active');
+        let currentMode = 'cash'; 
 
-        // 2. Logic Switching
-        if (mode === 'cash') {
-            cashUI.style.display = 'block';
-            digitalUI.style.display = 'none';
-            
-            // Reset for Cash Mode
-            tenderedInput.value = ''; 
-            calculateChange(); // This will disable the button until amount is entered
-            
-        } else {
-            // Digital Modes (QR / Card)
-            cashUI.style.display = 'none';
-            digitalUI.style.display = 'flex';
-            
-            const qrView = document.getElementById('qrInstruction');
-            const cardView = document.getElementById('cardInstruction');
+        // --- 2. Define Global Functions ---
 
-            if(mode === 'qr') {
-                qrView.style.display = 'block';
-                cardView.style.display = 'none';
-                payButton.innerText = "Verify & Complete Order"; 
-            } 
-            else if(mode === 'card') { 
-                qrView.style.display = 'none';
-                cardView.style.display = 'block';
-                payButton.innerText = "Transaction Approved"; 
+        // Toggle Mode (Cash vs QR/Card)
+        window.togglePaymentMode = function(mode, inputElement) {
+            currentMode = mode;
+            
+            // Visual Tab Switching
+            document.querySelectorAll('.method-btn').forEach(btn => btn.classList.remove('active'));
+            // Safety check in case inputElement is missing
+            if(inputElement && inputElement.closest('.method-btn')) {
+                inputElement.closest('.method-btn').classList.add('active');
             }
 
-            // FORCE ENABLE BUTTON FOR DIGITAL
-            tenderedInput.value = grandTotal.toFixed(2); 
-            
-            payButton.disabled = false;
-            payButton.style.opacity = '1';
-            payButton.style.background = '#28a745'; // Force Green
-            payButton.style.cursor = 'pointer';
-        }
-    }
+            // Logic Switching
+            if (mode === 'cash') {
+                cashUI.style.display = 'block';
+                digitalUI.style.display = 'none';
+                
+                // Enable Input for Cash
+                tenderedInput.disabled = false; 
+                tenderedInput.value = ''; 
+                
+                calculateChange(); 
+                
+            } else {
+                // Digital Modes
+                cashUI.style.display = 'none';
+                digitalUI.style.display = 'flex';
+                
+                const qrView = document.getElementById('qrInstruction');
+                const cardView = document.getElementById('cardInstruction');
 
-    // Handle Cash Logic
-    function setCash(amount) {
-        tenderedInput.value = amount.toFixed(2);
-        calculateChange();
-    }
+                if(mode === 'qr') {
+                    qrView.style.display = 'block';
+                    cardView.style.display = 'none';
+                    payButton.innerText = "Verify & Complete Order"; 
+                } 
+                else if(mode === 'card') { 
+                    qrView.style.display = 'none';
+                    cardView.style.display = 'block';
+                    payButton.innerText = "Transaction Approved"; 
+                }
 
-    function calculateChange() {
-        // Only apply cash validation logic when in cash mode
-        if (currentMode !== 'cash') {
-            return; // Exit early for digital payments
-        }
-        
-        const tendered = parseFloat(tenderedInput.value) || 0;
-        const change = tendered - grandTotal;
+                // DISABLE manual input so browser ignores "required" validation
+                tenderedInput.disabled = true;
+                
+                // Auto-fill hidden value for backend
+                tenderedInput.value = grandTotal.toFixed(2); 
+                
+                // Force Enable Button
+                payButton.disabled = false;
+                payButton.style.opacity = '1';
+                payButton.style.backgroundColor = '#28a745';
+                payButton.style.cursor = 'pointer';
+            }
+        };
 
-        // Visual updates for Change Display
-        if (change >= 0) {
-            changeDisplay.innerHTML = "Change Due:<br>" + "RM " + change.toFixed(2);
-            changeDisplay.style.color = "#28a745"; 
+        // Set Cash (The Buttons)
+        window.setCash = function(amount) {
+            // Un-disable input just in case
+            tenderedInput.disabled = false;
             
-            payButton.disabled = false;
-            payButton.style.opacity = '1';
-            payButton.innerText = "Pay & Print Receipt";
-            payButton.style.background = "#28a745";
-            payButton.style.cursor = 'pointer';
-        } else {
-            const short = (grandTotal - tendered).toFixed(2);
-            changeDisplay.innerHTML = "Short:<br>" + "RM " + short;
-            changeDisplay.style.color = "#dc3545"; 
+            // Update value
+            tenderedInput.value = parseFloat(amount).toFixed(2);
             
-            payButton.disabled = true;
-            payButton.style.opacity = '0.5';
-            payButton.innerText = "Insufficient Amount";
-            payButton.style.background = "#dc3545";
-            payButton.style.cursor = 'not-allowed';
+            // Notify system that value changed (Fixes "input not detected" bugs)
+            tenderedInput.dispatchEvent(new Event('input'));
+            
+            // Run calculation
+            calculateChange();
+        };
+
+        // Calculate Change Logic
+        window.calculateChange = function() {
+            // Ignore if we are in digital mode
+            if(currentMode !== 'cash') return;
+
+            const val = tenderedInput.value;
+            const tendered = parseFloat(val) || 0;
+            const change = tendered - grandTotal;
+
+            if (tendered > 0 && change >= 0) {
+                // Sufficient Payment
+                changeDisplay.innerHTML = "Change Due:<br>" + "RM " + change.toFixed(2);
+                changeDisplay.style.color = "#28a745"; 
+                
+                payButton.disabled = false;
+                payButton.style.opacity = '1';
+                payButton.innerText = "Pay & Print Receipt";
+                payButton.style.backgroundColor = "#28a745";
+                payButton.style.cursor = 'pointer';
+            } else {
+                // Insufficient Payment
+                const short = (grandTotal - tendered).toFixed(2);
+                changeDisplay.innerHTML = "Short:<br>" + "RM " + short;
+                changeDisplay.style.color = "#dc3545"; 
+                
+                payButton.disabled = true;
+                payButton.style.opacity = '0.5';
+                payButton.innerText = "Insufficient Amount";
+                payButton.style.backgroundColor = "#dc3545";
+                payButton.style.cursor = 'not-allowed';
+            }
+        };
+
+        // --- 3. Initial Setup ---
+        // Ensure inputs invoke the calculation
+        if(tenderedInput) {
+            tenderedInput.addEventListener('input', window.calculateChange);
         }
-    }
+    });
 </script>

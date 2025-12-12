@@ -27,7 +27,7 @@ $errorMsg = isset($data['error']) ? $data['error'] : "Unknown error connecting t
 
         <div class="page-header">
             <div>
-                <h1>Menu Engineering Matrix</h1>
+                <h1>Smart Menu Insights</h1>
                 <p style="color:#777; margin:5px 0 0 0;">Profitability vs. Popularity Analysis (30 Days)</p>
             </div>
             
@@ -59,7 +59,7 @@ $errorMsg = isset($data['error']) ? $data['error'] : "Unknown error connecting t
             </div>
 
             <div class="matrix-section">
-                <h2 style="margin-top:0; border-bottom:1px solid #eee; padding-bottom:15px;">Item Recommendations</h2>
+                <h2 style="margin-top:0; border-bottom:1px solid #eee; padding-bottom:15px;">Menu Item Analysis</h2>
                 <div class="table-responsive">
                     <table class="analysis-table">
                         <thead>
