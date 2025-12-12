@@ -169,51 +169,64 @@
    4. Quantity Controls (Batch Logic)
    ========================================= */
 .qty-control {
-    background-color: #F7FAFC;
+    display: flex;
+    flex-direction: row;        /* Forces horizontal layout */
+    align-items: center;
+    justify-content: center;    /* Centers content */
+    background-color: #f8f9fa;
     border-radius: 8px;
-    padding: 4px;
-    border: 1px solid #EDF2F7;
+    padding: 5px;
+    gap: 8px;                   /* Space between buttons */
+    margin-top: 10px;
+    width: 100%;                /* Full width of the card footer */
+    box-sizing: border-box;
 }
 
 .qty-btn {
     width: 32px;
     height: 32px;
-    border: none;
+    border: 1px solid #dee2e6;
     border-radius: 6px;
     background-color: #fff;
-    color: var(--text-dark);
-    font-weight: bold;
+    color: #333;
     font-size: 1.2rem;
+    font-weight: bold;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-    transition: background 0.1s;
+    transition: all 0.2s ease;
+    line-height: 1; /* Fixes vertical alignment of symbols */
 }
 
 .qty-btn:hover {
-    background-color: #EDF2F7;
+    background-color: var(--primary); /* Uses your orange theme */
+    color: white;
+    border-color: var(--primary);
 }
 
 .qty-btn:active {
-    background-color: #E2E8F0;
+    transform: scale(0.95);
 }
 
-/* Hide spinner in number input */
+.qty-input {
+    width: 40px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 1rem;
+    color: #333;
+    background: transparent;
+    border: none;
+    margin: 0;
+    padding: 0;
+    appearance: textfield; /* Removes up/down arrows in Firefox */
+}
+
+/* Removes up/down arrows in Chrome/Safari */
 .qty-input::-webkit-outer-spin-button,
 .qty-input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
-}
-
-.qty-input {
-    appearance: textfield; /* Firefox */
-    font-weight: 600;
-    color: var(--text-dark);
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important; /* Override inline style borders */
 }
 
 /* =========================================
@@ -614,4 +627,89 @@
     .ai-suggestions-title {
         font-size: 1.25rem;
     }
+}
+
+/* --- Back Link (New) --- */
+.back-link {
+    display: inline-block;
+    margin-right: 15px;
+    color: var(--text-light);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.back-link:hover {
+    color: var(--primary);
+}
+
+/* --- Message Styling --- */
+.message {
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: 500;
+}
+.msg-success { background-color: #e8f5e9; color: #2e7d32; border: 1px solid #66bb6a; }
+.msg-error { background-color: #ffebee; color: #c62828; border: 1px solid #ef5350; }
+
+/* --- AI Section Accordion Styles --- */
+.ai-suggestions-header {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ai-toggle-icon {
+    color: white;
+    font-size: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+.ai-content-wrapper {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-out, opacity 0.3s ease-out;
+}
+
+.ai-content-wrapper.open {
+    opacity: 1;
+    /* max-height set via JS */
+}
+
+/* Specific Sidebar Styles */
+.sidebar-subhead {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    color: #a0aec0;
+    margin: 10px 0;
+    letter-spacing: 0.5px;
+}
+
+.saved-list li, .draft-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #f7fafc;
+    font-size: 0.95rem;
+}
+
+/* Small +/- controls inside sidebar */
+.small-control {
+    padding: 2px 4px !important;
+    background: #edf2f7 !important;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    border-radius: 6px;
+}
+.small-control .qty-btn {
+    font-size: 1rem !important;
+    width: 24px;
+    height: 24px;
+    padding: 0 !important;
 }

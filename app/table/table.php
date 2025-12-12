@@ -63,7 +63,11 @@ $coordinates = [
     <div class="map-wrapper">
         
         <div class="header-flex">
-            <h2 class="page-title">Table Selection</h2>
+            <div class="header-left">
+                <a href="../waiter/index.php" class="back-link">← Back to Dashboard</a>
+                <h2 class="page-title">Table Selection</h2>
+            </div>
+
             <div class="map-legend">
                 <div class="legend-item"><span class="dot available"></span> Available</div>
                 <div class="legend-item"><span class="dot occupied"></span> Occupied</div>

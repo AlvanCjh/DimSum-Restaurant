@@ -1,5 +1,11 @@
 <?php
 session_start();
+
+// Prevent browser caching
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
 require_once '../connection.php';
 
 // Security: Only chef role can access
@@ -137,8 +143,8 @@ try {
 </main>
 
 <script>
-// Auto-refresh every 20 seconds
+// Auto-refresh every 20 seconds with cache-busting
 setTimeout(function() {
-    location.reload();
+    window.location.href = window.location.pathname + '?t=' + new Date().getTime();
 }, 20000);
 </script>
