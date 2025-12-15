@@ -32,9 +32,9 @@ include '../_header.php';
 
             <div class="dashboard-card">
                 <div class="card-icon">📊</div>
-                <h2 class="card-title">View Statistics</h2>
-                <p class="card-description">Order History and Statistics</p>
-                <a href="viewOrder.php" class="card-button">View Statistics</a>
+                <h2 class="card-title">View Orders</h2>
+                <p class="card-description">Order History</p>
+                <a href="viewOrder.php" class="card-button">View Orders</a>
             </div>
 
             <div class="dashboard-card">
