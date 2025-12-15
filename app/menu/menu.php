@@ -93,13 +93,13 @@ if (isset($_POST['confirm_draft_order']) && isset($_POST['draft_items'])) {
                     $price_data = $stmt_price->fetch();
 
                     if ($price_data) {
-                        $stmt_check = $pdo->prepare("SELECT id, quantity FROM order_items WHERE order_id = ? AND menu_item_id = ?");
+                        $stmt_check = $pdo->prepare("SELECT id, quantity FROM order_items WHERE order_id = ? AND menu_item_id = ? AND prepared_at IS NULL");
                         $stmt_check->execute([$order_id, $item_id]);
                         $existing = $stmt_check->fetch();
 
                         if ($existing) {
                             $new_qty = $existing['quantity'] + $qty;
-                            $pdo->prepare("UPDATE order_items SET quantity = ?, prepared_at = NULL WHERE id = ?")->execute([$new_qty, $existing['id']]);
+                            $pdo->prepare("UPDATE order_items SET quantity = ? WHERE id = ?")->execute([$new_qty, $existing['id']]);
                         } else {
                             $pdo->prepare("INSERT INTO order_items (order_id, menu_item_id, quantity, price) VALUES (?, ?, ?, ?)")->execute([$order_id, $item_id, $qty, $price_data['price']]);
                         }

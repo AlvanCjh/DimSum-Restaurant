@@ -1,87 +1,143 @@
 /* css/payment.css */
 
 :root {
-    --bg-color: #eef2f5;
-    --white: #ffffff;
-    --text-dark: #2d3436;
-    --text-grey: #636e72;
-    --primary: #28a745; /* Green for Money */
-    --accent: #4e73df;
-    --border: #dfe6e9;
+    /* Theme Colors from your request */
+    --primary: #FFDCDC;
+    --second: #FFF2EB;
+    --third: #ffffff;
+    --fourth: #FFD6BA;
+    
+    /* Functional Colors */
+    --text-dark: #5C4B4B;
+    --text-grey: #7a6a6a;
+    --border-color: #EAE0DA;
+    --accent-dark: #E5A9A9;
+    --success: #28a745;
+    --error: #dc3545;
+    --header-bg: #5C4B4B; /* Dark background for visibility */
 }
 
 body {
-    background-color: var(--bg-color);
+    background-color: var(--second); /* Peach Background */
+    font-family: 'Poppins', sans-serif;
+    color: var(--text-dark);
 }
 
+.main-wrapper {
+    padding: 100px 20px 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* --- NEW: TOP HEADER BAR --- */
+.page-header-bar {
+    padding: 10px 0 20px 0;
+}
+
+.back-link {
+    color: var(--text-dark); 
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 8px 15px;
+    border-radius: 8px;
+    background: var(--primary);
+    border: 1px solid var(--border-color);
+    transition: all 0.2s;
+}
+
+.back-link:hover {
+    background: var(--fourth);
+    color: var(--text-dark);
+    transform: translateY(-1px);
+}
+
+/* --- MAIN LAYOUT GRID --- */
 .pos-payment-layout {
     display: grid;
-    grid-template-columns: 1fr 1.2fr; /* Bill on Left, Keypad on Right */
+    grid-template-columns: 1fr 1.4fr; /* Bill on Left, Payment on Right */
     gap: 30px;
-    max-width: 1100px;
-    margin: 40px auto;
-    height: 80vh; /* Fixed height for POS feel */
+    width: 100%;
+    min-height: 70vh; /* Ensure it stretches */
 }
 
-/* --- LEFT: BILL SECTION --- */
+/* --- LEFT: BILL SECTION (Receipt Style) --- */
 .bill-section {
-    background: var(--white);
-    border-radius: 15px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    background: var(--third);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(92, 75, 75, 0.1);
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    border: 1px solid var(--border);
+    border: 1px solid var(--border-color);
 }
 
 .bill-header {
-    background: #f8f9fa;
-    padding: 20px;
-    border-bottom: 1px dashed var(--border);
+    background: var(--primary);
+    padding: 25px;
     text-align: center;
+    color: var(--text-dark);
 }
 
-.bill-header h2 { margin: 0; font-size: 1.5rem; color: var(--text-dark); }
-.order-id { font-size: 0.9rem; color: var(--text-grey); }
+.bill-header h2 { margin: 0; font-size: 1.8rem; font-weight: 700; }
+.order-id { font-size: 0.95rem; opacity: 0.8; font-weight: 500; }
 
 .bill-items-scroll {
     flex: 1;
-    padding: 20px;
-    overflow-y: auto; /* Scrollable list if long */
+    padding: 25px;
+    overflow-y: auto;
+    background-color: #fff;
 }
+
+/* Custom Scrollbar */
+.bill-items-scroll::-webkit-scrollbar { width: 6px; }
+.bill-items-scroll::-webkit-scrollbar-thumb { background-color: var(--border-color); border-radius: 10px; }
 
 .bill-row {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 12px;
+    margin-bottom: 15px;
     font-size: 1rem;
-    color: var(--text-dark);
+    padding-bottom: 15px;
+    border-bottom: 1px dashed var(--border-color);
 }
+.bill-row:last-child { border-bottom: none; }
 
-.bill-row .qty { font-weight: bold; margin-right: 10px; color: var(--accent); }
+.item-name { font-weight: 500; color: var(--text-dark); }
+.bill-row .qty { font-weight: 700; margin-right: 10px; color: var(--accent-dark); }
+.item-price { font-weight: 600; color: var(--text-dark); }
 
 .bill-totals {
-    background: #fff;
-    padding: 20px;
-    border-top: 2px solid var(--text-dark);
+    background: var(--second);
+    padding: 25px;
+    border-top: 2px dashed var(--border-color);
 }
 
 .bill-totals .row {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     color: var(--text-grey);
+    font-size: 0.95rem;
 }
 
 .bill-totals .total {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     font-weight: 800;
     color: var(--text-dark);
-    margin-top: 10px;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border-color);
 }
 
-/* --- RIGHT: INPUT SECTION --- */
+/* --- RIGHT: INPUT SECTION (Large Container Block) --- */
 .input-section {
+    background: rgba(255, 255, 255, 0.6); /* Lighter Glassmorphism Base */
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 15px 40px rgba(92, 75, 75, 0.1);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -90,65 +146,79 @@ body {
 /* Tabs */
 .payment-tabs {
     display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
+    gap: 15px;
+    margin-bottom: 25px;
 }
 
 .method-btn {
     flex: 1;
-    background: var(--white);
-    border: 1px solid var(--border);
+    background: var(--third);
+    border: 2px solid transparent;
     padding: 15px;
-    border-radius: 10px;
+    border-radius: 12px;
     text-align: center;
     cursor: pointer;
     font-weight: 600;
     color: var(--text-grey);
-    transition: all 0.2s;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 5px;
+    gap: 8px;
 }
 
 .method-btn input { display: none; }
-.method-btn ion-icon { font-size: 1.5rem; }
+.method-btn ion-icon { font-size: 1.8rem; margin-bottom: 5px; }
 
+/* Active State matches theme */
 .method-btn.active {
-    background: var(--accent);
-    color: white;
-    border-color: var(--accent);
-    box-shadow: 0 4px 10px rgba(78, 115, 223, 0.3);
+    background: var(--fourth); /* Peach Accent */
+    color: var(--text-dark);
+    border-color: var(--text-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 214, 186, 0.5);
 }
 
-/* Cash Interface */
+/* Cash Interface Container */
+.payment-mode-ui {
+    flex: 1; 
+    display: flex;
+    flex-direction: column;
+}
+
 .amount-display {
-    background: var(--white);
+    background: var(--third);
     padding: 20px;
-    border-radius: 10px;
+    border-radius: 15px;
     margin-bottom: 20px;
-    border: 1px solid var(--border);
+    border: 1px solid var(--border-color);
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.03);
 }
 
 .amount-display label {
     display: block;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
     color: var(--text-grey);
     margin-bottom: 5px;
+    font-weight: 700;
 }
 
 .input-group {
     display: flex;
     align-items: center;
-    font-size: 2.5rem;
-    font-weight: bold;
+    font-size: 3rem;
+    font-weight: 800;
     color: var(--text-dark);
 }
 
 .input-group input {
     border: none;
-    font-size: 2.5rem;
-    font-weight: bold;
+    background: transparent;
+    font-size: 3rem;
+    font-weight: 800;
     width: 100%;
     outline: none;
     color: var(--text-dark);
@@ -160,195 +230,223 @@ body {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 15px;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
 .quick-cash-grid button {
-    padding: 20px;
+    padding: 15px;
     font-size: 1.1rem;
     font-weight: 600;
-    background: white;
-    border: 1px solid var(--border);
-    border-radius: 10px;
+    background: var(--third);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
     cursor: pointer;
-    transition: background 0.1s;
+    transition: all 0.2s;
     color: var(--text-dark);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+}
+
+.quick-cash-grid button:hover {
+    background: var(--second);
+    border-color: var(--accent-dark);
+    transform: translateY(-2px);
 }
 
 .quick-cash-grid button:active {
-    background: #dfe6e9;
     transform: scale(0.98);
 }
 
+/* Change Display - Dark Card Style */
 .change-display {
+    background: var(--text-dark); 
+    color: #fff;
+    padding: 20px;
+    border-radius: 15px;
     text-align: right;
-    font-size: 1.2rem;
-    padding: 10px;
-    color: #fff; 
-    font-weight: 500;
-    transition: color 0.2s ease;
+    margin-top: auto;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
 }
 
-.change-display strong {
-    font-size: 1.8rem;
-    display: block;
-}
-
-/* Digital UI */
-.digital-instruction {
-    text-align: center;
-    padding: 40px;
-    color: #FFF;
-}
-.big-icon { font-size: 4rem; margin-bottom: 15px; display: block; margin: 0 auto;}
+.change-display span { font-size: 1rem; opacity: 0.8; }
+.change-display strong { font-size: 2rem; display: block; margin-top: 5px; }
 
 /* Pay Button */
 .pay-btn {
     width: 100%;
     padding: 20px;
-    background: var(--primary);
-    color: white;
-    font-size: 1.3rem;
-    font-weight: bold;
+    background: var(--accent-dark); /* Accent color for the main action */
+    color: var(--third);
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
     border: none;
-    border-radius: 12px;
+    border-radius: 15px;
     cursor: pointer;
     transition: all 0.3s;
-    margin-top: auto; /* Push to bottom */
+    margin-top: 25px;
+    box-shadow: 0 10px 20px rgba(229, 169, 169, 0.4);
 }
 
 .pay-btn:hover:not(:disabled) {
-    background: #218838;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+    background: var(--success); 
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(40, 167, 69, 0.3);
 }
 
+.pay-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* Error Banner */
 .error-banner {
-    background: #ff7675;
+    background: var(--error);
     color: white;
     padding: 10px;
     border-radius: 8px;
     text-align: center;
-    margin-top: 10px;
-}
-
-/* Responsive */
-@media (max-width: 900px) {
-    .pos-payment-layout {
-        grid-template-columns: 1fr;
-        height: auto;
-    }
+    margin-top: 15px;
+    font-weight: 600;
 }
 
 /* --- Digital UI (QR & Card) --- */
-
-/* Target the specific IDs because they don't have a common class in your HTML */
-#qrInstruction, #cardInstruction {
-    text-align: center;
-    padding: 40px;
-    color: #ffffff !important; /* Force White Text */
-    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.9); /* Black shadow to make text pop against background */
-}
-
-#qrInstruction p, #cardInstruction p {
-    color: #ffffff !important;
-    font-size: 1.1rem;
-    margin-bottom: 10px;
-}
-
-#qrInstruction strong, #cardInstruction strong {
-    color: #ffffff !important;
-    font-weight: 800;
-}
-
-.big-icon { 
-    font-size: 4rem; 
-    margin-bottom: 15px; 
-    display: block; 
-    margin: 0 auto;
-    color: #ffffff; /* Make the icon white too */
-    filter: drop-shadow(0 2px 3px rgba(0,0,0,0.5));
-}
-
 .instruction-box {
-    background: rgba(0, 0, 0, 0.6); /* Semi-transparent dark box */
+    background: var(--third);
     padding: 30px;
-    border-radius: 15px;
-    color: white;
-    backdrop-filter: blur(10px); /* Nice blur effect */
-    border: 1px solid rgba(255,255,255,0.1);
-    animation: fadeIn 0.3s ease;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    animation: fadeIn 0.4s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
-@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-.instruction-box h3 {
-    margin: 15px 0 10px 0;
-    font-size: 1.4rem;
-    color: #fff;
-}
-
-.instruction-box p {
-    color: #ddd;
-    font-size: 1rem;
-    margin-bottom: 20px;
-}
-
-/* 2. QR Code Styling */
 .qr-frame {
     background: white;
     padding: 15px;
-    border-radius: 12px;
+    border-radius: 15px;
+    border: 2px solid var(--border-color);
+    margin-bottom: 20px;
     display: inline-block;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
 }
 
 .qr-img {
-    width: 220px; /* Bigger size */
-    height: 220px;
+    width: 200px;
+    height: 200px;
     object-fit: contain;
-    display: block;
 }
 
-/* 3. Card Icon Styling */
 .card-icon-frame {
-    font-size: 5rem;
-    color: #4e73df; /* Blue icon */
-    background: white;
-    width: 120px;
-    height: 120px;
+    font-size: 4rem;
+    color: var(--accent-dark);
+    background: var(--second);
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    margin-bottom: 20px;
 }
 
-/* 4. Alert Box inside Instruction */
-.alert-info-box {
-    background: rgba(40, 167, 69, 0.2);
-    border: 1px solid #28a745;
-    color: #28a745; /* Green text */
-    padding: 10px;
-    border-radius: 8px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-}
+.instruction-box h3 { color: var(--text-dark); margin: 0 0 10px 0; }
+.instruction-box p { color: var(--text-grey); margin-bottom: 20px; }
 
 .amount-to-charge {
-    background: rgba(255,255,255,0.1);
-    padding: 15px;
-    border-radius: 10px;
+    background: var(--second);
+    padding: 15px 30px;
+    border-radius: 12px;
+    border: 1px dashed var(--accent-dark);
     margin-top: 15px;
 }
 
 .amount-to-charge div {
     font-size: 2rem;
     font-weight: 800;
-    color: #fff;
+    color: var(--text-dark);
 }
 
+.alert-info-box {
+    background: #e8f5e9;
+    color: var(--success);
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .pos-payment-layout {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+    
+    .bill-items-scroll {
+        max-height: 300px; 
+    }
+}
+
+/* ============================
+   PAGE LOAD ANIMATIONS
+============================ */
+
+/* Main page entrance */
+.main-wrapper {
+    animation: pageFadeUp 0.6s ease-out both;
+}
+
+/* Left & Right panels staggered */
+.bill-section {
+    animation: slideInLeft 0.6s ease-out both;
+    animation-delay: 0.15s;
+}
+
+.input-section {
+    animation: slideInRight 0.6s ease-out both;
+    animation-delay: 0.3s;
+}
+
+/* Keyframes */
+@keyframes pageFadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-25px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(25px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}

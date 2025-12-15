@@ -633,7 +633,7 @@
 .back-link {
     display: inline-block;
     margin-right: 15px;
-    color: var(--text-light);
+    color: #ffff;
     text-decoration: none;
     font-weight: 600;
     transition: color 0.2s ease;

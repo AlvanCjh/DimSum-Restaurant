@@ -117,6 +117,12 @@ include '../_header.php';
 <link rel="stylesheet" href="../css/payment.css">
 
 <main class="main-wrapper">
+    <div class="page-header-bar">
+        <a href="../waiter/active_orders.php" class="back-link">
+            ← Back to Order
+        </a>
+    </div>
+    
     <div class="pos-payment-layout">
         
         <div class="bill-section">
@@ -124,7 +130,7 @@ include '../_header.php';
                 <h2>Table <?php echo htmlspecialchars($order['table_number']); ?></h2>
                 <span class="order-id">Order #<?php echo $order_id; ?></span>
             </div>
-
+            
             <div class="bill-items-scroll">
                 <?php foreach ($order_items as $item): ?>
                 <div class="bill-row">
@@ -183,7 +189,6 @@ include '../_header.php';
                         <button type="button" onclick="setCash(200)">RM 200</button>
                     </div>
 
-                        
                     <div class="change-display">
                         <span>Change Due:</span>
                         <strong id="changeAmount">RM 0.00</strong>
