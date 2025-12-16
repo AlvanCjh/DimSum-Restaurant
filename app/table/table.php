@@ -8,7 +8,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'waiter') {
 }
 
 // --- HANDLE SELECTION LOGIC ---
-if (isset($_POST['select_table'])) { // Removed && isset table_id to catch errors better
+if (isset($_POST['select_table'])) { 
     $table_id = isset($_POST['table_id']) ? (int)$_POST['table_id'] : 0;
     
     if ($table_id > 0) {
@@ -39,7 +39,6 @@ try {
 }
 
 // --- COORDINATES ---
-// Tweak these if they don't align perfectly on your screen
 $coordinates = [
     'T01' => ['top' => '35%', 'left' => '18%'],
     'T02' => ['top' => '35%', 'left' => '33%'],
@@ -60,7 +59,8 @@ $coordinates = [
 <link rel="stylesheet" href="../css/table.css">
 
 <main class="main-wrapper">
-    <div class="map-wrapper">
+    
+    <div class="table-selection-container">
         
         <div class="header-flex">
             <div class="header-left">
@@ -154,14 +154,17 @@ function openTableModal(id, number, status, capacity) {
         btn.innerText = "Start Order";
         btn.classList.add('btn-green');
         btn.disabled = false;
+        btn.style.cursor = "pointer";
     } else if (status === 'occupied') {
         btn.innerText = "Add Items";
         btn.classList.add('btn-blue');
         btn.disabled = false;
+        btn.style.cursor = "pointer";
     } else {
         btn.innerText = "Unavailable";
         btn.classList.add('btn-gray');
         btn.disabled = true;
+        btn.style.cursor = "not-allowed";
     }
 
     modal.style.display = 'flex';

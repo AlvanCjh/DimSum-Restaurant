@@ -51,10 +51,10 @@ $errorMsg = isset($data['error']) ? $data['error'] : "Unknown error connecting t
                 </div>
                 
                 <div class="quadrant-legend">
-                    <div class="legend-item"><span class="dot" style="background:#28a745"></span> <strong>Stars:</strong> High Profit, High Sales</div>
-                    <div class="legend-item"><span class="dot" style="background:#ffc107"></span> <strong>Plowhorses:</strong> Low Profit, High Sales</div>
-                    <div class="legend-item"><span class="dot" style="background:#17a2b8"></span> <strong>Puzzles:</strong> High Profit, Low Sales</div>
-                    <div class="legend-item"><span class="dot" style="background:#dc3545"></span> <strong>Dogs:</strong> Low Profit, Low Sales</div>
+                    <div class="legend-item"><span class="dot" style="background:#28a745"></span> <strong>Top Performers:</strong> High Profit, High Sales</div>
+                    <div class="legend-item"><span class="dot" style="background:#ffc107"></span> <strong>Popular Staples:</strong> Low Profit, High Sales</div>
+                    <div class="legend-item"><span class="dot" style="background:#17a2b8"></span> <strong>High Potential:</strong> High Profit, Low Sales</div>
+                    <div class="legend-item"><span class="dot" style="background:#dc3545"></span> <strong>Underperformers:</strong> Low Profit, Low Sales</div>
                 </div>
             </div>
 
@@ -74,16 +74,24 @@ $errorMsg = isset($data['error']) ? $data['error'] : "Unknown error connecting t
                         <tbody>
                             <?php foreach($data['items'] as $item): ?>
                                 <?php 
-                                    $class = strtolower($item['category']); 
+                                    $cssClass = '';
+                                    switch($item['category']) {
+                                        case 'Top Performers':  $cssClass = 'star'; break;     
+                                        case 'Popular Staples': $cssClass = 'plowhorse'; break; 
+                                        case 'High Potential':  $cssClass = 'puzzle'; break;   
+                                        case 'Underperformers': $cssClass = 'dog'; break;     
+                                        default: $cssClass = 'default';
+                                    }
+
                                     $action = "";
-                                    if($item['category'] == 'Star') $action = "🏆 Promote heavily! Ensure quality consistency.";
-                                    if($item['category'] == 'Plowhorse') $action = "💸 Increase price slightly or reduce portion cost.";
-                                    if($item['category'] == 'Puzzle') $action = "📢 Marketing needed. Rename item or take better photos.";
-                                    if($item['category'] == 'Dog') $action = "⚠️ Consider removing from menu to simplify kitchen.";
+                                    if($item['category'] == 'Top Performers') $action = "🏆 Promote heavily! Ensure quality consistency.";
+                                    if($item['category'] == 'Popular Staples') $action = "💸 Increase price slightly or reduce portion cost.";
+                                    if($item['category'] == 'High Potential') $action = "📢 Marketing needed. Rename item or take better photos.";
+                                    if($item['category'] == 'Underperformers') $action = "⚠️ Consider removing from menu to simplify kitchen.";
                                 ?>
                                 <tr>
                                     <td><strong><?php echo $item['name']; ?></strong></td>
-                                    <td><span class="cat-badge cat-<?php echo $class; ?>"><?php echo $item['category']; ?></span></td>
+                                    <td><span class="cat-badge cat-<?php echo $cssClass; ?>"><?php echo $item['category']; ?></span></td>
                                     <td><?php echo $item['total_qty']; ?></td>
                                     <td>RM <?php echo number_format($item['margin'], 2); ?></td>
                                     <td class="recommendation"><?php echo $action; ?></td>
@@ -109,10 +117,10 @@ $errorMsg = isset($data['error']) ? $data['error'] : "Unknown error connecting t
     // Prepare Data for Chart.js
     const chartPoints = rawData.map(item => {
         let color = '#ccc';
-        if(item.category === 'Star') color = '#28a745';
-        if(item.category === 'Plowhorse') color = '#ffc107';
-        if(item.category === 'Puzzle') color = '#17a2b8';
-        if(item.category === 'Dog') color = '#dc3545';
+        if(item.category === 'Top Performers') color = '#28a745';
+        if(item.category === 'Popular Staples') color = '#ffc107';
+        if(item.category === 'High Potential') color = '#17a2b8';
+        if(item.category === 'Underperformers') color = '#dc3545';
 
         return {
             x: item.total_qty,

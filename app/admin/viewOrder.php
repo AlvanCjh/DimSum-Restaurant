@@ -12,6 +12,9 @@ $pageTitle = "View Orders";
 $basePath = "../";
 include '../_header.php';
 
+// --- HANDLE FILTER ---
+$filter_date = isset($_GET['filter_date']) ? $_GET['filter_date'] : '';
+
 // --- FETCH DATA ---
 try {
     $sql = "SELECT 
@@ -21,10 +24,22 @@ try {
                 o.created_at,
                 dt.table_number
             FROM orders o
-            JOIN dining_tables dt ON o.table_id = dt.id
-            ORDER BY o.created_at DESC";
-    $stmt = $pdo->query($sql);
+            JOIN dining_tables dt ON o.table_id = dt.id";
+            
+    $params = [];
+
+    // Apply Date Filter if set
+    if (!empty($filter_date)) {
+        $sql .= " WHERE DATE(o.created_at) = ?";
+        $params[] = $filter_date;
+    }
+
+    $sql .= " ORDER BY o.created_at DESC";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($params);
     $orders = $stmt->fetchAll();
+
 } catch (PDOException $e) {
     $orders = [];
     $message = "Error fetching orders: " . $e->getMessage();
@@ -55,7 +70,21 @@ $status_classes = [
         <?php endif; ?>
 
         <div class="orders-list-section">
-            <h2 class="section-title">Order History (<?php echo count($orders); ?>)</h2>
+            
+            <div class="header-flex">
+                <h2 class="section-title">Order History (<?php echo count($orders); ?>)</h2>
+                
+                <form method="GET" class="filter-form">
+                    <div class="filter-group">
+                        <input type="date" name="filter_date" value="<?php echo htmlspecialchars($filter_date); ?>" class="date-input">
+                        <button type="submit" class="filter-btn">Filter</button>
+                        <?php if(!empty($filter_date)): ?>
+                            <a href="viewOrder.php" class="reset-link">Reset</a>
+                        <?php endif; ?>
+                    </div>
+                </form>
+            </div>
+
             <div class="table-responsive">
                 <table>
                     <thead>
@@ -71,7 +100,9 @@ $status_classes = [
                     <tbody>
                         <?php if (empty($orders)): ?>
                             <tr>
-                                <td colspan="6">No orders have been placed yet.</td>
+                                <td colspan="6" style="text-align:center; padding: 30px;">
+                                    No orders found<?php echo !empty($filter_date) ? " for this date." : "."; ?>
+                                </td>
                             </tr>
                         <?php else: ?>
                             <?php foreach ($orders as $order): ?>

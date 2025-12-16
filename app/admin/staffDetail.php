@@ -13,7 +13,7 @@ if (!isset($_GET['id'])) {
 }
 
 $waiter_id = (int)$_GET['id'];
-$pageTitle = "waiter Details";
+$pageTitle = "Staff Details";
 $basePath = "../";
 include '../_header.php';
 
@@ -36,6 +36,63 @@ try {
     ");
     $stmtStats->execute([$waiter_id]);
     $stats = $stmtStats->fetch();
+
+    // --- AI badge evaluation via Python helper ---
+    function computeAiBadgeForStaff($waiter, $stats) {
+        $scriptPath = realpath(__DIR__ . '/../ai/staff_badges.py');
+        if (!$scriptPath) {
+            return ['label' => 'Consistent', 'reason' => 'Steady performance with room to grow'];
+        }
+
+        $payload = [
+            "staff" => [
+                [
+                    "id" => $waiter["id"],
+                    "orders_handled" => (int)$stats["total_orders"],
+                    "total_revenue" => (float)$stats["total_revenue"],
+                    "last_active" => $stats["last_active"],
+                    "created_at" => $waiter["created_at"],
+                ]
+            ]
+        ];
+
+        $descriptorSpec = [
+            0 => ["pipe", "r"],
+            1 => ["pipe", "w"],
+            2 => ["pipe", "w"]
+        ];
+
+        $cmd = escapeshellcmd("python") . " " . escapeshellarg($scriptPath);
+        $process = proc_open($cmd, $descriptorSpec, $pipes, __DIR__ . '/../');
+        if (!is_resource($process)) {
+            return ['label' => 'Consistent', 'reason' => 'Steady performance with room to grow'];
+        }
+
+        fwrite($pipes[0], json_encode($payload));
+        fclose($pipes[0]);
+
+        $output = stream_get_contents($pipes[1]);
+        $err = stream_get_contents($pipes[2]);
+        fclose($pipes[1]);
+        fclose($pipes[2]);
+
+        $status = proc_close($process);
+        if ($status !== 0) {
+            return ['label' => 'Consistent', 'reason' => 'Steady performance with room to grow'];
+        }
+
+        $decoded = json_decode($output, true);
+        if (!isset($decoded["badges"][0])) {
+            return ['label' => 'Consistent', 'reason' => 'Steady performance with room to grow'];
+        }
+
+        return [
+            'label' => $decoded["badges"][0]["label"] ?? 'Consistent',
+            'reason' => $decoded["badges"][0]["reason"] ?? 'Steady performance with room to grow'
+        ];
+    }
+
+    $badgeData = computeAiBadgeForStaff($waiter, $stats);
 
     // 3. Fetch Recent Orders handled by this waiter
     $stmtOrders = $pdo->prepare("
@@ -73,6 +130,12 @@ try {
                 </div>
                 <h2><?php echo htmlspecialchars($waiter['username']); ?></h2>
                 <span class="role-badge role-<?php echo $waiter['role']; ?>"><?php echo ucfirst($waiter['role']); ?></span>
+                <div class="ai-badge large">
+                    <?php echo htmlspecialchars($badgeData['label']); ?>
+                </div>
+                <div class="ai-badge-reason">
+                    <?php echo htmlspecialchars($badgeData['reason']); ?>
+                </div>
                 
                 <div class="profile-info-list">
                     <div class="info-row">

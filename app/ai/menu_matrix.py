@@ -59,13 +59,13 @@ def categorize(row):
     high_profit = row['margin'] >= avg_margin_benchmark
     
     if high_pop and high_profit:
-        return "Star"       
+        return "Top Performers"       
     elif high_pop and not high_profit:
-        return "Plowhorse"  
+        return "Popular Staples"  
     elif not high_pop and high_profit:
-        return "Puzzle"     
+        return "High Potential"     
     else:
-        return "Dog"        
+        return "Underperformers"        
 
 df['category'] = df.apply(categorize, axis=1)
 

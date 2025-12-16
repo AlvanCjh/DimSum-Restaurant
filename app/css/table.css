@@ -1,22 +1,33 @@
-/* --- Wrapper --- */
-.map-wrapper {
-    max-width: 100%; /* Use full width */
-    margin: 0;
-    padding: 20px;
-    height: 85vh; /* Make map taller */
-    display: flex;
-    flex-direction: column;
+/* --- Animations --- */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
+body {
+    background-color: #f8f9fa; /* Match dashboard background */
+}
+
+/* --- MAIN CONTAINER (White Box) --- */
+.table-selection-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* --- Header Section --- */
 .header-flex {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    margin-bottom: 15px;
-    max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
+    margin-bottom: 20px;
     width: 100%;
+    border-bottom: 2px solid #eee; /* Added separator */
+    padding-bottom: 15px;
 }
 
 .header-left {
@@ -25,8 +36,9 @@
     gap: 5px;
 }
 
+/* Back Link (Updated Colors) */
 .back-link {
-    color: #fff; 
+    color: var(--accent-dark); /* Accent Color */
     text-decoration: none;
     font-size: 0.9rem;
     font-weight: 600;
@@ -35,31 +47,38 @@
 }
 
 .back-link:hover {
-    color: #ffaa00; 
+    color: var(--primary); /* Primary Color */
 }
 
-.page-title { margin: 0; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+/* Page Title (Updated Color) */
+.page-title { 
+    margin: 0; 
+    color: #333; /* Dark text for white background */
+    font-size: 2rem;
+    text-shadow: none; /* Removed shadow */
+}
 
-/* --- BLUEPRINT CONTAINER --- */
+/* --- BLUEPRINT CONTAINER (The Map) --- */
 .blueprint-container {
     position: relative;
     width: 100%;
-    flex-grow: 1; /* Fill remaining height */
-    background-color: #EAEAEA; /* Clean Light Grey Floor */
+    height: 600px; /* Fixed height within the container */
+    background-color: #EAEAEA;
     border-radius: 12px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.05); /* Inner shadow for depth */
     overflow: hidden;
-    border: 10px solid #333; /* Dark Walls */
+    border: 8px solid #444;
+    margin-top: 10px;
 }
 
-/* --- ZONES (Low Z-Index) --- */
+/* --- ZONES --- */
 .area-kitchen {
     position: absolute;
     top: 0;
     left: 0;
     width: 60%;
     height: 22%;
-    background: #CCCCCC; /* Darker Grey */
+    background: #CCCCCC;
     border-bottom: 5px solid #333;
     border-right: 5px solid #333;
     display: flex;
@@ -68,7 +87,7 @@
     color: #555;
     font-weight: 800;
     letter-spacing: 2px;
-    z-index: 1; /* Ensure this is LOWER than tables */
+    z-index: 1;
 }
 
 .area-vip-zone {
@@ -77,9 +96,9 @@
     right: 0;
     width: 25%;
     height: 100%;
-    background-color: #F8F1E5; /* Warm Beige */
+    background-color: #F8F1E5;
     border-left: 6px double #333;
-    z-index: 1; /* Ensure this is LOWER than tables */
+    z-index: 1;
 }
 
 .zone-label {
@@ -99,7 +118,7 @@
     position: absolute;
     top: 0;
     left: 60%;
-    width: 15%; /* Gap between kitchen and VIP */
+    width: 15%;
     height: 12%;
     background: #444;
     color: #fff;
@@ -122,7 +141,7 @@
     border-right: 5px solid #333;
     text-align: center;
     line-height: -30px;
-    color: #fff;
+    color: #333;
     font-weight: bold;
     z-index: 2;
 }
@@ -136,7 +155,7 @@
     font-weight: 800;
 }
 
-/* --- TABLES (High Z-Index = Clickable) --- */
+/* --- TABLES --- */
 .table-node {
     position: absolute;
     transform: translate(-50%, -50%);
@@ -147,7 +166,8 @@
     cursor: pointer;
     transition: transform 0.2s ease;
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    z-index: 100; /* CRITICAL: Must be higher than Kitchen/VIP */
+    z-index: 100;
+    background-color: #fff; /* Default bg */
 }
 
 .table-node:hover {
@@ -156,7 +176,6 @@
     z-index: 110;
 }
 
-/* Shapes & Colors */
 .shape-regular {
     width: 70px;
     height: 70px;
@@ -173,21 +192,18 @@
     border-style: solid;
 }
 
-/* Status Colors (Clean) */
+/* Status Colors */
 .table-node.available { background: #fff; border-color: #28a745; color: #28a745; }
-.table-node.occupied { background: #fff; border-color: #007bff; color: #007bff; }
+.table-node.occupied { background: #e3f2fd; border-color: #007bff; color: #007bff; }
 .table-node.reserved { background: #fff; border-color: #ffc107; color: #d39e00; }
-
-.table-node.occupied { background: #e3f2fd; } /* Slight blue tint for occupied */
 
 /* Chairs */
 .chair {
     position: absolute;
-    background: #888;
+    background: #999;
     border-radius: 4px;
-    z-index: 1; /* Under table */
+    z-index: 1;
 }
-
 .shape-regular .chair { width: 30px; height: 10px; }
 .shape-regular .c-top { top: -14px; left: 50%; transform: translateX(-50%); }
 .shape-regular .c-bottom { bottom: -14px; left: 50%; transform: translateX(-50%); }
@@ -198,9 +214,22 @@
 .shape-vip .c-left { width: 10px; height: 40px; top: 50%; left: -14px; transform: translateY(-50%); }
 .shape-vip .c-right { width: 10px; height: 40px; top: 50%; right: -14px; transform: translateY(-50%); }
 
-/* --- Legend --- */
-.map-legend { display: flex; gap: 15px; background: rgba(0,0,0,0.2); padding: 8px 16px; border-radius: 20px; }
-.legend-item { color: #fff; display: flex; align-items: center; gap: 6px; font-size: 0.9rem; font-weight: 500; }
+/* --- Legend (Updated for White Background) --- */
+.map-legend { 
+    display: flex; 
+    gap: 15px; 
+    background: #f1f3f5; /* Light gray pill */
+    padding: 8px 16px; 
+    border-radius: 20px; 
+}
+.legend-item { 
+    color: #555; /* Dark text */
+    display: flex; 
+    align-items: center; 
+    gap: 6px; 
+    font-size: 0.9rem; 
+    font-weight: 600; 
+}
 .dot { width: 10px; height: 10px; border-radius: 50%; }
 .dot.available { background: #28a745; }
 .dot.occupied { background: #007bff; }

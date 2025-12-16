@@ -4,7 +4,7 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* --- General Styles (re-using from admin_tables for consistency) --- */
+/* --- General Styles --- */
 .admin-container {
     max-width: 1200px;
     margin: 2rem auto;
@@ -22,34 +22,87 @@ body {
 .back-link {
     display: inline-block;
     margin-bottom: 1.5rem;
-    color: var(--accent-dark, #a05252);
+    color: var(--accent-dark);
     text-decoration: none;
     font-weight: 600;
     transition: color 0.3s ease;
 }
 
 .back-link:hover {
-    color: var(--primary, #e5a9a9);
+    color: var(--primary);
 }
 
 .page-header {
-    border-bottom: 2px solid var(--border-color, #eee);
+    border-bottom: 2px solid #eee;
     padding-bottom: 1rem;
     margin-bottom: 2rem;
 }
 
 .page-header h1 {
-    color: var(--text-dark, #333);
+    color: #333;
     font-size: 2.5rem;
     margin: 0;
 }
 
+/* --- Header Flex & Filter Styles (NEW) --- */
+.header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
 .section-title {
     font-size: 1.5rem;
-    color: var(--text-dark, #333);
-    margin-top: 0;
-    margin-bottom: 1.5rem;
+    color: #333;
+    margin: 0;
 }
+
+.filter-form {
+    display: flex;
+    align-items: center;
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.date-input {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-family: inherit;
+    color: #555;
+    outline: none;
+}
+
+.filter-btn {
+    padding: 8px 16px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+
+.filter-btn:hover {
+    background-color: #555;
+}
+
+.reset-link {
+    color: #dc3545;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+.reset-link:hover { text-decoration: underline; }
+
 
 /* --- Table Styles --- */
 .table-responsive { overflow-x: auto; }
@@ -60,13 +113,13 @@ table {
 }
 table th, table td {
     padding: 1rem;
-    border-bottom: 1px solid var(--border-color, #eee);
+    border-bottom: 1px solid #eee;
     vertical-align: middle;
 }
 table th {
     background-color: #f9fafb;
     font-weight: 600;
-    color: var(--text-light, #555);
+    color: #555;
 }
 
 /* --- Status Badges --- */
@@ -112,50 +165,21 @@ table th {
     transform: translateY(-2px);
 }
 
-/* --- Order Details Page --- */
-.order-details-grid {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 2rem;
-    align-items: flex-start;
-}
-
-.order-summary-card, .order-items-card {
-    background-color: #f9fafb;
-    padding: 2rem;
-    border-radius: 10px;
-    border: 1px solid var(--border-color, #eee);
-}
-
-.summary-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.8rem 0;
-    border-bottom: 1px dashed var(--border-color, #eee);
-    font-size: 1rem;
-}
-.summary-item:last-child {
-    border-bottom: none;
-}
-.summary-item span {
-    color: var(--text-light);
-}
-.summary-item strong {
-    color: var(--text-dark);
-}
-
-.status-text-completed { color: #155724; }
-.status-text-pending { color: #856404; }
-.status-text-cancelled { color: #721c24; }
-
 /* Responsive Adjustments */
-@media screen and (max-width: 992px) {
-    .order-details-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
 @media screen and (max-width: 768px) {
+    .header-flex {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .filter-group {
+        width: 100%;
+    }
+    
+    .date-input {
+        flex-grow: 1;
+    }
+
     table, thead, tbody, th, td, tr { display: block; }
     thead tr { position: absolute; top: -9999px; left: -9999px; }
     tr { border: 1px solid #ccc; margin-bottom: 1rem; }
