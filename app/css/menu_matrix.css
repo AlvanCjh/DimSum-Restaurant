@@ -42,7 +42,7 @@ body {
 }
 
 .page-header {
-    border-bottom: 1px solid #eee;
+    border-bottom: 2px solid #eee;
     padding-bottom: 1.5rem;
     margin-bottom: 2rem;
     display: flex;
@@ -57,13 +57,7 @@ body {
     font-weight: 700;
 }
 
-.page-header p {
-    color: #7a6a6a;
-    margin: 5px 0 0 0;
-    font-size: 0.95rem;
-}
-
-/* --- Status Badge (Matches Forecast) --- */
+/* --- Status Badge --- */
 .ai-status-badge {
     background-color: #f0fdf4;
     color: #15803d;
@@ -93,19 +87,53 @@ body {
     100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
 }
 
+/* --- Action Buttons (Print) --- */
+.report-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.print-btn {
+    background-color: #4e73df;
+    color: white;
+}
+
+.print-btn:hover {
+    background-color: #3d5fd1;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(78, 115, 223, 0.3);
+}
+
+.action-btn ion-icon {
+    font-size: 1.2rem;
+}
+
 /* --- Hero Card / Chart Section --- */
 .matrix-section {
     background: #fff;
     padding: 30px;
     border-radius: 20px;
-    border: 1px solid #ffe8cc; /* Subtle orange tint border */
+    border: 1px solid #ffe8cc;
     margin-bottom: 30px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
     position: relative;
     overflow: hidden;
 }
 
-/* Decoration for the section similar to revenue card */
 .matrix-section::before {
     content: '';
     position: absolute;
@@ -117,13 +145,20 @@ body {
     opacity: 0.8;
 }
 
+.section-title {
+    margin-top:0; 
+    border-bottom:1px solid #eee; 
+    padding-bottom:15px;
+    color: #333;
+}
+
 .chart-container {
     position: relative;
     height: 450px;
     width: 100%;
 }
 
-/* --- Legend / Quadrant Explainer (Modern Pill Style) --- */
+/* --- Legend / Quadrant Explainer --- */
 .quadrant-legend {
     display: flex;
     gap: 12px;
@@ -132,7 +167,7 @@ body {
     justify-content: center;
     background: #f8f9fa;
     padding: 15px;
-    border-radius: 50px; /* Pill container */
+    border-radius: 50px;
     box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);
 }
 
@@ -148,11 +183,6 @@ body {
     border-radius: 30px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     border: 1px solid #eee;
-    transition: transform 0.2s;
-}
-
-.legend-item:hover {
-    transform: translateY(-2px);
 }
 
 .dot {
@@ -161,7 +191,7 @@ body {
     border-radius: 50%;
 }
 
-/* --- Table Styles (Matches Forecast Table) --- */
+/* --- Table Styles --- */
 .table-responsive {
     overflow-x: auto;
     border-radius: 12px;
@@ -201,7 +231,7 @@ body {
     border-bottom: none;
 }
 
-/* --- Category Badges (Redesigned) --- */
+/* --- Category Badges --- */
 .cat-badge {
     padding: 6px 14px;
     border-radius: 20px;
@@ -231,8 +261,163 @@ body {
     border-left: 3px solid #ccc;
 }
 
-/* Specific borders for recommendations based on type (optional detail) */
 tr:has(.cat-star) .recommendation { border-left-color: var(--star-color); background: #f0fdf4; }
 tr:has(.cat-plowhorse) .recommendation { border-left-color: var(--plow-color); background: #fffbe6; }
 tr:has(.cat-puzzle) .recommendation { border-left-color: var(--puzzle-color); background: #e0f7fa; }
 tr:has(.cat-dog) .recommendation { border-left-color: var(--dog-color); background: #fef2f2; }
+
+/* --- Report Headers (Print Only) --- */
+.report-header-print {
+    display: none;
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 3px double #000;
+    position: relative; /* Added: Allows absolute positioning of the logo */
+    min-height: 80px;   /* Added: Ensures header is tall enough for the logo */
+}
+
+/* Added: Logo Styling */
+.print-logo {
+    position: absolute; /* Takes logo out of flow so text stays centered */
+    left: 0;
+    top: 0;
+    height: 80px;       /* Adjust height as needed */
+    width: auto;        /* Maintains aspect ratio */
+    object-fit: contain;
+}
+
+.report-title-print {
+    font-size: 22pt;
+    font-weight: bold;
+    margin: 10px 0 5px 0; /* Adjusted margin for better spacing */
+    letter-spacing: 2px;
+    color: #000;
+}
+/* ... rest of css ... */
+
+.report-subtitle-print {
+    font-size: 16pt;
+    font-weight: bold;
+    margin: 0;
+    color: #000;
+}
+
+.report-footer-print {
+    display: none;
+    text-align: right;
+    margin-top: 30px;
+    padding-top: 15px;
+    border-top: 1px solid #ccc;
+}
+
+.report-footer-print p {
+    margin: 0;
+    font-size: 10pt;
+    color: #666;
+    font-style: italic;
+}
+
+/* --- PRINT MEDIA QUERIES --- */
+@media print {
+    /* Show Print Headers */
+    .report-header-print,
+    .report-footer-print {
+        display: block !important;
+    }
+
+    /* Hide Navigation & Buttons */
+    header, footer, .back-link, .report-actions, .ai-status-badge {
+        display: none !important;
+    }
+
+    /* Reset Container */
+    body {
+        background: white !important;
+        margin: 0;
+        padding: 0;
+    }
+
+    .main-wrapper, .admin-container {
+        margin: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+
+    .page-header {
+        border-bottom: none !important;
+        margin-bottom: 10px !important;
+    }
+    
+    .page-header h1, .page-header p {
+        display: none !important; /* Hide original screen title */
+    }
+
+    /* Reset Sections */
+    .matrix-section {
+        box-shadow: none !important;
+        border: 1px solid #ccc !important;
+        page-break-inside: avoid;
+        margin-bottom: 20px !important;
+    }
+
+    .matrix-section::before { display: none; }
+
+    /* Fix Chart Size for Print */
+    .chart-container {
+        /* Increased height to ensure X-axis labels fit */
+        height: 500px !important; 
+        max-height: 500px !important;
+        
+        /* specific width adjustment for A4 portrait */
+        width: 95% !important; 
+        margin: 20px auto !important;
+        
+        /* Remove clipping so labels/dots aren't cut off */
+        overflow: visible !important; 
+        
+        /* Add padding inside border so dots on the edge aren't cropped */
+        padding: 20px !important; 
+        
+        page-break-inside: avoid;
+        border: 1px solid #ccc !important;
+        background: white !important;
+        display: block !important;
+    }
+
+    /* Force canvas to scale properly within the container */
+    .chart-container canvas {
+        width: 100% !important;
+        height: 100% !important;
+        max-width: 100% !important;
+    }
+    /* Table Fixes */
+    .table-responsive {
+        border: 1px solid #000 !important;
+        overflow: visible !important;
+    }
+    
+    .analysis-table th {
+        background-color: #333 !important;
+        color: white !important;
+        border: 1px solid #000;
+    }
+    
+    .analysis-table td {
+        border: 1px solid #000;
+    }
+
+    .cat-badge {
+        border: 1px solid #000;
+        color: #000 !important; 
+        box-shadow: none !important;
+        background: transparent !important;
+    }
+
+    .recommendation {
+        border: 1px solid #ccc;
+        background: #fff !important;
+    }
+}

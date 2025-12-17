@@ -1,274 +1,433 @@
-/* --- Animations --- */
-@keyframes fadeInDown {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
-/* --- General Admin Container Styles --- */
-.active-orders-container {
-    max-width: 1200px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background-color: #fff;
-    border-radius: 20px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-    animation: fadeInUp 0.6s ease-out;
+/* =========================================
+   1. Core Variables & Typography
+   ========================================= */
+:root {
+    --primary: #e5a9a9;
+    --primary-dark: #d08c8c;
+    --accent: #a05252;
+    --bg-light: #f8f9fa;
+    --text-dark: #2c3e50;
+    --text-medium: #5a6268;
+    --border-color: #e9ecef;
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+    --shadow-md: 0 10px 30px rgba(0,0,0,0.15);
+    --success: #10b981;
+    --danger: #ef4444;
 }
 
 body {
-    background-color: #f8f9fa;
-    font-family: 'Poppins', sans-serif;
+    background-color: var(--bg-light);
+    font-family: 'Inter', 'Poppins', sans-serif;
+    color: var(--text-dark);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
 }
 
+.fw-bold { font-weight: 700; }
+.main-wrapper { padding: 2rem; }
+
+/* =========================================
+   2. Animations
+   ========================================= */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes popIn { 
+    from { opacity: 0; transform: translateY(-10px) scale(0.98); } 
+    to { opacity: 1; transform: translateY(0) scale(1); } 
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes pulse { 50% { opacity: 0.6; } }
+
+/* =========================================
+   3. Container & Header
+   ========================================= */
+.active-orders-container {
+    max-width: 1300px;
+    margin: 4rem auto; 
+    background-color: #fff;
+    border-radius: 16px;
+    box-shadow: var(--shadow-md);
+    padding: 2.5rem;
+    animation: fadeIn 0.5s ease-out;
+    position: relative; 
+}
+
+/* Back Link */
 .back-link {
-    display: inline-block;
-    margin-bottom: 1.5rem;
-    color: var(--accent-dark, #a05252);
+    color: var(--accent-dark); /* Accent Color */
     text-decoration: none;
+    font-size: 0.9rem;
     font-weight: 600;
-    transition: color 0.3s ease;
+    transition: color 0.2s;
+    display: inline-block;
 }
 
 .back-link:hover {
-    color: var(--primary, #e5a9a9);
+    color: var(--primary); /* Primary Color */
 }
 
+/* Header */
 .page-header {
-    border-bottom: 2px solid var(--border-color, #eee);
-    padding-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 1.5rem;
     margin-bottom: 2rem;
-    animation: fadeInDown 0.5s ease-out;
 }
 
 .page-header h1 {
-    color: var(--text-dark, #333);
-    font-size: 2.5rem;
-    margin: 0 0 10px 0;
+    font-size: 2rem;
+    margin: 0;
+    color: var(--text-dark);
 }
 
+/* Auto Refresh Badge */
 .auto-refresh-indicator {
-    margin-top: 10px;
-    font-size: 0.9em;
-    color: var(--text-light, #666);
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 8px;
+    font-size: 0.9rem;
+    color: #666;
+    background: var(--bg-light);
+    padding: 8px 16px;
+    border-radius: 20px;
 }
 
-.refresh-icon {
-    animation: spin 2s linear infinite;
+.refresh-icon { 
+    width: 18px;          
+    height: 18px;       
+    object-fit: contain;  
+    animation: spin 2s linear infinite; 
 }
 
-/* --- Message Styles --- */
+/* =========================================
+   4. Alerts & Empty States
+   ========================================= */
 .message {
     padding: 1rem 1.5rem;
-    margin-bottom: 1.5rem;
-    border-radius: 8px;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
     font-weight: 500;
-    border: 1px solid transparent;
-    animation: fadeInDown 0.5s ease-out;
 }
+.message.error { background-color: #fdf0f0; color: #c0392b; border: 1px solid #f5c6cb; }
 
-.message.success {
-    background-color: #d4edda;
-    color: #155724;
-    border-color: #c3e6cb;
-}
-
-.message.error {
-    background-color: #f8d7da;
-    color: #721c24;
-    border-color: #f5c6cb;
-}
-
-/* --- No Orders State --- */
 .no-orders {
     text-align: center;
-    padding: 80px 20px;
-    background: #f9fafb;
-    border-radius: 12px;
-    border: 1px solid var(--border-color, #eee);
-    animation: fadeInUp 0.6s ease-out 0.2s;
-    animation-fill-mode: forwards;
+    padding: 5rem 2rem;
+    background: var(--bg-light);
+    border-radius: 16px;
+    border: 2px dashed var(--border-color);
 }
+.no-orders-icon { font-size: 4rem; margin-bottom: 1rem; }
+.no-orders h2 { margin-bottom: 0.5rem; }
 
-.no-orders-icon {
-    font-size: 5em;
-    margin-bottom: 20px;
-}
-
-.no-orders h2 {
-    color: var(--text-dark, #333);
-    margin-bottom: 10px;
-}
-
-.no-orders p {
-    color: var(--text-light, #666);
-    font-size: 1.1em;
-}
-
-/* --- Table Styles --- */
+/* =========================================
+   5. Table Styles
+   ========================================= */
 .orders-table-wrapper {
-    background: #fff;
-    border-radius: 12px;
-    border: 1px solid var(--border-color, #eee);
     overflow-x: auto;
-    animation: fadeInUp 0.6s ease-out 0.3s;
-    animation-fill-mode: forwards;
+    border-radius: 12px;
+    /* Ensure popup isn't clipped by overflow */
+    min-height: 400px; 
 }
 
 .orders-table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
     text-align: left;
 }
 
-.orders-table th, .orders-table td {
-    padding: 1rem;
-    border-bottom: 1px solid var(--border-color, #eee);
-    vertical-align: middle;
-}
-
 .orders-table th {
-    background-color: #f9fafb;
+    padding: 1.2rem 1rem;
+    background: #fcfcfc;
+    color: #555;
     font-weight: 600;
-    color: var(--text-light, #555);
-}
-
-.orders-table tbody tr {
-    transition: all 0.25s ease-in-out;
-}
-
-.orders-table tbody tr:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-    background-color: #fff;
-}
-
-/* --- Status Badges --- */
-.status-badge {
-    padding: 0.4rem 0.8rem;
-    border-radius: 20px;
-    font-weight: 600;
-    font-size: 0.85rem;
     text-transform: uppercase;
+    font-size: 0.85rem;
+    border-bottom: 2px solid var(--border-color);
 }
 
-.status-pending {
-    background-color: #fff3cd;
-    color: #856404;
+.orders-table td {
+    padding: 1.2rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+    vertical-align: middle;
+    background: #fff;
+    transition: background 0.2s;
 }
 
-.status-prepared {
-    background-color: #d1ecf1;
-    color: #0c5460;
+/* Hover effect for rows */
+.orders-table tbody tr:hover td {
+    background-color: #f9fbfd;
 }
 
-.status-other {
-    background-color: #f8d7da;
-    color: #721c24;
+.table-cell { font-size: 1.1rem; color: var(--accent); }
+
+/* =========================================
+   6. Status Badges
+   ========================================= */
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.status-pending { background: #fff3cd; color: #856404; }
+.status-prepared { background: #d1ecf1; color: #0c5460; }
+.status-other { background: #e2e8f0; color: #4a5568; }
+
+/* =========================================
+   7. Item Summary (The Floating Pop-out)
+   ========================================= */
+.items-cell {
+    position: relative; /* Critical: Anchors the absolute pop-up */
+    max-width: 300px;
+    cursor: pointer;
+    user-select: none;
 }
 
-/* --- Action Buttons --- */
-.actions-cell {
+.item-summary-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 14px;
+    background: var(--bg-light);
+    border: 1px solid transparent;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+/* Trigger Hover State */
+.item-summary-trigger:hover, 
+.item-summary-trigger.active {
+    background: #e9ecef;
+    border-color: #ced4da;
+    transform: translateY(-1px);
+}
+
+.trigger-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    overflow: hidden;
+}
+
+.trigger-text {
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 500;
+    color: var(--text-dark);
+}
+
+.item-count-badge {
+    background: #e2e8f0;
+    color: var(--text-medium);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 12px;
+}
+
+/* The Pop-out Box */
+.item-popout {
+    display: none; /* Hidden by default */
+    position: absolute;
+    top: 100%; /* Push it exactly below the cell */
+    left: 0;
+    margin-top: 10px;
+    z-index: 999; /* Float on top of everything */
+    width: 280px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15); /* Strong shadow for depth */
+    border: 1px solid var(--border-color);
+}
+
+/* Show State (Toggled by JS) */
+.item-popout.show {
+    display: block;
+    animation: popIn 0.2s ease-out;
+}
+
+/* Tiny Arrow */
+.item-popout::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 20px;
+    width: 12px;
+    height: 12px;
+    background: #fff;
+    transform: rotate(45deg);
+    border-top: 1px solid var(--border-color);
+    border-left: 1px solid var(--border-color);
+}
+
+/* Pop-out Internals */
+.popout-header {
+    padding: 12px 16px;
+    background: #fcfcfc;
+    border-bottom: 1px solid var(--border-color);
+    border-radius: 12px 12px 0 0;
+    font-size: 0.85rem;
+    color: #6c757d;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.close-btn { cursor: pointer; font-size: 1.2rem; }
+.close-btn:hover { color: var(--danger); }
+
+.popout-body {
+    padding: 16px;
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.popout-item-list { list-style: none; padding: 0; margin: 0; }
+.popout-item-list li {
+    padding: 8px 0;
+    border-bottom: 1px dashed var(--border-color);
+    font-size: 0.95rem;
+    color: var(--text-dark);
+}
+.popout-item-list li:last-child { border-bottom: none; }
+
+.popout-footer {
+    padding: 12px 16px;
+    background: var(--bg-light);
+    border-top: 1px solid var(--border-color);
+    border-radius: 0 0 12px 12px;
+    text-align: right;
+    font-weight: 600;
+}
+
+/* =========================================
+   8. Live Timers
+   ========================================= */
+.live-timer {
+    display: inline-block;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    min-width: 80px;
+    text-align: center;
+}
+.timer-green { color: #22c55e; background: #dcfce7; }
+.timer-yellow { color: #d97706; background: #fef3c7; }
+.timer-red { color: #dc2626; background: #fee2e2; animation: pulse 2s infinite; }
+
+/* =========================================
+   9. Action Buttons
+   ========================================= */
+.actions-cell { white-space: nowrap; }
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
 }
 
 .action-btn {
-    padding: 0.5rem 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.7rem 1.2rem;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
     font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
     transition: all 0.2s ease;
+}
+
+.print-btn {
+    background-color: #e2e8f0;
+    color: var(--text-dark);
+}
+.print-btn:hover { background-color: #cbd5e0; transform: translateY(-2px); }
+
+.process-btn {
+    background-color: var(--success);
+    color: white;
+    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
+}
+.process-btn:hover {
+    background-color: #059669;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(16, 185, 129, 0.3);
+}
+
+.kitchen-wait {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    text-decoration: none;
+    color: var(--text-medium);
+    font-style: italic;
     font-size: 0.9rem;
 }
 
-.process-btn {
-    background-color: #28a745;
-    color: white;
-    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.2);
+/* =========================================
+   10. Mobile Responsiveness (Card View)
+   ========================================= */
+@media screen and (max-width: 992px) {
+    .orders-table th, .orders-table td { padding: 1rem 0.5rem; }
+    .action-btn { padding: 0.6rem 0.8rem; font-size: 0.85rem; }
+    .items-cell { max-width: 180px; }
 }
 
-.process-btn:hover {
-    background-color: #218838;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.3);
-}
-
-.action-info {
-    color: var(--text-light, #666);
-    font-size: 0.9em;
-    font-style: italic;
-}
-
-/* --- Responsive Design --- */
 @media screen and (max-width: 768px) {
-    .orders-table {
-        font-size: 0.9em;
-    }
+    .active-orders-container { padding: 1.5rem; }
+    .page-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
     
-    .orders-table th,
-    .orders-table td {
-        padding: 10px 8px;
-    }
-    
-    .page-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-    }
-    
-    .orders-table, thead, tbody, th, td, tr {
-        display: block;
-    }
-    
-    thead tr {
-        position: absolute;
-        top: -9999px;
-        left: -9999px;
-    }
+    /* Convert Table to Card Stack */
+    .orders-table, thead, tbody, th, td, tr { display: block; }
+    thead { display: none; }
     
     tr {
-        border: 1px solid #ccc;
-        margin-bottom: 1rem;
-        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        box-shadow: var(--shadow-sm);
+        background: #fff;
     }
     
     td {
         border: none;
-        border-bottom: 1px solid #eee;
-        position: relative;
-        padding-left: 50%;
+        border-bottom: 1px solid var(--border-color);
+        padding: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         text-align: right;
     }
+    td:last-child { border-bottom: none; }
     
-    td:before {
-        position: absolute;
-        left: 10px;
-        width: 45%;
-        padding-right: 10px;
-        white-space: nowrap;
+    td::before {
         content: attr(data-label);
-        font-weight: bold;
+        font-weight: 600;
+        color: var(--text-medium);
+        font-size: 0.9rem;
         text-align: left;
+        margin-right: 1rem;
     }
     
-    .actions-cell {
-        justify-content: flex-end;
+    .items-cell { max-width: none; width: 100%; }
+    .action-buttons { width: 100%; justify-content: flex-end; }
+    
+    /* Mobile Popout Adjustment */
+    .item-popout {
+        width: 100%; /* Full width relative to card */
+        left: 0;
     }
 }

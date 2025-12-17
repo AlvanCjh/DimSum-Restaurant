@@ -162,8 +162,8 @@ include '_header.php';
                 </div>
                 <div class="overlay-panel overlay-right">
                     <img src="/image/logo.png" alt="Yobita Logo" class="overlay-logo">
-                    <h1>Hello, New waiter!</h1>
-                    <p>Enter your details to create an account.</p>
+                    <h1>Welcome Back!</h1>
+                    <p>Enter your details to login to the system.</p>
                     <!-- <button class="ghost" id="signUpBtn">Sign Up</button> -->
                 </div>
             </div>

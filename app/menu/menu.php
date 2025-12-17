@@ -193,7 +193,18 @@ try {
     if ($curr) {
         $current_order_id = $curr['id'];
         $current_subtotal = $curr['total_amount'];
-        $stmt_items = $pdo->prepare("SELECT oi.id, oi.quantity, mi.name, oi.price FROM order_items oi JOIN menu_items mi ON oi.menu_item_id = mi.id WHERE oi.order_id = ?");
+        
+        $stmt_items = $pdo->prepare("
+            SELECT 
+                MIN(oi.id) as id, 
+                SUM(oi.quantity) as quantity, 
+                mi.name, 
+                mi.price 
+            FROM order_items oi 
+            JOIN menu_items mi ON oi.menu_item_id = mi.id 
+            WHERE oi.order_id = ? 
+            GROUP BY oi.menu_item_id, mi.name, mi.price
+        ");
         $stmt_items->execute([$current_order_id]);
         $current_order_items = $stmt_items->fetchAll();
     }

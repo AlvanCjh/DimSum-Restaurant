@@ -90,6 +90,7 @@ else:
 # 7. Output JSON
 result = {
     "revenue": float(current['revenue']),
+    "previous_revenue": float(previous['revenue']), 
     "orders": int(current['total_orders']),
     "summary": summary,
     "sentiment": sentiment,

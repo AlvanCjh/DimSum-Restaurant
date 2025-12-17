@@ -55,17 +55,21 @@ body {
 }
 
 .auto-refresh-indicator {
-    margin-top: 15px;
-    font-size: 0.9em;
-    color: var(--text-light, #666);
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
     gap: 8px;
+    font-size: 0.9rem;
+    color: #666;
+    background: var(--bg-light);
+    padding: 8px 16px;
+    border-radius: 20px;
 }
 
-.refresh-icon {
-    animation: spin 2s linear infinite;
+.refresh-icon { 
+    width: 18px;          
+    height: 18px;       
+    object-fit: contain;  
+    animation: spin 2s linear infinite; 
 }
 
 /* --- Message Styles --- */

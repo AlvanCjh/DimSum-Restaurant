@@ -36,22 +36,28 @@ try {
         exit;
     }
 
-    $sql_items = "SELECT oi.quantity, oi.price, mi.name as item_name
-                  FROM order_items oi
-                  JOIN menu_items mi ON oi.menu_item_id = mi.id
-                  WHERE oi.order_id = ?";
+    $sql_items = "SELECT 
+                        SUM(oi.quantity) as quantity, 
+                        mi.price, 
+                        mi.name as item_name
+                    FROM order_items oi
+                    JOIN menu_items mi ON oi.menu_item_id = mi.id
+                    WHERE oi.order_id = ?
+                    GROUP BY oi.menu_item_id, mi.name, mi.price";
+                  
     $stmt_items = $pdo->prepare($sql_items);
     $stmt_items->execute([$order_id]);
     $order_items = $stmt_items->fetchAll();
 
     // Calculate Totals
     $subtotal = $order['total_amount'];
-    $service_charge = $subtotal * SERVICE_CHARGE_RATE;
-    $sst = $subtotal * SST_RATE;
+    
+    // FIX: Round components individually BEFORE summing
+    $service_charge = round($subtotal * SERVICE_CHARGE_RATE, 2);
+    $sst = round($subtotal * SST_RATE, 2);
+    
+    // Now sum them up. No extra rounding needed on the total.
     $grand_total = $subtotal + $service_charge + $sst;
-
-    // Round logic (Standard accounting)
-    $grand_total = round($grand_total, 2);
 
 } catch (PDOException $e) {
     die("Error: " . $e->getMessage());

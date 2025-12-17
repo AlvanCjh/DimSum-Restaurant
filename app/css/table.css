@@ -46,10 +46,6 @@ body {
     display: inline-block;
 }
 
-.back-link:hover {
-    color: var(--primary); /* Primary Color */
-}
-
 /* Page Title (Updated Color) */
 .page-title { 
     margin: 0; 

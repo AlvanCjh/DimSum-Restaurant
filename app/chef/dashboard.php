@@ -70,7 +70,7 @@ try {
             <h1>🍳 Kitchen Display System</h1>
             <p>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</p>
             <div class="auto-refresh-indicator">
-                <span class="refresh-icon">🔄</span>
+                <img src="../image/Loading.png" alt="Refresh" class="refresh-icon">
                 <span>Auto-refreshing every 20 seconds</span>
             </div>
         </div>

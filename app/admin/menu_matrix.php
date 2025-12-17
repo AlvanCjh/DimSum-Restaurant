@@ -25,6 +25,12 @@ $errorMsg = isset($data['error']) ? $data['error'] : "Unknown error connecting t
     <div class="admin-container">
         <a href="dashboard.php" class="back-link">← Back to Dashboard</a>
 
+        <div class="report-header-print">
+            <img src="../image/logo.png" alt="Logo" class="print-logo">
+            <h1 class="report-title-print">YOBITA RESTAURANT</h1>
+            <h2 class="report-subtitle-print">Menu Engineering Matrix Report</h2>
+        </div>
+
         <div class="page-header">
             <div>
                 <h1>Smart Menu Insights</h1>
@@ -32,8 +38,15 @@ $errorMsg = isset($data['error']) ? $data['error'] : "Unknown error connecting t
             </div>
             
             <?php if($hasData): ?>
-                <div class="ai-status-badge">
-                    <span class="pulse-dot"></span> Matrix Generated
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <div class="ai-status-badge">
+                        <span class="pulse-dot"></span> Matrix Generated
+                    </div>
+                    <div class="report-actions">
+                        <button onclick="printReport()" class="action-btn print-btn">
+                            <ion-icon name="print-outline"></ion-icon> Print
+                        </button>
+                    </div>
                 </div>
             <?php endif; ?>
         </div>
@@ -58,8 +71,8 @@ $errorMsg = isset($data['error']) ? $data['error'] : "Unknown error connecting t
                 </div>
             </div>
 
-            <div class="matrix-section">
-                <h2 style="margin-top:0; border-bottom:1px solid #eee; padding-bottom:15px;">Menu Item Analysis</h2>
+            <div class="matrix-section tables-list-section">
+                <h2 class="section-title">Menu Item Analysis</h2>
                 <div class="table-responsive">
                     <table class="analysis-table">
                         <thead>
@@ -101,12 +114,18 @@ $errorMsg = isset($data['error']) ? $data['error'] : "Unknown error connecting t
                     </table>
                 </div>
             </div>
+            
+            <div class="report-footer-print">
+                <p>Report Generated: <?php echo date('F j, Y g:i A'); ?></p>
+            </div>
 
         <?php endif; ?>
     </div>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
 <?php if($hasData): ?>
 <script>
@@ -174,5 +193,9 @@ $errorMsg = isset($data['error']) ? $data['error'] : "Unknown error connecting t
             }
         }
     });
+
+    function printReport() {
+        window.print();
+    }
 </script>
 <?php endif; ?>

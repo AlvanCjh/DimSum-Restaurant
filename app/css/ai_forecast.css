@@ -1,6 +1,6 @@
 /* css/ai_forecast.css */
 
-/* --- Animations (Matches manageTables) --- */
+/* --- Animations --- */
 @keyframes fadeInDown {
     from { opacity: 0; transform: translateY(-10px); }
     to { opacity: 1; transform: translateY(0); }
@@ -13,7 +13,7 @@
 
 body {
     background-color: #f8f9fa;
-    font-family: sans-serif; /* Adjust to your main font */
+    font-family: sans-serif;
 }
 
 /* --- Main Layout --- */
@@ -58,12 +58,33 @@ body {
 
 /* --- Status & Alerts --- */
 .ai-status-badge {
-    background-color: #e2e6ea;
-    color: #495057;
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
+    background-color: #f0fdf4;
+    color: #15803d;
+    padding: 8px 16px;
+    border-radius: 30px;
     font-size: 0.9rem;
-    font-weight: 600;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid #bbf7d0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.pulse-dot {
+    display: block;
+    width: 8px;
+    height: 8px;
+    background-color: #22c55e;
+    border-radius: 50%;
+    box-shadow: 0 0 0 rgba(34, 197, 94, 0.4);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
 }
 
 .alert-warning {
@@ -75,9 +96,9 @@ body {
     border: 1px solid #ffeeba;
 }
 
-/* --- Content Sections (Matches form-section) --- */
+/* --- Content Sections --- */
 .forecast-section {
-    background-color: #f9fafb; /* Light gray background */
+    background-color: #f9fafb;
     padding: 2rem;
     border-radius: 10px;
     margin-bottom: 2.5rem;
@@ -98,7 +119,7 @@ body {
 
 /* --- Custom Date Range --- */
 .custom-range-container {
-    display: none; /* Hidden by default */
+    display: none;
     gap: 15px;
     align-items: center;
     padding: 15px;
@@ -119,6 +140,7 @@ body {
     padding: 5px 8px;
     border-radius: 5px;
 }
+
 /* --- Chart Specifics --- */
 .chart-container {
     background: white;
@@ -138,7 +160,7 @@ body {
     right: 0;
     bottom: 0;
     background-color: rgba(255, 255, 255, 0.7);
-    display: none; /* Hidden by default */
+    display: none; 
     justify-content: center;
     align-items: center;
     z-index: 10;
@@ -181,7 +203,7 @@ body {
     margin-right: 5px;
 }
 
-/* --- Table Styles (Matches manageTables) --- */
+/* --- Table Styles --- */
 .table-responsive {
     overflow-x: auto;
     background: white;
@@ -225,59 +247,6 @@ table tbody tr:hover {
     border-radius: 4px;
 }
 
-/* --- Responsive --- */
-@media screen and (max-width: 768px) {
-    .page-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 1rem;
-    }
-    
-    .chart-container {
-        height: 300px;
-    }
-}
-
-/* --- AI STATUS BADGE --- */
-.ai-status-badge {
-    background-color: #f0fdf4; /* Very light green bg */
-    color: #15803d; /* Dark green text */
-    padding: 8px 16px;
-    border-radius: 30px;
-    font-size: 0.9rem;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    border: 1px solid #bbf7d0;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-}
-
-.pulse-dot {
-    display: block;
-    width: 8px;
-    height: 8px;
-    background-color: #22c55e; /* Bright green */
-    border-radius: 50%;
-    box-shadow: 0 0 0 rgba(34, 197, 94, 0.4);
-    animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-    0% {
-        transform: scale(0.95);
-        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
-    }
-    70% {
-        transform: scale(1);
-        box-shadow: 0 0 0 6px rgba(34, 197, 94, 0);
-    }
-    100% {
-        transform: scale(0.95);
-        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
-    }
-}
-
 /* --- Report Action Buttons --- */
 .report-actions {
     display: flex;
@@ -309,223 +278,15 @@ table tbody tr:hover {
     box-shadow: 0 4px 8px rgba(78, 115, 223, 0.3);
 }
 
-.pdf-btn {
-    background-color: #dc3545;
-    color: white;
-}
-
-.pdf-btn:hover {
-    background-color: #c82333;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
-}
-
 .action-btn ion-icon {
     font-size: 1.2rem;
 }
 
-/* --- Report Content Wrapper --- */
-.report-content {
-    position: relative;
-}
-
-/* --- Report Header for Print/PDF --- */
-.report-header-print {
-    display: none;
-    text-align: center;
-    margin-bottom: 30px;
-    padding-bottom: 15px;
-    border-bottom: 3px double #000;
-}
-
-.report-title-print {
-    font-size: 22pt;
-    font-weight: bold;
-    margin: 0 0 5px 0;
-    letter-spacing: 2px;
-    color: #000;
-}
-
-.report-subtitle-print {
-    font-size: 16pt;
-    font-weight: bold;
-    margin: 0;
-    color: #000;
-}
-
-.report-footer-print {
-    display: none;
-    text-align: right;
-    margin-top: 30px;
-    padding-top: 15px;
-    border-top: 1px solid #ccc;
-}
-
-.report-footer-print p {
-    margin: 0;
-    font-size: 10pt;
-    color: #666;
-    font-style: italic;
-}
-
-/* --- Print Styles --- */
-@media print {
-    /* Show report header and footer */
-    .report-header-print,
-    .report-footer-print {
-        display: block !important;
-    }
-
-    /* Hide navigation and non-essential elements */
-    header, footer, .back-link, .report-actions, .ai-status-badge {
-        display: none !important;
-    }
-
-    /* Reset body and container for printing */
-    body {
-        background: white !important;
-        margin: 0;
-        padding: 0;
-    }
-
-    .main-wrapper {
-        margin: 0;
-        padding: 0;
-    }
-
-    .admin-container {
-        max-width: 100% !important;
-        margin: 0 !important;
-        padding: 20px !important;
-        box-shadow: none !important;
-        border-radius: 0 !important;
-        background: white !important;
-        page-break-inside: avoid;
-    }
-
-    .page-header {
-        border-bottom: 3px solid #000 !important;
-        margin-bottom: 20px !important;
-        padding-bottom: 10px !important;
-    }
-
-    .page-header h1 {
-        font-size: 24pt !important;
-        color: #000 !important;
-        margin: 0 !important;
-    }
-
-    /* Section styling */
-    .forecast-section, .tables-list-section {
-        page-break-inside: avoid;
-        margin-bottom: 30px !important;
-        padding: 15px !important;
-        background: white !important;
-        border: 1px solid #000 !important;
-        border-radius: 0 !important;
-    }
-
-    .section-title {
-        font-size: 16pt !important;
-        color: #000 !important;
-        margin-bottom: 15px !important;
-        margin-top: 0 !important;
-        padding-bottom: 5px !important;
-        border-bottom: 2px solid #000 !important;
-    }
-
-    /* Chart container - FIXED */
-    .chart-container {
-        height: 350px !important;
-        max-height: 350px !important;
-        page-break-inside: avoid;
-        border: 2px solid #000 !important;
-        padding: 10px !important;
-        background: white !important;
-        overflow: hidden !important;
-        box-sizing: border-box !important;
-        margin-bottom: 10px !important;
-    }
-
-    .chart-container canvas {
-        max-width: 100% !important;
-        max-height: 100% !important;
-        width: 100% !important;
-        height: 100% !important;
-    }
-
-    .chart-legend {
-        margin-top: 10px !important;
-        font-size: 10pt !important;
-        padding: 5px 0 !important;
-    }
-
-    /* Table styling */
-    .tables-list-section {
-        margin-top: 30px !important;
-    }
-
-    .table-responsive {
-        page-break-inside: avoid;
-        border: 1px solid #000 !important;
-        overflow: visible !important;
-    }
-
-    table {
-        width: 100% !important;
-        border-collapse: collapse !important;
-    }
-
-    table th {
-        background-color: #333 !important;
-        color: white !important;
-        padding: 10px !important;
-        font-size: 11pt !important;
-        border: 1px solid #000 !important;
-    }
-
-    table td {
-        padding: 8px !important;
-        border: 1px solid #000 !important;
-        font-size: 10pt !important;
-    }
-
-    table tbody tr {
-        page-break-inside: avoid;
-    }
-
-    table tbody tr:nth-child(even) {
-        background-color: #f5f5f5 !important;
-    }
-
-    .price-tag {
-        background: transparent !important;
-        padding: 0 !important;
-        font-weight: bold !important;
-    }
-
-    /* Hide animations and transitions */
-    * {
-        animation: none !important;
-        transition: none !important;
-    }
-
-    /* Page breaks */
-    .forecast-section {
-        page-break-after: auto;
-    }
-
-    @page {
-        margin: 1cm;
-        size: A4;
-    }
-}
-
-/* --- New Forecast Controls (Segmented Pill Style) --- */
+/* --- Forecast Controls --- */
 .forecast-controls {
     background: #f1f3f5;
     padding: 5px;
-    border-radius: 50px; /* Pill shape container */
+    border-radius: 50px;
     display: inline-flex;
     gap: 0;
     box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);
@@ -549,14 +310,13 @@ table tbody tr:hover {
     color: #333;
 }
 
-/* Active State: White pill with Orange text & Shadow */
 .forecast-btn.active {
     background: #fff;
-    color: #fd7e14; /* Yobita Orange */
+    color: #fd7e14;
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
-/* --- New Predicted Revenue Card --- */
+/* --- Revenue Card --- */
 .revenue-card {
     background: linear-gradient(135deg, #ffffff 0%, #fffbf5 100%);
     border: 1px solid #ffe8cc;
@@ -574,7 +334,6 @@ table tbody tr:hover {
     box-shadow: 0 15px 35px rgba(253, 126, 20, 0.12);
 }
 
-/* Background Decoration Icon */
 .revenue-card::before {
     content: '$';
     position: absolute;
@@ -618,7 +377,6 @@ table tbody tr:hover {
     letter-spacing: -1px;
 }
 
-/* Small trend indicator below value (optional visual flair) */
 .revenue-subtext {
     font-size: 0.85rem;
     color: #fd7e14;
@@ -628,42 +386,141 @@ table tbody tr:hover {
     z-index: 1;
 }
 
-/* --- Improved Custom Range Inputs --- */
-.custom-range-container {
-    background: #fff;
-    border: 1px solid #eee;
-    padding: 15px 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-    margin-top: 15px;
-    gap: 15px;
+/* --- Report Headers (Print Only) --- */
+.report-header-print {
+    display: none;
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 3px double #000;
+    position: relative; /* Key for logo positioning */
+    min-height: 80px;
 }
 
-.custom-range-container input[type="date"] {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 8px 12px;
-    color: #555;
-    font-family: inherit;
-    outline: none;
-    transition: border 0.2s;
+.print-logo {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 80px;
+    width: auto;
+    object-fit: contain;
 }
 
-.custom-range-container input[type="date"]:focus {
-    border-color: #fd7e14;
+.report-title-print {
+    font-size: 22pt;
+    font-weight: bold;
+    margin: 10px 0 5px 0;
+    letter-spacing: 2px;
+    color: #000;
 }
 
-.custom-range-container button#applyCustomRangeBtn {
-    background-color: #fd7e14;
-    color: white;
-    border: none;
-    padding: 8px 20px;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s;
+.report-subtitle-print {
+    font-size: 16pt;
+    font-weight: bold;
+    margin: 0;
+    color: #000;
 }
 
-.custom-range-container button#applyCustomRangeBtn:hover {
-    background-color: #e66b0d;
+.report-footer-print {
+    display: none;
+    text-align: right;
+    margin-top: 30px;
+    padding-top: 15px;
+    border-top: 1px solid #ccc;
+}
+
+.report-footer-print p {
+    margin: 0;
+    font-size: 10pt;
+    color: #666;
+    font-style: italic;
+}
+
+/* --- PRINT MEDIA QUERIES (Redesigned) --- */
+@media print {
+    /* Show Headers */
+    .report-header-print,
+    .report-footer-print {
+        display: block !important;
+    }
+
+    /* Hide Navigation & Interactive Elements */
+    header, footer, .back-link, .report-actions, .ai-status-badge, 
+    .forecast-controls, .custom-range-container, .revenue-card {
+        display: none !important;
+    }
+
+    /* Reset Container */
+    body {
+        background: white !important;
+        margin: 0;
+        padding: 0;
+    }
+
+    .main-wrapper, .admin-container {
+        margin: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+
+    .page-header {
+        border-bottom: none !important;
+        margin-bottom: 10px !important;
+    }
+    
+    .page-header h1 {
+        display: none !important; /* Hide screen title */
+    }
+
+    /* Reset Sections */
+    .forecast-section, .tables-list-section {
+        box-shadow: none !important;
+        border: 1px solid #ccc !important;
+        page-break-inside: avoid;
+        margin-bottom: 20px !important;
+        padding: 15px !important;
+    }
+
+    /* Fix Chart Size and Visibility for Print */
+    .chart-container {
+        height: 500px !important; 
+        max-height: 500px !important;
+        width: 95% !important;
+        margin: 20px auto !important;
+        overflow: visible !important; /* Prevents cutting off */
+        padding: 20px !important;
+        page-break-inside: avoid;
+        border: 1px solid #ccc !important;
+        background: white !important;
+        display: block !important;
+    }
+
+    .chart-container canvas {
+        width: 100% !important;
+        height: 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* Table Fixes */
+    .table-responsive {
+        border: 1px solid #000 !important;
+        overflow: visible !important;
+    }
+    
+    table th {
+        background-color: #333 !important;
+        color: white !important;
+        border: 1px solid #000;
+    }
+    
+    table td {
+        border: 1px solid #000;
+    }
+    
+    .price-tag {
+        background: transparent !important;
+        font-weight: bold;
+    }
 }
