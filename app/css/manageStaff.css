@@ -246,3 +246,57 @@
     font-weight: 400;
     line-height: 1.2;
 }
+
+/* --- NEW: Add Staff Button Styling --- */
+
+/* Wrapper to align the Add Button and the AI Badge side-by-side */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px; /* Space between button and badge */
+}
+
+/* The Add Staff Button Design */
+.add-staff-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #4e73df; /* Primary Blue */
+    color: #ffffff;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 30px; /* Pill shape to match AI badge */
+    font-weight: 600;
+    font-size: 0.9rem;
+    box-shadow: 0 2px 5px rgba(78, 115, 223, 0.25);
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.add-staff-btn:hover {
+    background-color: #2e59d9; /* Darker Blue */
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(78, 115, 223, 0.35);
+}
+
+.add-staff-btn:active {
+    transform: translateY(0);
+}
+
+.add-staff-btn ion-icon {
+    font-size: 1.1rem;
+}
+
+/* Ensure Page Header handles the new group correctly on mobile */
+@media (max-width: 600px) {
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .header-actions {
+        width: 100%;
+        justify-content: space-between; /* Spreads them out on mobile */
+        margin-top: 15px;
+    }
+}

@@ -18,14 +18,14 @@ try {
                 o.status,
                 o.total_amount,
                 o.created_at,
+                -- 1. Fetch the updated_at column
+                o.updated_at,
                 dt.table_number,
                 dt.id as table_id,
                 u.username as waiter_name,
                 
-                -- 1. Grab the summary from our new LEFT JOIN below
                 COALESCE(summary_data.item_summary, 'No items') as item_summary,
 
-                -- 2. Simple item count (Sum of quantities)
                 (
                     SELECT COALESCE(SUM(quantity), 0) 
                     FROM order_items 
@@ -36,14 +36,11 @@ try {
             JOIN dining_tables dt ON o.table_id = dt.id
             LEFT JOIN staffs u ON o.user_id = u.id
 
-            -- FIX: We moved the complex stacking logic here.
-            -- This creates a temporary list of stacked items per order, then joins it.
             LEFT JOIN (
                 SELECT 
                     aggregated_items.order_id,
                     GROUP_CONCAT(CONCAT(aggregated_items.total_qty, 'x ', mi.name) SEPARATOR ', ') as item_summary
                 FROM (
-                    -- First: Group items by ID and Sum their Quantities
                     SELECT order_id, menu_item_id, SUM(quantity) as total_qty
                     FROM order_items
                     GROUP BY order_id, menu_item_id
@@ -115,21 +112,31 @@ try {
                     </thead>
                     <tbody>
                         <?php foreach ($active_orders as $order): 
-                            // Status Logic
-                            $status_class = '';
-                            $status_text = '';
-                            switch($order['status']) {
-                                case 'pending': $status_class = 'status-pending'; $status_text = 'Pending'; break;
-                                case 'prepared': $status_class = 'status-prepared'; $status_text = 'Prepared'; break;
-                                default: $status_class = 'status-other'; $status_text = ucfirst($order['status']);
-                            }
-                            
-                            // Truncate text for the preview
-                            $display_items = $order['item_summary'];
-                            if (strlen($display_items) > 35) {
-                                $display_items = substr($display_items, 0, 35) . '...';
-                            }
-                        ?>
+                                $status_class = '';
+                                $status_text = '';
+
+                                // --- FIX: Logic to handle Timer Reset ---
+                                // 1. We prefer updated_at because it changes whenever you add items or finish cooking.
+                                // 2. If updated_at is null (rare), fall back to created_at.
+                                $timer_timestamp = !empty($order['updated_at']) ? $order['updated_at'] : $order['created_at'];
+
+                                if ($order['status'] === 'prepared') {
+                                    $timer_label = "Since Ready"; 
+                                    $status_class = 'status-prepared'; 
+                                    $status_text = 'Prepared'; 
+                                } else {
+                                    // Now this uses the SAME $timer_timestamp variable we set above (updated_at)
+                                    $timer_label = "Since Order";
+                                    $status_class = ($order['status'] === 'pending') ? 'status-pending' : 'status-other';
+                                    $status_text = ucfirst($order['status']);
+                                }
+                                
+                                // Truncate text logic...
+                                $display_items = $order['item_summary'];
+                                if (strlen($display_items) > 35) {
+                                    $display_items = substr($display_items, 0, 35) . '...';
+                                }
+                            ?>
                             <tr>
                                 <td data-label="Order ID" class="fw-bold">#<?php echo htmlspecialchars($order['order_id']); ?></td>
                                 <td data-label="Table" class="fw-bold table-cell"><?php echo htmlspecialchars($order['table_number']); ?></td>
@@ -176,9 +183,12 @@ try {
                                 <td data-label="Total" class="fw-bold">RM <?php echo number_format($order['total_amount'], 2); ?></td>
                                 
                                 <td data-label="Wait Time">
-                                    <span class="live-timer" data-time="<?php echo $order['created_at']; ?>">
+                                    <span class="live-timer" data-time="<?php echo $timer_timestamp; ?>">
                                         Loading...
                                     </span>
+                                    <div style="font-size: 0.75rem; color: #999; margin-top: 4px;">
+                                        <?php echo $order['status'] === 'prepared' ? 'Since Ready' : 'Total Wait'; ?>
+                                    </div>
                                 </td>
 
                                 <td data-label="Waiter"><?php echo htmlspecialchars($order['waiter_name'] ?? 'N/A'); ?></td>

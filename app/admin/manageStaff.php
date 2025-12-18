@@ -8,6 +8,30 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     exit;
 }
 
+// --- HANDLE DELETE REQUEST ---
+if (isset($_POST['delete_staff_id'])) {
+    $id_to_delete = $_POST['delete_staff_id'];
+    
+    // Prevent deleting yourself
+    if ($id_to_delete == $_SESSION['user_id']) {
+        echo "<script>alert('You cannot delete your own admin account!');</script>";
+    } else {
+        try {
+            // Delete related orders first if necessary, or ensure DB has ON DELETE SET NULL/CASCADE
+            // Ideally, update orders to set user_id = NULL instead of deleting history
+            $pdo->prepare("UPDATE orders SET user_id = NULL WHERE user_id = ?")->execute([$id_to_delete]);
+            
+            // Delete the staff member
+            $stmt = $pdo->prepare("DELETE FROM staffs WHERE id = ?");
+            if ($stmt->execute([$id_to_delete])) {
+                echo "<script>alert('Staff member deleted successfully.'); window.location.href='manageStaff.php';</script>";
+            }
+        } catch (PDOException $e) {
+            echo "<script>alert('Error deleting staff: " . $e->getMessage() . "');</script>";
+        }
+    }
+}
+
 $pageTitle = "Manage Staff";
 $basePath = "../";
 include '../_header.php';
@@ -27,14 +51,13 @@ try {
     $stmt = $pdo->query($sql);
     $waiter_members = $stmt->fetchAll();
 
-    // --- AI badge evaluation via Python helper ---
+    // ... (Your existing AI Badge Python Logic remains here) ...
     function computeAiBadges($waiter_members) {
         $scriptPath = realpath(__DIR__ . '/../ai/staff_badges.py');
         if (!$scriptPath) return [];
 
         $payload = ["staff" => []];
         foreach ($waiter_members as $m) {
-            // Only analyze waiters
             if ($m['role'] === 'waiter') {
                 $payload["staff"][] = [
                     "id" => $m["id"],
@@ -45,7 +68,6 @@ try {
                 ];
             }
         }
-
         if (empty($payload["staff"])) return [];
 
         $descriptorSpec = [0 => ["pipe", "r"], 1 => ["pipe", "w"], 2 => ["pipe", "w"]];
@@ -71,14 +93,12 @@ try {
 
     $aiBadges = computeAiBadges($waiter_members);
     
-    // Assign Badges Logic
     foreach ($waiter_members as &$member) {
         if ($member['role'] === 'waiter') {
             $memberBadge = $aiBadges[$member["id"]] ?? null;
             $member["ai_badge"] = $memberBadge["label"] ?? "Consistent";
             $member["ai_badge_reason"] = $memberBadge["reason"] ?? "Steady performance";
         } else {
-            // Clear badges for non-waiters
             $member["ai_badge"] = "";
             $member["ai_badge_reason"] = "";
         }
@@ -91,6 +111,8 @@ try {
 
 <link rel="stylesheet" href="<?php echo $basePath; ?>css/viewOrders.css">
 <link rel="stylesheet" href="<?php echo $basePath; ?>css/manageStaff.css">
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
 <main class="main-wrapper">
     <div class="admin-container">
@@ -102,9 +124,16 @@ try {
                 <p style="color:#777; margin:5px 0 0 0;">Manage roles and view AI performance metrics</p>
             </div>
             
-            <div class="ai-status-badge">
-                <span class="pulse-dot"></span>
-                AI Staff Ranking Active
+            <div class="header-actions">
+                <a href="addStaff.php" class="add-staff-btn">
+                    <ion-icon name="person-add-outline"></ion-icon>
+                    Add New Staff
+                </a>
+                
+                <div class="ai-status-badge">
+                    <span class="pulse-dot"></span>
+                    AI Staff Ranking Active
+                </div>
             </div>
         </div>
 
@@ -153,9 +182,18 @@ try {
                                 <td data-label="Orders Handled"><?php echo $waiter['orders_handled']; ?></td>
                                 <td data-label="Joined"><?php echo date("d M Y", strtotime($waiter['created_at'])); ?></td>
                                 <td class="actions-cell" data-label="Actions">
-                                    <a href="staffDetail.php?id=<?php echo $waiter['id']; ?>" class="action-btn view-btn">
-                                        View Details
-                                    </a>
+                                    <div class="action-buttons-group">
+                                        <a href="staffDetail.php?id=<?php echo $waiter['id']; ?>" class="action-btn view-btn" title="View Details">
+                                            <ion-icon name="eye-outline"></ion-icon>
+                                        </a>
+
+                                        <form method="POST" onsubmit="return confirm('Are you sure you want to delete this staff member? This cannot be undone.');" style="display:inline;">
+                                            <input type="hidden" name="delete_staff_id" value="<?php echo $waiter['id']; ?>">
+                                            <button type="submit" class="action-btn delete-btn" title="Delete Staff">
+                                                <ion-icon name="trash-outline"></ion-icon>
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

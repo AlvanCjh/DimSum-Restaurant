@@ -240,7 +240,7 @@ try {
           <div class="ai-suggestions-header" onclick="toggleAI()">
               <div style="display: flex; align-items: center; gap: 10px; flex-grow: 1;">
                   <span class="ai-icon">🤖</span>
-                  <h3 class="ai-suggestions-title">AI Recommendations</h3>
+                  <h3 class="ai-suggestions-title">Recommendations powered by AI</h3>
                   <span class="ai-badge">Smart Suggestions</span>
               </div>
               <div class="ai-toggle-icon"><ion-icon name="chevron-up-outline" id="aiToggleIcon"></ion-icon></div>

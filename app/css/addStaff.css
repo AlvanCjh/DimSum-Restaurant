@@ -1,0 +1,204 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* --- Reset & Variables --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --linear-grad: linear-gradient(to right, #FFDCDC, #FFF2EB);
+    --grad-clr1: #FFDCDC;
+    --grad-clr2: #FFF2EB;
+    --text-color: #333;
+    --input-bg: #f3f3f3;
+    --btn-text: #9a6d6d;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    /* Background is handled by inline PHP in the file */
+}
+
+/* --- Main Layout --- */
+.main-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.admin-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+/* --- Form Card (Based on .container in reference) --- */
+.form-card {
+    position: relative;
+    width: 100%;
+    max-width: 450px; /* Slightly wider to accommodate icons */
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+    padding: 40px;
+    text-align: center;
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* --- Back Link --- */
+.back-link {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    text-decoration: none;
+    color: var(--accent-dark);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: color 0.3s;
+}
+
+.back-link:hover {
+    color: var(--primary);
+}
+
+/* --- Header --- */
+.page-header {
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.page-header h1 {
+    font-size: 1.8rem;
+    color: var(--text-color);
+    margin-bottom: 5px;
+}
+
+.page-header p {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* --- Form Groups & Inputs --- */
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #555;
+    margin-left: 5px;
+}
+
+/* Input Wrapper acts as the gray box from reference */
+.input-wrapper {
+    background: var(--input-bg);
+    border-radius: 8px; /* Slightly rounded */
+    padding: 0 15px;
+    display: flex;
+    align-items: center;
+    transition: box-shadow 0.3s ease;
+}
+
+.input-wrapper:focus-within {
+    box-shadow: 0 0 0 2px var(--grad-clr1);
+}
+
+.input-icon {
+    font-size: 1.2rem;
+    color: #888;
+    margin-right: 10px;
+}
+
+/* Actual Input Field */
+.input-wrapper input,
+.input-wrapper select {
+    background: transparent;
+    border: none;
+    width: 100%;
+    padding: 12px 0;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.95rem;
+    color: #333;
+    outline: none;
+}
+
+/* Remove default appearance for select to match inputs */
+.input-wrapper select {
+    cursor: pointer;
+}
+
+/* --- Button (Based on reference) --- */
+.submit-btn {
+    margin-top: 20px;
+    border: none;
+    padding: 12px 45px;
+    background: var(--linear-grad);
+    color: var(--btn-text);
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    width: 100%; /* Full width looks better on mobile cards */
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.submit-btn:hover {
+    transform: scale(1.03);
+    box-shadow: 0 5px 15px rgba(255, 220, 220, 0.4);
+}
+
+/* --- Messages (Success/Error) --- */
+.message {
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    animation: fadeIn 0.4s ease;
+}
+
+/* Error style based on reference */
+.message.error {
+    color: #ff4d4f;
+    background: rgba(255, 77, 79, 0.1);
+    border: 1px solid #ff4d4f;
+}
+
+/* Success style complementary to design */
+.message.success {
+    color: #2e7d32;
+    background: rgba(46, 125, 50, 0.1);
+    border: 1px solid #2e7d32;
+}
+
+/* --- Animations --- */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Responsive --- */
+@media (max-width: 480px) {
+    .form-card {
+        padding: 30px 20px;
+    }
+    
+    .submit-btn {
+        padding: 12px 20px;
+    }
+}
