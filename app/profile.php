@@ -43,9 +43,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Update email if changed
     if ($email !== $user['email']) {
+        
+        // --- NEW VALIDATION: Check for @yobita.com domain ---
+        if (!preg_match("/@yobita\.com$/", $email)) {
+            $error = "Email address must end with @yobita.com";
+        } 
         // Validate email format
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $error = "Please enter a valid email address (e.g., user@example.com).";
+        elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $error = "Please enter a valid email address (e.g., user@yobita.com).";
         } else {
             // Check if new email is already taken
             $stmt = $pdo->prepare("SELECT id FROM staffs WHERE email = ? AND id != ?");
@@ -60,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Update password if new one is provided and matches
-    if (!empty($newPassword)) {
+    if (empty($error) && !empty($newPassword)) {
         if (strlen($newPassword) < 6) {
             $error = "New password must be at least 6 characters long.";
         } elseif ($newPassword !== $confirmPassword) {
@@ -74,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // --- UPDATED IMAGE SAVING LOGIC ---
     // Update profile picture if new one is uploaded
-    if ($imageData) {
+    if (empty($error) && $imageData) {
         // Decode base64 image data
         $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $imageData));
         
@@ -92,7 +97,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Save the new image file
         if (file_put_contents($filename, $data)) {
             // Delete old picture if it's not the default one
-            // Note: We check against 'uploads/Default_pfp.png' as that is in the root upload folder
             if ($user['profile_picture'] && $user['profile_picture'] !== 'uploads/Default_pfp.png' && file_exists($user['profile_picture'])) {
                 unlink($user['profile_picture']);
             }
@@ -171,8 +175,11 @@ include '_header.php';
 
         <div class="form-group">
             <label for="email" style="animation-delay: 0.6s;">Email</label>
-            <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required style="animation-delay: 0.7s;">
-            <small style="color: #888; display: block; margin-top: 5px;">Please enter a valid email (e.g., user@example.com)</small>
+            <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" 
+                   required style="animation-delay: 0.7s;" 
+                   pattern=".+@yobita\.com" 
+                   title="Please enter an email ending in @yobita.com">
+            <small style="color: #888; display: block; margin-top: 5px;">Please enter a valid email (xxx@yobita.com)</small>
         </div>
 
         <hr style="animation-delay: 0.8s;">

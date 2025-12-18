@@ -714,3 +714,105 @@
     height: 24px;
     padding: 0 !important;
 }
+
+/* =========================================
+   6. Responsive Design (Fixed for iPad Pro)
+   ========================================= */
+
+/* --- iPad Pro Landscape & Laptops (1025px - 1366px) --- */
+@media (max-width: 1366px) {
+    .menu-page-layout {
+        grid-template-columns: 1fr 300px; /* Keep sidebar on right but narrower */
+        gap: 20px;
+        padding: 0 20px;
+    }
+}
+
+/* --- iPad Portrait, iPad Air, Tablets (992px and below) --- */
+@media (max-width: 1024px) {
+    .menu-page-layout {
+        display: block; /* Disable Grid to allow stacking */
+        width: 100%;
+        margin: 0;
+        padding: 0 15px;
+    }
+
+    /* Make the Menu Grid use full width */
+    #menu-grid {
+        grid-template-columns: repeat(3, 1fr); /* 3 items per row looks best on iPad */
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+    
+    .ai-suggestions-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    /* --- SIDEBAR MOVES TO BOTTOM --- */
+    .order-sidebar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: auto; /* Reset top positioning */
+        
+        width: 100%;
+        height: auto;
+        max-height: 35vh; /* Takes up bottom 35% of screen */
+        
+        border-radius: 20px 20px 0 0; /* Round top corners only */
+        box-shadow: 0 -5px 25px rgba(0,0,0,0.15); /* Shadow pointing up */
+        z-index: 1000;
+        padding: 15px 20px;
+        
+        display: flex;
+        flex-direction: column;
+        background: #fff;
+    }
+
+    /* Adjust list scrolling inside the small drawer */
+    .order-sidebar ul {
+        overflow-y: auto;
+        flex-grow: 1;
+        padding-right: 5px; /* Space for scrollbar */
+        margin-bottom: 10px;
+    }
+
+    /* Hide the "Current Order" title to save space */
+    .order-sidebar h3 {
+        font-size: 1rem;
+        margin-bottom: 10px;
+        padding-bottom: 5px;
+    }
+
+    /* Add padding to the body so content isn't hidden behind the fixed sidebar */
+    .menu-main-content {
+        padding-bottom: 38vh; /* Match sidebar height + extra space */
+    }
+}
+
+/* --- Mobile Phones (600px and below) --- */
+@media (max-width: 600px) {
+    #menu-grid {
+        grid-template-columns: 1fr; /* 1 item per row */
+    }
+    
+    .ai-suggestions-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .waiter-action-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    /* Adjust bottom padding for mobile sidebar height */
+    .menu-main-content {
+        padding-bottom: 42vh; 
+    }
+    
+    .order-sidebar {
+        max-height: 40vh;
+    }
+}
