@@ -12,9 +12,9 @@ $pageTitle = 'Profile';
 $message = '';
 $error = '';
 
-// Fetch current user data
+// Fetch current user data (Added 'role' to the query)
 try {
-    $stmt = $pdo->prepare("SELECT username, email, profile_picture FROM staffs WHERE id = ?");
+    $stmt = $pdo->prepare("SELECT username, email, profile_picture, role FROM staffs WHERE id = ?");
     $stmt->execute([$_SESSION['user_id']]);
     $user = $stmt->fetch();
 } catch (PDOException $e) {
@@ -44,14 +44,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Update email if changed
     if ($email !== $user['email']) {
         
-        // --- NEW VALIDATION: Check for @yobita.com domain ---
-        if (!preg_match("/@yobita\.com$/", $email)) {
-            $error = "Email address must end with @yobita.com";
-        } 
-        // Validate email format
-        elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $error = "Please enter a valid email address (e.g., user@yobita.com).";
+        // --- ROLE-BASED VALIDATION ---
+        $isValidEmail = false;
+        
+        if ($user['role'] === 'admin') {
+            // Admin Validation
+            if (!preg_match("/@admin\.com$/", $email)) {
+                $error = "Admin email address must end with @admin.com";
+            } else {
+                $isValidEmail = true;
+            }
         } else {
+            // Staff Validation (Waiter/Chef)
+            if (!preg_match("/@yobita\.com$/", $email)) {
+                $error = "Staff email address must end with @yobita.com";
+            } else {
+                $isValidEmail = true;
+            }
+        }
+
+        // Common Email Format Check
+        if ($isValidEmail && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $error = "Please enter a valid email address format.";
+            $isValidEmail = false;
+        }
+
+        if ($isValidEmail && empty($error)) {
             // Check if new email is already taken
             $stmt = $pdo->prepare("SELECT id FROM staffs WHERE email = ? AND id != ?");
             $stmt->execute([$email, $userId]);
@@ -122,7 +140,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (isset($filename)) {
                     $_SESSION['profile_picture'] = $filename;
                 }
-                $stmt = $pdo->prepare("SELECT username, email, profile_picture FROM staffs WHERE id = ?");
+                // Fetch updated user data (including role)
+                $stmt = $pdo->prepare("SELECT username, email, profile_picture, role FROM staffs WHERE id = ?");
                 $stmt->execute([$userId]);
                 $user = $stmt->fetch();
 
@@ -138,6 +157,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 include '_header.php';
+
+// --- Determine Validation Rules for HTML ---
+if ($user['role'] === 'admin') {
+    $emailPattern = ".+@admin\.com";
+    $emailTitle = "Please enter an email ending in @admin.com";
+    $emailHelp = "Admin emails must end in @admin.com";
+} else {
+    $emailPattern = ".+@yobita\.com";
+    $emailTitle = "Please enter an email ending in @yobita.com";
+    $emailHelp = "Staff emails must end in @yobita.com";
+}
 ?>
 
 <style>
@@ -177,9 +207,9 @@ include '_header.php';
             <label for="email" style="animation-delay: 0.6s;">Email</label>
             <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" 
                    required style="animation-delay: 0.7s;" 
-                   pattern=".+@yobita\.com" 
-                   title="Please enter an email ending in @yobita.com">
-            <small style="color: #888; display: block; margin-top: 5px;">Please enter a valid email (xxx@yobita.com)</small>
+                   pattern="<?php echo $emailPattern; ?>" 
+                   title="<?php echo $emailTitle; ?>">
+            <small style="color: #888; display: block; margin-top: 5px;"><?php echo $emailHelp; ?></small>
         </div>
 
         <hr style="animation-delay: 0.8s;">

@@ -159,7 +159,7 @@ $errorMsg = isset($data['error']) ? $data['error'] : "Unknown error connecting t
 
                                     echo "<tr>";
                                     echo "<td>" . $dateStr . "</td>";
-                                    echo "<td><span class='price-tag'>$" . number_format($currVal, 2) . "</span></td>";
+                                    echo "<td><span class='price-tag'>RM" . number_format($currVal, 2) . "</span></td>";
                                     echo "<td>" . $trendIcon . "</td>";
                                     echo "</tr>";
 
